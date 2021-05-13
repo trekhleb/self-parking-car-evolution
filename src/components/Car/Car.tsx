@@ -29,7 +29,7 @@ interface CarProps extends ChassisProps {
 }
 
 function Car(props: CarProps) {
-  const { wheelRadius = 0.7 } = props;
+  const { wheelRadius = 0.3 } = props;
 
   // chassisBody
   const chassis = useRef()

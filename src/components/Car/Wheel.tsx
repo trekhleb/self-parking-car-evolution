@@ -40,13 +40,13 @@ function WheelModel(props: WheelModelProps) {
 }
 
 type WheelProps = {
-  radius?: number,
+  radius: number,
   isLeft?: boolean,
   bodyProps?: CylinderProps,
 }
 
 const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) => {
-  const { radius = 0.7, isLeft = false, bodyProps = {} } = props;
+  const { radius, isLeft = false, bodyProps = {} } = props;
 
   const mass = 1;
   const width = 0.5;
