@@ -167,9 +167,9 @@ function Car(props: CarProps) {
         position={props.position}
         angularVelocity={props.angularVelocity}
       />
-      <Wheel ref={wheel_1} radius={wheelRadius} isLeftSide />
+      <Wheel ref={wheel_1} radius={wheelRadius} isLeft />
       <Wheel ref={wheel_2} radius={wheelRadius} />
-      <Wheel ref={wheel_3} radius={wheelRadius} isLeftSide />
+      <Wheel ref={wheel_3} radius={wheelRadius} isLeft />
       <Wheel ref={wheel_4} radius={wheelRadius} />
     </group>
   )

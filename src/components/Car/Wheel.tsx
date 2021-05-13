@@ -12,10 +12,10 @@ const modelPath = getModelPath('wheel.glb');
 // @see: https://github.com/pmndrs/drei#usegltf
 useGLTF.preload(modelPath);
 
-interface WheelProps extends CylinderProps {
-  radius: number,
-  width?: number,
-  isLeftSide?: boolean,
+type WheelProps = {
+  radius?: number,
+  isLeft?: boolean,
+  bodyProps?: CylinderProps,
 }
 
 function WheelModel(props: GroupProps) {
@@ -38,25 +38,28 @@ function WheelModel(props: GroupProps) {
 }
 
 const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) => {
-  const { radius, width = 0.5, isLeftSide = false } = props;
+  const { radius = 0.7, isLeft = false, bodyProps = {} } = props;
 
-  const wheelSize: NumVec4 = [radius, radius, width, 16];
+  const mass = 1;
+  const width = 0.5;
+  const segments = 16;
+
+  const wheelSize: NumVec4 = [radius, radius, width, segments];
+
+  // The rotation should be applied to the shape (not the body).
+  const rotation: NumVec3 = [0, 0, ((isLeft ? 1 : -1) * Math.PI) / 2];
 
   useCylinder(
     () => ({
-      mass: 1,
+      mass,
       type: 'Kinematic',
-      // material: 'wheel',
-      collisionFilterGroup: 0, // turn off collisions, or turn them on if you want to fly!
-      // the rotation should be applied to the shape (not the body)
+      collisionFilterGroup: 0,
       args: wheelSize,
-      ...props,
+      ...bodyProps,
     }),
     // @ts-ignore
     ref,
   )
-
-  const rotation: NumVec3 = [0, 0, ((isLeftSide ? 1 : -1) * Math.PI) / 2];
 
   return (
     <mesh ref={ref}>
