@@ -4,7 +4,9 @@ import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
 
-const modelPath = '/wheel.glb';
+import { getModelPath } from '../../utils/models';
+
+const modelPath = getModelPath('wheel.glb');
 
 useGLTF.preload(modelPath)
 

@@ -4,7 +4,9 @@ import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
 
-const modelPath = '/beetle.glb';
+import { getModelPath } from '../../utils/models';
+
+const modelPath = getModelPath('beetle.glb');
 
 useGLTF.preload(modelPath);
 
