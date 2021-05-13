@@ -12,29 +12,37 @@ const modelPath = getModelPath('wheel.glb');
 // @see: https://github.com/pmndrs/drei#usegltf
 useGLTF.preload(modelPath);
 
+type WheelModelProps = {
+  castShadow?: boolean,
+  receiveShadow?: boolean,
+  groupProps?: GroupProps,
+};
+
+function WheelModel(props: WheelModelProps) {
+  const { castShadow = true, receiveShadow = true, groupProps = {} } = props;
+
+  const { nodes, materials } = useGLTF(modelPath);
+
+  // @ts-ignore
+  const tire = nodes.wheel_1.geometry;
+  // @ts-ignore
+  const disc = nodes.wheel_2.geometry;
+  // @ts-ignore
+  const cap = nodes.wheel_3.geometry;
+
+  return (
+    <group {...groupProps} dispose={null}>
+      <mesh material={materials.Rubber} geometry={tire} castShadow={castShadow} receiveShadow={receiveShadow} />
+      <mesh material={materials.Steel} geometry={disc} castShadow={castShadow} receiveShadow={receiveShadow} />
+      <mesh material={materials.Chrom} geometry={cap} castShadow={castShadow} receiveShadow={receiveShadow} />
+    </group>
+  )
+}
+
 type WheelProps = {
   radius?: number,
   isLeft?: boolean,
   bodyProps?: CylinderProps,
-}
-
-function WheelModel(props: GroupProps) {
-  const { nodes, materials } = useGLTF(modelPath);
-
-  // @ts-ignore
-  const g1 = nodes.wheel_1.geometry;
-  // @ts-ignore
-  const g2 = nodes.wheel_2.geometry;
-  // @ts-ignore
-  const g3 = nodes.wheel_3.geometry;
-
-  return (
-    <group {...props} dispose={null}>
-      <mesh material={materials.Rubber} geometry={g1} castShadow receiveShadow />
-      <mesh material={materials.Steel} geometry={g2} castShadow receiveShadow />
-      <mesh material={materials.Chrom} geometry={g3} castShadow receiveShadow />
-    </group>
-  )
 }
 
 const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) => {
@@ -43,6 +51,9 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
   const mass = 1;
   const width = 0.5;
   const segments = 16;
+
+  const castShadow = true;
+  const receiveShadow = true;
 
   const wheelSize: NumVec4 = [radius, radius, width, segments];
 
@@ -63,8 +74,8 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
 
   return (
     <mesh ref={ref}>
-      <mesh rotation={rotation} castShadow receiveShadow>
-        <WheelModel />
+      <mesh rotation={rotation} castShadow={castShadow} receiveShadow={receiveShadow}>
+        <WheelModel castShadow={castShadow} receiveShadow={receiveShadow} />
       </mesh>
     </mesh>
   )

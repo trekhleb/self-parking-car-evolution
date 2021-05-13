@@ -8,6 +8,8 @@ import { getModelPath } from '../../utils/models';
 
 const modelPath = getModelPath('beetle.glb');
 
+// @TODO: Do this in global space, not inside a component!
+// @see: https://github.com/pmndrs/drei#usegltf
 useGLTF.preload(modelPath);
 
 export interface ChassisProps extends BoxProps {
@@ -16,7 +18,7 @@ export interface ChassisProps extends BoxProps {
 
 const onCollide = (e: any) => {
   // the other body:
-  console.log('bonk!', e.body.userData)
+  console.log('Bonk!', e.body.userData)
 }
 
 function Beetle(props: GroupProps) {
@@ -87,7 +89,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
       angularVelocity: props.angularVelocity,
       allowSleep: false,
       args: boxSize,
-      onCollide: onCollide,
+      onCollide,
       userData: {
         id: 'vehicle-chassis',
       },
