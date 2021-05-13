@@ -3,8 +3,10 @@ import { useCylinder, CylinderProps, } from '@react-three/cannon';
 import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
+
 import { getModelPath } from '../../utils/models';
 import { NumVec3, NumVec4 } from '../../types/vectors';
+import { ModelData } from '../../types/models';
 
 const modelPath = getModelPath('wheel.glb');
 
@@ -21,14 +23,11 @@ type WheelModelProps = {
 function WheelModel(props: WheelModelProps) {
   const { castShadow = true, receiveShadow = true, groupProps = {} } = props;
 
-  const { nodes, materials } = useGLTF(modelPath);
+  const { nodes, materials }: ModelData = useGLTF(modelPath);
 
-  // @ts-ignore
-  const tire = nodes.wheel_1.geometry;
-  // @ts-ignore
-  const disc = nodes.wheel_2.geometry;
-  // @ts-ignore
-  const cap = nodes.wheel_3.geometry;
+  const tire = nodes.wheel_1?.geometry;
+  const disc = nodes.wheel_2?.geometry;
+  const cap = nodes.wheel_3?.geometry;
 
   return (
     <group {...groupProps} dispose={null}>
