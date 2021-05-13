@@ -29,6 +29,8 @@ interface CarProps extends ChassisProps {
 }
 
 function Car(props: CarProps) {
+  const { wheelRadius = 0.7 } = props;
+
   // chassisBody
   const chassis = useRef()
   // wheels
@@ -42,7 +44,7 @@ function Car(props: CarProps) {
   const chassisBack = -1.15
 
   const wheelInfo = {
-    radius: props.wheelRadius || 0.7,
+    radius: wheelRadius,
     directionLocal: [0, -1, 0], // same as Physics gravity
     suspensionStiffness: 30,
     suspensionRestLength: 0.3,
@@ -165,10 +167,10 @@ function Car(props: CarProps) {
         position={props.position}
         angularVelocity={props.angularVelocity}
       />
-      <Wheel ref={wheel_1} radius={props.wheelRadius || 0.7} leftSide />
-      <Wheel ref={wheel_2} radius={props.wheelRadius || 0.7} />
-      <Wheel ref={wheel_3} radius={props.wheelRadius || 0.7} leftSide />
-      <Wheel ref={wheel_4} radius={props.wheelRadius || 0.7} />
+      <Wheel ref={wheel_1} radius={wheelRadius} isLeftSide />
+      <Wheel ref={wheel_2} radius={wheelRadius} />
+      <Wheel ref={wheel_3} radius={wheelRadius} isLeftSide />
+      <Wheel ref={wheel_4} radius={wheelRadius} />
     </group>
   )
 }
