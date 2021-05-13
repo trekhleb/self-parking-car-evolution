@@ -1,7 +1,13 @@
 {
-  "name": "physics",
+  "name": "self-parking-car-evolution",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "author": "Oleksii Trekhleb (https://trekhleb.dev)",
+  "homepage": "https://trekhleb.dev/self-parking-car-evolution",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trekhleb/self-parking-car-evolution.git"
+  },
   "dependencies": {
     "@react-three/cannon": "^1.1.1",
     "@react-three/drei": "^4.3.3",
@@ -16,16 +22,14 @@
     "@types/react-dom": "^17.0.3",
     "@types/three": "^0.127.1",
     "cannon-es": "^0.17.0",
+    "gh-pages": "^3.1.0",
     "matter-js": "^0.17.1",
     "matter-tools": "^0.14.0",
     "nice-color-palettes": "^3.0.0",
     "oimo": "^1.0.9",
-    "planck-js": "^0.4.0-alpha.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
-    "react-spring": "^9.1.2",
-    "stage-js": "^0.9.4",
     "three": "^0.128.0",
     "typescript": "^4.2.4",
     "web-vitals": "^1.1.1"
@@ -34,7 +38,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d ./build"
   },
   "eslintConfig": {
     "extends": [
