@@ -63,7 +63,7 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
 
   return (
     <mesh ref={ref}>
-      <mesh rotation={rotation} castShadow>
+      <mesh rotation={rotation} castShadow receiveShadow>
         <WheelModel />
       </mesh>
     </mesh>
