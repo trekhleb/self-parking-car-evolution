@@ -40,19 +40,28 @@ function WheelModel(props: WheelModelProps) {
 
 type WheelProps = {
   radius: number,
+  mass?: number,
+  width?: number,
+  segments?: number,
+  collisionFilterGroup?: number,
+  castShadow?: boolean,
+  receiveShadow?: boolean,
   isLeft?: boolean,
   bodyProps?: CylinderProps,
 }
 
 const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) => {
-  const { radius, isLeft = false, bodyProps = {} } = props;
-
-  const mass = 1;
-  const width = 0.5;
-  const segments = 16;
-
-  const castShadow = true;
-  const receiveShadow = true;
+  const {
+    radius,
+    width = 0.5,
+    mass = 1,
+    segments = 16,
+    collisionFilterGroup = 0,
+    castShadow = true,
+    receiveShadow = true,
+    isLeft = false,
+    bodyProps = {},
+  } = props;
 
   const wheelSize: NumVec4 = [radius, radius, width, segments];
 
@@ -63,7 +72,7 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
     () => ({
       mass,
       type: 'Kinematic',
-      collisionFilterGroup: 0,
+      collisionFilterGroup,
       args: wheelSize,
       ...bodyProps,
     }),
@@ -73,7 +82,7 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
 
   return (
     <mesh ref={ref}>
-      <mesh rotation={rotation} castShadow={castShadow} receiveShadow={receiveShadow}>
+      <mesh rotation={rotation}>
         <WheelModel castShadow={castShadow} receiveShadow={receiveShadow} />
       </mesh>
     </mesh>
