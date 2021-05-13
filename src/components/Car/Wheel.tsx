@@ -30,9 +30,9 @@ function WheelModel(props: GroupProps) {
 
   return (
     <group {...props} dispose={null}>
-      <mesh material={materials.Rubber} geometry={g1} />
-      <mesh material={materials.Steel} geometry={g2} />
-      <mesh material={materials.Chrom} geometry={g3} />
+      <mesh material={materials.Rubber} geometry={g1} castShadow />
+      <mesh material={materials.Steel} geometry={g2} castShadow />
+      <mesh material={materials.Chrom} geometry={g3} castShadow />
     </group>
   )
 }
