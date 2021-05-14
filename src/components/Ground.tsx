@@ -12,7 +12,7 @@ function Ground(props: PlaneProps) {
   return (
     <mesh ref={ref} receiveShadow>
       <planeBufferGeometry args={args} />
-      <shadowMaterial color="#171717" opacity={0.4} />
+      <shadowMaterial color="#225380" opacity={0.4} />
     </mesh>
   )
 }
