@@ -18,3 +18,17 @@ export const getRubber = (props: MeshStandardMaterialParameters): Material => {
     ...props,
   });
 };
+
+export const getPlastic = (props: MeshStandardMaterialParameters): Material => {
+  return new THREE.MeshStandardMaterial({
+    color: baseColor,
+    ...props,
+  });
+};
+
+export const getGlass = (props: MeshStandardMaterialParameters): Material => {
+  return new THREE.MeshStandardMaterial({
+    color: baseColor,
+    ...props,
+  });
+};

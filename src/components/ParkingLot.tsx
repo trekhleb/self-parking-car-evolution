@@ -45,8 +45,9 @@ function ParkingLot() {
             position={[0, 5, 0]}
             rotation={[0, 0, 0]}
             angularVelocity={[-0.2, 0, 0.2]}
-            styled={false}
+            wireframe={false}
             controllable
+            styled
           />
           <Pillar position={[-5, 2.5, -5]} userData={{ id: 'pillar-1' }} />
           <Pillar position={[0, 2.5, -5]} userData={{ id: 'pillar-2' }} />

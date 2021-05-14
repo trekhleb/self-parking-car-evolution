@@ -6,6 +6,7 @@ import { GroupProps } from '@react-three/fiber';
 
 import { getModelPath } from '../../utils/models';
 import { ModelData } from '../../types/models';
+import { getPlastic, getRubber, getSteel, getGlass } from '../../utils/materials';
 
 const modelPath = getModelPath('beetle.glb');
 
@@ -50,95 +51,95 @@ function Beetle(props: BeetleProps) {
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Black paint']}
+        material={styled ? materials['Black paint'] : getSteel({wireframe})}
         geometry={nodes.chassis_1.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Rubber']}
+        material={styled ? materials['Rubber'] : getRubber({wireframe})}
         geometry={nodes.chassis_2.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Paint']}
+        material={styled ? materials['Paint'] : getSteel({wireframe})}
         geometry={nodes.chassis_3.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Underbody']}
+        material={styled ? materials['Underbody'] : getSteel({wireframe})}
         geometry={nodes.chassis_4.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Chrom']}
+        material={styled ? materials['Chrom'] : getSteel({wireframe})}
         geometry={nodes.chassis_5.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Interior (dark)']}
+        material={styled ? materials['Interior (dark)'] : getPlastic({wireframe})}
         geometry={nodes.chassis_6.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Interior (light)']}
+        material={styled ? materials['Interior (light)'] : getPlastic({wireframe})}
         geometry={nodes.chassis_7.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Reflector']}
+        material={styled ? materials['Reflector'] : getSteel({wireframe})}
         geometry={nodes.chassis_8.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Glass']}
+        material={styled ? materials['Glass'] : getGlass({wireframe})}
         geometry={nodes.chassis_9.geometry} />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Steel']}
+        material={styled ? materials['Steel'] : getSteel({wireframe})}
         geometry={nodes.chassis_10.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Black plastic']}
+        material={styled ? materials['Black plastic'] : getPlastic({wireframe})}
         geometry={nodes.chassis_11.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Headlight']}
+        material={styled ? materials['Headlight'] : getSteel({wireframe})}
         geometry={nodes.chassis_12.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Reverse lights']}
+        material={styled ? materials['Reverse lights'] : getSteel({wireframe})}
         geometry={nodes.chassis_13.geometry} />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Orange plastic']}
+        material={styled ? materials['Orange plastic'] : getPlastic({wireframe})}
         geometry={nodes.chassis_14.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['Tail lights']}
+        material={styled ? materials['Tail lights'] : getSteel({wireframe})}
         geometry={nodes.chassis_15.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={materials['License Plate']}
+        material={styled ? materials['License Plate'] : getSteel({wireframe})}
         geometry={nodes.chassis_16.geometry}
       />
     </group>

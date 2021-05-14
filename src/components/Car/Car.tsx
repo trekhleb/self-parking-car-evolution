@@ -32,7 +32,12 @@ interface CarProps extends ChassisProps {
 }
 
 function Car(props: CarProps) {
-  const { wheelRadius = 0.3, wireframe = false, styled = true, controllable = false } = props;
+  const {
+    wheelRadius = 0.3,
+    wireframe = false,
+    styled = true,
+    controllable = false,
+  } = props;
 
   // chassisBody
   const chassis = useRef()
@@ -176,6 +181,8 @@ function Car(props: CarProps) {
         rotation={props.rotation}
         position={props.position}
         angularVelocity={props.angularVelocity}
+        styled={styled}
+        wireframe={wireframe}
       />
       <Wheel
         ref={wheel_1}
