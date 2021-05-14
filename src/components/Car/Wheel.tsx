@@ -7,6 +7,7 @@ import { GroupProps } from '@react-three/fiber';
 import { getModelPath } from '../../utils/models';
 import { NumVec3, NumVec4 } from '../../types/vectors';
 import { ModelData } from '../../types/models';
+import { getRubber, getSteel } from '../../utils/materials';
 
 const modelPath = getModelPath('wheel.glb');
 
@@ -19,10 +20,17 @@ type WheelModelProps = {
   receiveShadow?: boolean,
   groupProps?: GroupProps,
   styled?: boolean,
+  wireframe?: boolean,
 };
 
 function WheelModel(props: WheelModelProps) {
-  const { castShadow = true, receiveShadow = true, groupProps = {}, styled = false } = props;
+  const {
+    castShadow = true,
+    receiveShadow = true,
+    groupProps = {},
+    styled = true,
+    wireframe = false,
+  } = props;
 
   const { nodes, materials }: ModelData = useGLTF(modelPath);
 
@@ -30,19 +38,38 @@ function WheelModel(props: WheelModelProps) {
   const disc = nodes.wheel_2?.geometry;
   const cap = nodes.wheel_3?.geometry;
 
-  const steel = styled
+  const tireMaterial = styled
+    ? materials.Rubber
+    : getRubber({ wireframe });
+
+  const discMaterial = styled
     ? materials.Steel
-    : new THREE.MeshStandardMaterial({
-      color: '#FFFFFF',
-      metalness: 0.5,
-      roughness: 0.1,
-    });
+    : getSteel({ wireframe });
+
+  const capMaterial = styled
+    ? materials.Chrom
+    : getSteel({ wireframe });
 
   return (
     <group {...groupProps} dispose={null}>
-      <mesh material={materials.Rubber} geometry={tire} castShadow={castShadow} receiveShadow={receiveShadow} />
-      <mesh material={steel} geometry={disc} castShadow={castShadow} receiveShadow={receiveShadow} />
-      <mesh material={materials.Chrom} geometry={cap} castShadow={castShadow} receiveShadow={receiveShadow} />
+      <mesh
+        geometry={tire}
+        material={tireMaterial}
+        castShadow={castShadow}
+        receiveShadow={receiveShadow}
+      />
+      <mesh
+        geometry={disc}
+        material={discMaterial}
+        castShadow={castShadow}
+        receiveShadow={receiveShadow}
+      />
+      <mesh
+        geometry={cap}
+        material={capMaterial}
+        castShadow={castShadow}
+        receiveShadow={receiveShadow}
+      />
     </group>
   )
 }
@@ -56,6 +83,8 @@ type WheelProps = {
   castShadow?: boolean,
   receiveShadow?: boolean,
   isLeft?: boolean,
+  styled?: boolean,
+  wireframe?: boolean,
   bodyProps?: CylinderProps,
 }
 
@@ -69,6 +98,8 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
     castShadow = true,
     receiveShadow = true,
     isLeft = false,
+    styled = true,
+    wireframe = false,
     bodyProps = {},
   } = props;
 
@@ -92,7 +123,12 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
   return (
     <mesh ref={ref}>
       <mesh rotation={rotation}>
-        <WheelModel castShadow={castShadow} receiveShadow={receiveShadow} />
+        <WheelModel
+          castShadow={castShadow}
+          receiveShadow={receiveShadow}
+          styled={styled}
+          wireframe={wireframe}
+        />
       </mesh>
     </mesh>
   )

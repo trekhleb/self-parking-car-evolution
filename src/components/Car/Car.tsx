@@ -26,10 +26,13 @@ type WheelInfoOptions = {
 
 interface CarProps extends ChassisProps {
   wheelRadius?: number,
+  wireframe?: boolean,
+  styled?: boolean,
+  controllable?: boolean,
 }
 
 function Car(props: CarProps) {
-  const { wheelRadius = 0.3 } = props;
+  const { wheelRadius = 0.3, wireframe = false, styled = true, controllable = false } = props;
 
   // chassisBody
   const chassis = useRef()
@@ -97,12 +100,12 @@ function Car(props: CarProps) {
     indexUpAxis: 1,
   }))
 
-  const forward = useKeyPress(['w', 'ArrowUp']);
-  const backward = useKeyPress(['s', 'ArrowDown']);
-  const left = useKeyPress(['a', 'ArrowLeft']);
-  const right = useKeyPress(['d', 'ArrowRight']);
-  const brake = useKeyPress([' ']);
-  const reset = useKeyPress(['r']);
+  const forward = useKeyPress(['w', 'ArrowUp'], controllable);
+  const backward = useKeyPress(['s', 'ArrowDown'], controllable);
+  const left = useKeyPress(['a', 'ArrowLeft'], controllable);
+  const right = useKeyPress(['d', 'ArrowRight'], controllable);
+  const brake = useKeyPress([' '], controllable);
+  const reset = useKeyPress(['r'], controllable);
 
   const [steeringValue, setSteeringValue] = useState(0)
   const [engineForce, setEngineForce] = useState(0)
@@ -113,6 +116,9 @@ function Car(props: CarProps) {
   const maxBrakeForce = 100000
 
   useFrame(() => {
+    if (!controllable) {
+      return;
+    }
     if (left && !right) {
       setSteeringValue(maxSteerVal)
     } else if (right && !left) {
@@ -171,15 +177,41 @@ function Car(props: CarProps) {
         position={props.position}
         angularVelocity={props.angularVelocity}
       />
-      <Wheel ref={wheel_1} radius={wheelRadius} bodyProps={wheelBodyProps} isLeft />
-      <Wheel ref={wheel_2} radius={wheelRadius} bodyProps={wheelBodyProps} />
-      <Wheel ref={wheel_3} radius={wheelRadius} bodyProps={wheelBodyProps} isLeft />
-      <Wheel ref={wheel_4} radius={wheelRadius} bodyProps={wheelBodyProps} />
+      <Wheel
+        ref={wheel_1}
+        radius={wheelRadius}
+        bodyProps={wheelBodyProps}
+        styled={styled}
+        wireframe={wireframe}
+        isLeft
+      />
+      <Wheel
+        ref={wheel_2}
+        radius={wheelRadius}
+        bodyProps={wheelBodyProps}
+        styled={styled}
+        wireframe={wireframe}
+      />
+      <Wheel
+        ref={wheel_3}
+        radius={wheelRadius}
+        bodyProps={wheelBodyProps}
+        styled={styled}
+        wireframe={wireframe}
+        isLeft
+      />
+      <Wheel
+        ref={wheel_4}
+        radius={wheelRadius}
+        bodyProps={wheelBodyProps}
+        styled={styled}
+        wireframe={wireframe}
+      />
     </group>
   )
 }
 
-function useKeyPress(target: string[]) {
+function useKeyPress(target: string[], controllable: boolean = true): boolean {
   const [keyPressed, setKeyPressed] = useState(false)
 
   const downHandler = ({ key }: KeyboardEvent) => {
@@ -195,6 +227,9 @@ function useKeyPress(target: string[]) {
   };
 
   useEffect(() => {
+    if (!controllable) {
+      return;
+    }
     window.addEventListener('keydown', downHandler)
     window.addEventListener('keyup', upHandler)
     return () => {
