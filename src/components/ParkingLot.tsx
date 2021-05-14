@@ -43,7 +43,6 @@ function ParkingLot() {
           <Ground userData={{ id: 'ground' }} />
           <Car
             position={[0, 5, 0]}
-            rotation={[0, 0, 0]}
             angularVelocity={[-0.2, 0, 0.2]}
             wireframe={false}
             controllable
