@@ -18,10 +18,11 @@ type WheelModelProps = {
   castShadow?: boolean,
   receiveShadow?: boolean,
   groupProps?: GroupProps,
+  styled?: boolean,
 };
 
 function WheelModel(props: WheelModelProps) {
-  const { castShadow = true, receiveShadow = true, groupProps = {} } = props;
+  const { castShadow = true, receiveShadow = true, groupProps = {}, styled = false } = props;
 
   const { nodes, materials }: ModelData = useGLTF(modelPath);
 
@@ -29,10 +30,18 @@ function WheelModel(props: WheelModelProps) {
   const disc = nodes.wheel_2?.geometry;
   const cap = nodes.wheel_3?.geometry;
 
+  const steel = styled
+    ? materials.Steel
+    : new THREE.MeshStandardMaterial({
+      color: '#FFFFFF',
+      metalness: 0.5,
+      roughness: 0.1,
+    });
+
   return (
     <group {...groupProps} dispose={null}>
       <mesh material={materials.Rubber} geometry={tire} castShadow={castShadow} receiveShadow={receiveShadow} />
-      <mesh material={materials.Steel} geometry={disc} castShadow={castShadow} receiveShadow={receiveShadow} />
+      <mesh material={steel} geometry={disc} castShadow={castShadow} receiveShadow={receiveShadow} />
       <mesh material={materials.Chrom} geometry={cap} castShadow={castShadow} receiveShadow={receiveShadow} />
     </group>
   )
