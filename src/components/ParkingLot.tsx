@@ -53,7 +53,7 @@ function ParkingLot() {
   });
 
   return (
-    <div style={{ height: `600px` }}>
+    <div style={{ height: '100%', width: '100%' }}>
       <Canvas
         camera={{ position: [-10, 10, 0], fov: 50 }}
         shadows

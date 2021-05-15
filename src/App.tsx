@@ -5,7 +5,9 @@ import ParkingLot from './components/ParkingLot';
 
 function App() {
   return (
-    <ParkingLot />
+    <div style={{height: '600px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
+      <ParkingLot />
+    </div>
   );
 }
 
