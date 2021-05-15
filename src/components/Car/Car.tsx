@@ -56,7 +56,7 @@ function Car(props: CarProps) {
     directionLocal: [0, -1, 0], // same as Physics gravity
     suspensionStiffness: 30,
     suspensionRestLength: 0.3,
-    maxSuspensionForce: 1e4,
+    maxSuspensionForce: 10000,
     maxSuspensionTravel: 0.3,
     dampingRelaxation: 2.3,
     dampingCompression: 4.4,
@@ -69,25 +69,25 @@ function Car(props: CarProps) {
     customSlidingRotationalSpeed: -30,
   }
 
-  // FrontLeft [-X,Y,Z]
+  // FrontLeft [-X, Y, Z]
   const wheel_1 = useRef()
   const wheelInfo_1 = { ...wheelInfo }
   wheelInfo_1.chassisConnectionPointLocal = [-chassisWidth / 2, chassisHeight, chassisFront]
   wheelInfo_1.isFrontWheel = true
 
-  // FrontRight [X,Y,Z]
+  // FrontRight [X, Y, Z]
   const wheel_2 = useRef()
   const wheelInfo_2 = { ...wheelInfo }
   wheelInfo_2.chassisConnectionPointLocal = [chassisWidth / 2, chassisHeight, chassisFront]
   wheelInfo_2.isFrontWheel = true
 
-  // BackLeft [-X,Y,-Z]
+  // BackLeft [-X, Y, -Z]
   const wheel_3 = useRef()
   const wheelInfo_3 = { ...wheelInfo }
   wheelInfo_3.isFrontWheel = false
   wheelInfo_3.chassisConnectionPointLocal = [-chassisWidth / 2, chassisHeight, chassisBack]
 
-  // BackRight [X,Y,-Z]
+  // BackRight [X, Y, -Z]
   const wheel_4 = useRef()
   const wheelInfo_4 = { ...wheelInfo }
   wheelInfo_4.chassisConnectionPointLocal = [chassisWidth / 2, chassisHeight, chassisBack]
@@ -167,7 +167,9 @@ function Car(props: CarProps) {
   }, [steeringValue])
 
   useEffect(() => {
-    wheels.forEach((_, i) => api.setBrake(brakeForce, i))
+    wheels.forEach((wheel, i) => {
+      api.setBrake(brakeForce, i);
+    })
   }, [brakeForce])
 
   const wheelBodyProps = {

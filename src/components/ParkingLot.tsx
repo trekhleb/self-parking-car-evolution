@@ -43,7 +43,6 @@ function ParkingLot() {
       <Car
         key={index}
         position={position}
-        angularVelocity={[-0.2, 0, 0.2]}
         wireframe={false}
         controllable={false}
         styled={false}
