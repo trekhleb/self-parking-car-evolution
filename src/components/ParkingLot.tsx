@@ -17,6 +17,7 @@ function ParkingLot() {
       angularVelocity={[-0.2, 0, 0.2]}
       wireframe={false}
       controllable
+      movable
       styled
     />
   );
@@ -35,7 +36,7 @@ function ParkingLot() {
       const marginedWidth = 3.5 * carWidth;
       const x = -0.5 * marginedWidth + row * marginedWidth;
       const z = -2 * marginedLength + col * marginedLength;
-      staticCarPositions.push([x, 5, z]);
+      staticCarPositions.push([x, 0.6, z]);
     }
   }
   const staticCars = staticCarPositions.map((position: NumVec3, index: number) => {
@@ -46,6 +47,7 @@ function ParkingLot() {
         wireframe={false}
         controllable={false}
         styled={false}
+        movable={false}
       />
     );
   });

@@ -29,6 +29,7 @@ interface CarProps extends ChassisProps {
   wireframe?: boolean,
   styled?: boolean,
   controllable?: boolean,
+  movable?: boolean,
 }
 
 function Car(props: CarProps) {
@@ -37,6 +38,7 @@ function Car(props: CarProps) {
     wireframe = false,
     styled = true,
     controllable = false,
+    movable = false,
   } = props;
 
   // chassisBody
@@ -185,6 +187,7 @@ function Car(props: CarProps) {
         angularVelocity={props.angularVelocity}
         styled={styled}
         wireframe={wireframe}
+        movable={movable}
       />
       <Wheel
         ref={wheel_1}

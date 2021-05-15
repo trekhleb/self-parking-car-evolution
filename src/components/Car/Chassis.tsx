@@ -20,6 +20,7 @@ export interface ChassisProps extends BoxProps {
   castShadow?: boolean,
   receiveShadow?: boolean,
   styled?: boolean,
+  movable?: boolean,
 }
 
 const onCollide = (e: any) => {
@@ -155,6 +156,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     styled = true,
     castShadow = true,
     receiveShadow = true,
+    movable = true,
     weight = 500,
   } = props;
 
@@ -170,6 +172,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
       userData: {
         id: 'vehicle-chassis',
       },
+      type: movable ? 'Dynamic' : 'Static',
       ...props,
     }),
     // @ts-ignore
