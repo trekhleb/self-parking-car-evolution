@@ -21,9 +21,20 @@ function ParkingLot() {
     />
   );
 
+  const rows = 2;
+  const cols = 5
+  const carLength = 4;
+  const carWidth = 1.7;
   const staticCarPositions: NumVec3[] = [];
-  for (let x = -3; x < 6; x += 6) {
-    for (let z = -10; z < 20; z += 5) {
+  for (let row = 0; row < rows; row += 1) {
+    for (let col = 0; col < cols; col += 1) {
+      if (row === 0 && col === 2) {
+        continue;
+      }
+      const marginedLength = 1.4 * carLength;
+      const marginedWidth = 3.5 * carWidth;
+      const x = -0.5 * marginedWidth + row * marginedWidth;
+      const z = -2 * marginedLength + col * marginedLength;
       staticCarPositions.push([x, 5, z]);
     }
   }
