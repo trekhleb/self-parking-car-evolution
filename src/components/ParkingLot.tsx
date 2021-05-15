@@ -7,8 +7,39 @@ import * as THREE from 'three';
 import Ground from './Ground';
 import Car from './Car/Car';
 import Pillar from './Pillar';
+import { NumVec3 } from '../types/vectors';
 
 function ParkingLot() {
+
+  const activeCar = (
+    <Car
+      position={[0, 5, 0]}
+      angularVelocity={[-0.2, 0, 0.2]}
+      wireframe={false}
+      controllable
+      styled
+    />
+  );
+
+  const staticCarPositions: NumVec3[] = [];
+  for (let x = -3; x < 6; x += 6) {
+    for (let z = -10; z < 20; z += 5) {
+      staticCarPositions.push([x, 5, z]);
+    }
+  }
+  const staticCars = staticCarPositions.map((position: NumVec3, index: number) => {
+    return (
+      <Car
+        key={index}
+        position={position}
+        angularVelocity={[-0.2, 0, 0.2]}
+        wireframe={false}
+        controllable={false}
+        styled={false}
+      />
+    );
+  });
+
   return (
     <div style={{ height: `600px` }}>
       <Canvas
@@ -41,16 +72,11 @@ function ParkingLot() {
           allowSleep
         >
           <Ground userData={{ id: 'ground' }} />
-          <Car
-            position={[0, 5, 0]}
-            angularVelocity={[-0.2, 0, 0.2]}
-            wireframe={false}
-            controllable
-            styled
-          />
-          <Pillar position={[-5, 2.5, -5]} userData={{ id: 'pillar-1' }} />
-          <Pillar position={[0, 2.5, -5]} userData={{ id: 'pillar-2' }} />
-          <Pillar position={[5, 2.5, -5]} userData={{ id: 'pillar-3' }} />
+          {activeCar}
+          {staticCars}
+          {/*<Pillar position={[-5, 2.5, -5]} userData={{ id: 'pillar-1' }} />*/}
+          {/*<Pillar position={[0, 2.5, -5]} userData={{ id: 'pillar-2' }} />*/}
+          {/*<Pillar position={[5, 2.5, -5]} userData={{ id: 'pillar-3' }} />*/}
         </Physics>
       </Canvas>
     </div>
