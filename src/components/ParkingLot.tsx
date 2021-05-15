@@ -14,7 +14,7 @@ function ParkingLot() {
   const activeCar = (
     <Car
       position={[0, 5, 0]}
-      angularVelocity={[-0.2, 0, 0.2]}
+      angularVelocity={[0, 0, 0.2]}
       wireframe={false}
       controllable
       movable
