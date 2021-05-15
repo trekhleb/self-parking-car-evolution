@@ -5,13 +5,11 @@ import { MeshPhysicalMaterialParameters } from 'three';
 
 const baseColor = '#FFFFFF';
 
-export const getSteel = (props: MeshPhysicalMaterialParameters): Material => {
-  return new THREE.MeshPhysicalMaterial({
+export const getSteel = (props: MeshStandardMaterialParameters): Material => {
+  return new THREE.MeshStandardMaterial({
     color: baseColor,
-    metalness: 0.6,
-    roughness: 0.4,
-    clearcoat: 0.05,
-    clearcoatRoughness: 0.05,
+    metalness: 0.5,
+    roughness: 0,
     ...props,
   });
 };
