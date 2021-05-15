@@ -42,9 +42,11 @@ function WheelModel(props: WheelModelProps) {
     ? materials.Rubber
     : getRubber({ wireframe });
 
-  const discMaterial = styled
-    ? materials.Steel
-    : getSteel({ wireframe });
+  // const discMaterial = styled
+  //   ? materials.Steel
+  //   : getSteel({ wireframe });
+
+  const discMaterial = getSteel({ wireframe });
 
   const capMaterial = styled
     ? materials.Chrom
