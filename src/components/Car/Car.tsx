@@ -194,6 +194,9 @@ function Car(props: CarProps) {
         movable={movable}
         baseColor={baseColor}
         bodyProps={{...bodyProps}}
+        userData={{
+          id: 'vehicle-chassis-id',
+        }}
       />
       <Wheel
         ref={wheel_1}

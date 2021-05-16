@@ -26,6 +26,7 @@ type ChassisProps = {
   baseColor?: string,
   chassisPosition: NumVec3,
   bodyProps: BoxProps,
+  userData?: Record<string, any>,
 }
 
 // @TODO: Move it up to the Car level.
@@ -167,6 +168,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     baseColor,
     chassisPosition,
     bodyProps,
+    userData = {},
   } = props;
 
   const boxSize = CHASSIS_SIZE;
@@ -176,9 +178,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
       allowSleep: false,
       args: boxSize,
       onCollide,
-      userData: {
-        id: 'vehicle-chassis',
-      },
+      userData,
       type: movable ? 'Dynamic' : 'Static',
       ...bodyProps,
     }),
