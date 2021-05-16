@@ -5,7 +5,13 @@ import * as THREE from 'three';
 
 import Chassis from './Chassis';
 import Wheel from './Wheel';
-import { CHASSIS_BASE_COLOR, WHEEL_RADIUS } from './parameters';
+import {
+  CHASSIS_BACK_WHEEL_SHIFT,
+  CHASSIS_BASE_COLOR,
+  CHASSIS_FRONT_WHEEL_SHIFT,
+  CHASSIS_GROUND_CLEARANCE, CHASSIS_WHEEL_WIDTH, CHASSIS_WIDTH,
+  WHEEL_RADIUS
+} from './parameters';
 
 type WheelInfoOptions = {
   radius?: number
@@ -53,12 +59,6 @@ function Car(props: CarProps) {
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
   const wheelInfos: WheelInfoOptions[] = [];
 
-  // chassis - wheel connection helpers
-  const chassisWidth = 1.2;
-  const chassisHeight = -0.04; // ground clearance
-  const chassisFront = 1.3;
-  const chassisBack = -1.15;
-
   const wheelInfo = {
     radius: wheelRadius,
     directionLocal: [0, -1, 0], // same as Physics gravity
@@ -80,25 +80,41 @@ function Car(props: CarProps) {
   // FrontLeft [-X, Y, Z]
   const wheel_1 = useRef()
   const wheelInfo_1 = { ...wheelInfo }
-  wheelInfo_1.chassisConnectionPointLocal = [-chassisWidth / 2, chassisHeight, chassisFront]
+  wheelInfo_1.chassisConnectionPointLocal = [
+    -CHASSIS_WHEEL_WIDTH / 2,
+    CHASSIS_GROUND_CLEARANCE,
+    CHASSIS_FRONT_WHEEL_SHIFT,
+  ]
   wheelInfo_1.isFrontWheel = true
 
   // FrontRight [X, Y, Z]
   const wheel_2 = useRef()
   const wheelInfo_2 = { ...wheelInfo }
-  wheelInfo_2.chassisConnectionPointLocal = [chassisWidth / 2, chassisHeight, chassisFront]
+  wheelInfo_2.chassisConnectionPointLocal = [
+    CHASSIS_WHEEL_WIDTH / 2,
+    CHASSIS_GROUND_CLEARANCE,
+    CHASSIS_FRONT_WHEEL_SHIFT
+  ]
   wheelInfo_2.isFrontWheel = true
 
   // BackLeft [-X, Y, -Z]
   const wheel_3 = useRef()
   const wheelInfo_3 = { ...wheelInfo }
   wheelInfo_3.isFrontWheel = false
-  wheelInfo_3.chassisConnectionPointLocal = [-chassisWidth / 2, chassisHeight, chassisBack]
+  wheelInfo_3.chassisConnectionPointLocal = [
+    -CHASSIS_WHEEL_WIDTH / 2,
+    CHASSIS_GROUND_CLEARANCE,
+    CHASSIS_BACK_WHEEL_SHIFT,
+  ]
 
   // BackRight [X, Y, -Z]
   const wheel_4 = useRef()
   const wheelInfo_4 = { ...wheelInfo }
-  wheelInfo_4.chassisConnectionPointLocal = [chassisWidth / 2, chassisHeight, chassisBack]
+  wheelInfo_4.chassisConnectionPointLocal = [
+    CHASSIS_WHEEL_WIDTH / 2,
+    CHASSIS_GROUND_CLEARANCE,
+    CHASSIS_BACK_WHEEL_SHIFT,
+  ]
   wheelInfo_4.isFrontWheel = false
 
   wheels.push(wheel_1, wheel_2, wheel_3, wheel_4)
@@ -193,7 +209,7 @@ function Car(props: CarProps) {
         wireframe={wireframe}
         movable={movable}
         baseColor={baseColor}
-        bodyProps={{...bodyProps}}
+        bodyProps={{ ...bodyProps }}
         userData={{
           id: 'vehicle-chassis-id',
         }}
