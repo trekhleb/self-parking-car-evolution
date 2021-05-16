@@ -203,6 +203,10 @@ function Car(props: CarProps) {
     })
   }, [brakeForce])
 
+  const wheelBodyProps = {
+    position: bodyProps.position,
+  };
+
   return (
     <group ref={vehicle}>
       <Chassis
@@ -212,9 +216,7 @@ function Car(props: CarProps) {
         wireframe={wireframe}
         movable={movable}
         baseColor={baseColor}
-        bodyProps={{
-          position: bodyProps.position,
-        }}
+        bodyProps={{ ...bodyProps }}
         onCollide={onCollide}
         userData={{
           id: 'vehicle-chassis-id',
