@@ -9,7 +9,8 @@ import {
   CHASSIS_BACK_WHEEL_SHIFT,
   CHASSIS_BASE_COLOR,
   CHASSIS_FRONT_WHEEL_SHIFT,
-  CHASSIS_GROUND_CLEARANCE, CHASSIS_WHEEL_WIDTH, CHASSIS_WIDTH,
+  CHASSIS_GROUND_CLEARANCE,
+  CHASSIS_WHEEL_WIDTH,
   WHEEL_RADIUS
 } from './parameters';
 
@@ -52,16 +53,14 @@ function Car(props: CarProps) {
     bodyProps = {},
   } = props;
 
-  // chassisBody
   const chassis = useRef<THREE.Object3D | undefined>();
 
-  // wheels
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
   const wheelInfos: WheelInfoOptions[] = [];
 
   const wheelInfo = {
     radius: wheelRadius,
-    directionLocal: [0, -1, 0], // same as Physics gravity
+    directionLocal: [0, -1, 0], // Same as Physics gravity.
     suspensionStiffness: 30,
     suspensionRestLength: 0.3,
     maxSuspensionForce: 10000,
@@ -75,50 +74,50 @@ function Car(props: CarProps) {
     isFrontWheel: false,
     useCustomSlidingRotationalSpeed: true,
     customSlidingRotationalSpeed: -30,
-  }
+  };
 
-  // FrontLeft [-X, Y, Z]
-  const wheel_1 = useRef()
-  const wheelInfo_1 = { ...wheelInfo }
-  wheelInfo_1.chassisConnectionPointLocal = [
+  // FrontLeft [-X, Y, Z].
+  const wheel_fl = useRef<THREE.Object3D | undefined>()
+  const wheelInfo_fl = { ...wheelInfo }
+  wheelInfo_fl.chassisConnectionPointLocal = [
     -CHASSIS_WHEEL_WIDTH / 2,
     CHASSIS_GROUND_CLEARANCE,
     CHASSIS_FRONT_WHEEL_SHIFT,
   ]
-  wheelInfo_1.isFrontWheel = true
+  wheelInfo_fl.isFrontWheel = true
 
-  // FrontRight [X, Y, Z]
-  const wheel_2 = useRef()
-  const wheelInfo_2 = { ...wheelInfo }
-  wheelInfo_2.chassisConnectionPointLocal = [
+  // FrontRight [X, Y, Z].
+  const wheel_fr = useRef<THREE.Object3D | undefined>()
+  const wheelInfo_fr = { ...wheelInfo }
+  wheelInfo_fr.chassisConnectionPointLocal = [
     CHASSIS_WHEEL_WIDTH / 2,
     CHASSIS_GROUND_CLEARANCE,
     CHASSIS_FRONT_WHEEL_SHIFT
   ]
-  wheelInfo_2.isFrontWheel = true
+  wheelInfo_fr.isFrontWheel = true
 
-  // BackLeft [-X, Y, -Z]
-  const wheel_3 = useRef()
-  const wheelInfo_3 = { ...wheelInfo }
-  wheelInfo_3.isFrontWheel = false
-  wheelInfo_3.chassisConnectionPointLocal = [
+  // BackLeft [-X, Y, -Z].
+  const wheel_bl = useRef<THREE.Object3D | undefined>()
+  const wheelInfo_bl = { ...wheelInfo }
+  wheelInfo_bl.isFrontWheel = false
+  wheelInfo_bl.chassisConnectionPointLocal = [
     -CHASSIS_WHEEL_WIDTH / 2,
     CHASSIS_GROUND_CLEARANCE,
     CHASSIS_BACK_WHEEL_SHIFT,
   ]
 
-  // BackRight [X, Y, -Z]
-  const wheel_4 = useRef()
-  const wheelInfo_4 = { ...wheelInfo }
-  wheelInfo_4.chassisConnectionPointLocal = [
+  // BackRight [X, Y, -Z].
+  const wheel_br = useRef<THREE.Object3D | undefined>()
+  const wheelInfo_br = { ...wheelInfo }
+  wheelInfo_br.chassisConnectionPointLocal = [
     CHASSIS_WHEEL_WIDTH / 2,
     CHASSIS_GROUND_CLEARANCE,
     CHASSIS_BACK_WHEEL_SHIFT,
   ]
-  wheelInfo_4.isFrontWheel = false
+  wheelInfo_br.isFrontWheel = false
 
-  wheels.push(wheel_1, wheel_2, wheel_3, wheel_4)
-  wheelInfos.push(wheelInfo_1, wheelInfo_2, wheelInfo_3, wheelInfo_4)
+  wheels.push(wheel_fl, wheel_fr, wheel_bl, wheel_br)
+  wheelInfos.push(wheelInfo_fl, wheelInfo_fr, wheelInfo_bl, wheelInfo_br)
 
   const [vehicle, api] = useRaycastVehicle(() => ({
     chassisBody: chassis,
@@ -215,7 +214,7 @@ function Car(props: CarProps) {
         }}
       />
       <Wheel
-        ref={wheel_1}
+        ref={wheel_fl}
         radius={wheelRadius}
         bodyProps={wheelBodyProps}
         styled={styled}
@@ -224,7 +223,7 @@ function Car(props: CarProps) {
         isLeft
       />
       <Wheel
-        ref={wheel_2}
+        ref={wheel_fr}
         radius={wheelRadius}
         bodyProps={wheelBodyProps}
         styled={styled}
@@ -232,7 +231,7 @@ function Car(props: CarProps) {
         baseColor={baseColor}
       />
       <Wheel
-        ref={wheel_3}
+        ref={wheel_bl}
         radius={wheelRadius}
         bodyProps={wheelBodyProps}
         styled={styled}
@@ -241,7 +240,7 @@ function Car(props: CarProps) {
         isLeft
       />
       <Wheel
-        ref={wheel_4}
+        ref={wheel_br}
         radius={wheelRadius}
         bodyProps={wheelBodyProps}
         styled={styled}
