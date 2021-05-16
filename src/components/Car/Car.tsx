@@ -1,10 +1,11 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useRaycastVehicle } from '@react-three/cannon';
+import { BoxProps, useRaycastVehicle } from '@react-three/cannon';
 import * as THREE from 'three';
 
-import Chassis, { ChassisProps } from './Chassis';
+import Chassis from './Chassis';
 import Wheel from './Wheel';
+import { WHEEL_RADIUS } from './parameters';
 
 export const DEFAULT_CAR_BASE_COLOR = '#FFFFFF';
 
@@ -26,36 +27,39 @@ type WheelInfoOptions = {
   customSlidingRotationalSpeed?: number
 };
 
-interface CarProps extends ChassisProps {
+type CarProps = {
   wheelRadius?: number,
   wireframe?: boolean,
   styled?: boolean,
   controllable?: boolean,
   movable?: boolean,
   baseColor?: string,
+  bodyProps: BoxProps,
 }
 
 function Car(props: CarProps) {
   const {
-    wheelRadius = 0.3,
+    wheelRadius = WHEEL_RADIUS,
     wireframe = false,
     styled = true,
     controllable = false,
     movable = false,
     baseColor = DEFAULT_CAR_BASE_COLOR,
+    bodyProps = {},
   } = props;
 
   // chassisBody
-  const chassis = useRef()
+  const chassis = useRef<THREE.Object3D | undefined>();
+
   // wheels
-  const wheels: MutableRefObject<THREE.Object3D | undefined>[] = []
-  const wheelInfos: WheelInfoOptions[] = []
+  const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
+  const wheelInfos: WheelInfoOptions[] = [];
 
   // chassis - wheel connection helpers
-  const chassisWidth = 1.2
-  const chassisHeight = -0.04 // ground clearance
-  const chassisFront = 1.3
-  const chassisBack = -1.15
+  const chassisWidth = 1.2;
+  const chassisHeight = -0.04; // ground clearance
+  const chassisFront = 1.3;
+  const chassisBack = -1.15;
 
   const wheelInfo = {
     radius: wheelRadius,
@@ -179,20 +183,19 @@ function Car(props: CarProps) {
   }, [brakeForce])
 
   const wheelBodyProps = {
-    position: props.position,
+    position: bodyProps.position,
   };
 
   return (
     <group ref={vehicle}>
       <Chassis
         ref={chassis}
-        rotation={props.rotation}
-        position={props.position}
-        angularVelocity={props.angularVelocity}
+        chassisPosition={[0, -0.6, 0]}
         styled={styled}
         wireframe={wireframe}
         movable={movable}
         baseColor={baseColor}
+        bodyProps={{...bodyProps}}
       />
       <Wheel
         ref={wheel_1}

@@ -8,6 +8,7 @@ import { getModelPath } from '../../utils/models';
 import { NumVec3, NumVec4 } from '../../types/vectors';
 import { ModelData } from '../../types/models';
 import { getRubber, getSteel } from '../../utils/materials';
+import { WHEEL_MASS, WHEEL_WIDTH } from './parameters';
 
 const modelPath = getModelPath('wheel.glb');
 
@@ -96,8 +97,8 @@ type WheelProps = {
 const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) => {
   const {
     radius,
-    width = 0.5,
-    mass = 1,
+    width = WHEEL_WIDTH,
+    mass = WHEEL_MASS,
     segments = 16,
     collisionFilterGroup = 0,
     castShadow = true,

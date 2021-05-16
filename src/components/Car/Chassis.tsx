@@ -7,6 +7,8 @@ import { GroupProps } from '@react-three/fiber';
 import { getModelPath } from '../../utils/models';
 import { ModelData } from '../../types/models';
 import { getPlastic, getRubber, getSteel, getGlass } from '../../utils/materials';
+import { CHASSIS_MASS, CHASSIS_SIZE } from './parameters';
+import { NumVec3 } from '../../types/vectors';
 
 const modelPath = getModelPath('beetle.glb');
 
@@ -14,7 +16,7 @@ const modelPath = getModelPath('beetle.glb');
 // @see: https://github.com/pmndrs/drei#usegltf
 useGLTF.preload(modelPath);
 
-export interface ChassisProps extends BoxProps {
+type ChassisProps = {
   weight?: number,
   wireframe?: boolean,
   castShadow?: boolean,
@@ -22,8 +24,11 @@ export interface ChassisProps extends BoxProps {
   styled?: boolean,
   movable?: boolean,
   baseColor?: string,
+  chassisPosition: NumVec3,
+  bodyProps: BoxProps,
 }
 
+// @TODO: Move it up to the Car level.
 const onCollide = (e: any) => {
   // the other body:
   console.log('Bonk!', e.body.userData)
@@ -153,23 +158,21 @@ function Beetle(props: BeetleProps) {
 // The vehicle chassis
 const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref) => {
   const {
-    rotation,
-    angularVelocity,
     wireframe = false,
     styled = true,
     castShadow = true,
     receiveShadow = true,
     movable = true,
-    weight = 500,
+    weight = CHASSIS_MASS,
     baseColor,
+    chassisPosition,
+    bodyProps,
   } = props;
 
-  const boxSize = [1.7, 1, 4] // roughly the cars' visual dimensions
+  const boxSize = CHASSIS_SIZE;
   useBox(
     () => ({
       mass: weight,
-      rotation,
-      angularVelocity,
       allowSleep: false,
       args: boxSize,
       onCollide,
@@ -177,20 +180,20 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
         id: 'vehicle-chassis',
       },
       type: movable ? 'Dynamic' : 'Static',
-      ...props,
+      ...bodyProps,
     }),
     // @ts-ignore
     ref
   )
 
-  const bodyProps: GroupProps = {
-    position: [0, -0.6, 0],
+  const groupProps: GroupProps = {
+    position: chassisPosition,
   };
 
   return (
     <mesh ref={ref}>
       <Beetle
-        bodyProps={bodyProps}
+        bodyProps={groupProps}
         castShadow={castShadow}
         receiveShadow={receiveShadow}
         wireframe={wireframe}
