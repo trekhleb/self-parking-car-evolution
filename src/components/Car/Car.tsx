@@ -6,6 +6,8 @@ import * as THREE from 'three';
 import Chassis, { ChassisProps } from './Chassis';
 import Wheel from './Wheel';
 
+export const DEFAULT_CAR_BASE_COLOR = '#FFFFFF';
+
 type WheelInfoOptions = {
   radius?: number
   directionLocal?: number[]
@@ -30,6 +32,7 @@ interface CarProps extends ChassisProps {
   styled?: boolean,
   controllable?: boolean,
   movable?: boolean,
+  baseColor?: string,
 }
 
 function Car(props: CarProps) {
@@ -39,6 +42,7 @@ function Car(props: CarProps) {
     styled = true,
     controllable = false,
     movable = false,
+    baseColor = DEFAULT_CAR_BASE_COLOR,
   } = props;
 
   // chassisBody
@@ -188,6 +192,7 @@ function Car(props: CarProps) {
         styled={styled}
         wireframe={wireframe}
         movable={movable}
+        baseColor={baseColor}
       />
       <Wheel
         ref={wheel_1}
@@ -195,6 +200,7 @@ function Car(props: CarProps) {
         bodyProps={wheelBodyProps}
         styled={styled}
         wireframe={wireframe}
+        baseColor={baseColor}
         isLeft
       />
       <Wheel
@@ -203,6 +209,7 @@ function Car(props: CarProps) {
         bodyProps={wheelBodyProps}
         styled={styled}
         wireframe={wireframe}
+        baseColor={baseColor}
       />
       <Wheel
         ref={wheel_3}
@@ -210,6 +217,7 @@ function Car(props: CarProps) {
         bodyProps={wheelBodyProps}
         styled={styled}
         wireframe={wireframe}
+        baseColor={baseColor}
         isLeft
       />
       <Wheel
@@ -218,6 +226,7 @@ function Car(props: CarProps) {
         bodyProps={wheelBodyProps}
         styled={styled}
         wireframe={wireframe}
+        baseColor={baseColor}
       />
     </group>
   )

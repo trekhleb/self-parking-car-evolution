@@ -21,6 +21,7 @@ export interface ChassisProps extends BoxProps {
   receiveShadow?: boolean,
   styled?: boolean,
   movable?: boolean,
+  baseColor?: string,
 }
 
 const onCollide = (e: any) => {
@@ -34,6 +35,7 @@ type BeetleProps = {
   castShadow?: boolean,
   receiveShadow?: boolean,
   styled?: boolean,
+  baseColor?: string,
 };
 
 function Beetle(props: BeetleProps) {
@@ -43,6 +45,7 @@ function Beetle(props: BeetleProps) {
     styled = true,
     castShadow = true,
     receiveShadow = true,
+    baseColor: color,
   } = props;
 
   const { nodes, materials }: ModelData = useGLTF(modelPath)
@@ -52,95 +55,95 @@ function Beetle(props: BeetleProps) {
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Black paint'] : getSteel({wireframe})}
+        material={styled ? materials['Black paint'] : getSteel({wireframe, color})}
         geometry={nodes.chassis_1.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Rubber'] : getRubber({wireframe})}
+        material={styled ? materials['Rubber'] : getRubber({wireframe, color})}
         geometry={nodes.chassis_2.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Paint'] : getSteel({wireframe})}
+        material={styled ? materials['Paint'] : getSteel({wireframe, color})}
         geometry={nodes.chassis_3.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Underbody'] : getSteel({wireframe})}
+        material={styled ? materials['Underbody'] : getSteel({wireframe, color})}
         geometry={nodes.chassis_4.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Chrom'] : getSteel({wireframe})}
+        material={styled ? materials['Chrom'] : getSteel({wireframe, color})}
         geometry={nodes.chassis_5.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Interior (dark)'] : getPlastic({wireframe})}
+        material={styled ? materials['Interior (dark)'] : getPlastic({wireframe, color})}
         geometry={nodes.chassis_6.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Interior (light)'] : getPlastic({wireframe})}
+        material={styled ? materials['Interior (light)'] : getPlastic({wireframe, color})}
         geometry={nodes.chassis_7.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Reflector'] : getSteel({wireframe})}
+        material={styled ? materials['Reflector'] : getSteel({wireframe, color})}
         geometry={nodes.chassis_8.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Glass'] : getGlass({wireframe})}
+        material={styled ? materials['Glass'] : getGlass({wireframe, color})}
         geometry={nodes.chassis_9.geometry} />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Steel'] : getSteel({wireframe})}
+        material={styled ? materials['Steel'] : getSteel({wireframe, color})}
         geometry={nodes.chassis_10.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Black plastic'] : getPlastic({wireframe})}
+        material={styled ? materials['Black plastic'] : getPlastic({wireframe, color})}
         geometry={nodes.chassis_11.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Headlight'] : getSteel({wireframe})}
+        material={styled ? materials['Headlight'] : getSteel({wireframe, color})}
         geometry={nodes.chassis_12.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Reverse lights'] : getSteel({wireframe})}
+        material={styled ? materials['Reverse lights'] : getSteel({wireframe, color})}
         geometry={nodes.chassis_13.geometry} />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Orange plastic'] : getPlastic({wireframe})}
+        material={styled ? materials['Orange plastic'] : getPlastic({wireframe, color})}
         geometry={nodes.chassis_14.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Tail lights'] : getSteel({wireframe})}
+        material={styled ? materials['Tail lights'] : getSteel({wireframe, color})}
         geometry={nodes.chassis_15.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['License Plate'] : getSteel({wireframe})}
+        material={styled ? materials['License Plate'] : getSteel({wireframe, color})}
         geometry={nodes.chassis_16.geometry}
       />
     </group>
@@ -158,6 +161,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     receiveShadow = true,
     movable = true,
     weight = 500,
+    baseColor,
   } = props;
 
   const boxSize = [1.7, 1, 4] // roughly the cars' visual dimensions
@@ -191,6 +195,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
         receiveShadow={receiveShadow}
         wireframe={wireframe}
         styled={styled}
+        baseColor={baseColor}
       />
     </mesh>
   )

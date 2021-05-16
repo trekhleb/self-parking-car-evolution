@@ -21,6 +21,7 @@ type WheelModelProps = {
   groupProps?: GroupProps,
   styled?: boolean,
   wireframe?: boolean,
+  baseColor?: string,
 };
 
 function WheelModel(props: WheelModelProps) {
@@ -30,6 +31,7 @@ function WheelModel(props: WheelModelProps) {
     groupProps = {},
     styled = true,
     wireframe = false,
+    baseColor: color,
   } = props;
 
   const { nodes, materials }: ModelData = useGLTF(modelPath);
@@ -40,17 +42,17 @@ function WheelModel(props: WheelModelProps) {
 
   const tireMaterial = styled
     ? materials.Rubber
-    : getRubber({ wireframe });
+    : getRubber({ wireframe, color });
 
   // const discMaterial = styled
   //   ? materials.Steel
   //   : getSteel({ wireframe });
 
-  const discMaterial = getSteel({ wireframe });
+  const discMaterial = getSteel({ wireframe, color });
 
   const capMaterial = styled
     ? materials.Chrom
-    : getSteel({ wireframe });
+    : getSteel({ wireframe, color });
 
   return (
     <group {...groupProps} dispose={null}>
@@ -87,6 +89,7 @@ type WheelProps = {
   isLeft?: boolean,
   styled?: boolean,
   wireframe?: boolean,
+  baseColor?: string,
   bodyProps?: CylinderProps,
 }
 
@@ -103,6 +106,7 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
     styled = true,
     wireframe = false,
     bodyProps = {},
+    baseColor,
   } = props;
 
   const wheelSize: NumVec4 = [radius, radius, width, segments];
@@ -130,6 +134,7 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
           receiveShadow={receiveShadow}
           styled={styled}
           wireframe={wireframe}
+          baseColor={baseColor}
         />
       </mesh>
     </mesh>

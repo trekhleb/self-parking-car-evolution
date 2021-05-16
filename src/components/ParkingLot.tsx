@@ -5,8 +5,7 @@ import { Physics } from '@react-three/cannon';
 import * as THREE from 'three';
 
 import Ground from './Ground';
-import Car from './Car/Car';
-import Pillar from './Pillar';
+import Car, { DEFAULT_CAR_BASE_COLOR } from './Car/Car';
 import { NumVec3 } from '../types/vectors';
 
 function ParkingLot() {
@@ -48,6 +47,7 @@ function ParkingLot() {
         controllable={false}
         styled={false}
         movable={false}
+        baseColor={DEFAULT_CAR_BASE_COLOR}
       />
     );
   });
