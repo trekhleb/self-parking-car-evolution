@@ -4,10 +4,10 @@ import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
 
-import { getModelPath } from '../../utils/models';
-import { NumVec3, NumVec4 } from '../../types/vectors';
-import { ModelData } from '../../types/models';
-import { getRubber, getSteel } from '../../utils/materials';
+import { getModelPath } from '../../../utils/models';
+import { NumVec3, NumVec4 } from '../../../types/vectors';
+import { ModelData } from '../../../types/models';
+import { getRubber, getSteel } from '../../../utils/materials';
 import { WHEEL_MASS, WHEEL_WIDTH } from './parameters';
 
 const modelPath = getModelPath('wheel.glb');

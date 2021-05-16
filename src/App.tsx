@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './App.css';
-import ParkingLot from './components/ParkingLot';
+import ParkingLot from './components/world/ParkingLot';
 
 function App() {
   return (

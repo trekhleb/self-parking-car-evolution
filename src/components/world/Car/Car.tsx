@@ -39,6 +39,7 @@ type CarProps = {
   controllable?: boolean,
   movable?: boolean,
   baseColor?: string,
+  onCollide?: (event: any) => void,
   bodyProps: BoxProps,
 }
 
@@ -51,6 +52,7 @@ function Car(props: CarProps) {
     movable = false,
     baseColor = CHASSIS_BASE_COLOR,
     bodyProps = {},
+    onCollide = (event) => {},
   } = props;
 
   const chassis = useRef<THREE.Object3D | undefined>();
@@ -142,11 +144,6 @@ function Car(props: CarProps) {
   const maxSteerVal = 0.5
   const maxForce = 1000
   const maxBrakeForce = 100000
-
-  const onCollide = (event: any) => {
-    // the other body:
-    console.log('Bonk!', event.body.userData)
-  };
 
   useFrame(() => {
     if (!controllable) {

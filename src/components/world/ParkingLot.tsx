@@ -6,10 +6,15 @@ import * as THREE from 'three';
 
 import Ground from './Ground';
 import Car from './Car/Car';
-import { NumVec3 } from '../types/vectors';
+import { NumVec3 } from '../../types/vectors';
 import { CHASSIS_BASE_COLOR } from './Car/parameters';
 
 function ParkingLot() {
+
+  const onCollide = (event: any) => {
+    // the other body:
+    console.log('Bonk!', event.body.userData)
+  };
 
   const activeCar = (
     <Car
@@ -17,6 +22,7 @@ function ParkingLot() {
         position: [0, 3, 0],
         angularVelocity: [0, 0, 0.2],
       }}
+      onCollide={onCollide}
       wireframe={false}
       controllable
       movable

@@ -4,11 +4,11 @@ import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
 
-import { getModelPath } from '../../utils/models';
-import { ModelData } from '../../types/models';
-import { getPlastic, getRubber, getSteel, getGlass } from '../../utils/materials';
+import { getModelPath } from '../../../utils/models';
+import { ModelData } from '../../../types/models';
+import { getPlastic, getRubber, getSteel, getGlass } from '../../../utils/materials';
 import { CHASSIS_MASS, CHASSIS_SIZE } from './parameters';
-import { NumVec3 } from '../../types/vectors';
+import { NumVec3 } from '../../../types/vectors';
 
 const modelPath = getModelPath('beetle.glb');
 

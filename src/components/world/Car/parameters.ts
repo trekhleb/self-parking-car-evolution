@@ -1,4 +1,4 @@
-import { NumVec3 } from '../../types/vectors';
+import { NumVec3 } from '../../../types/vectors';
 
 export const WHEEL_MASS = 1;
 export const WHEEL_RADIUS = 0.3;
