@@ -14,7 +14,7 @@ function ParkingLot() {
   const activeCar = (
     <Car
       bodyProps={{
-        position: [0, 5, 0],
+        position: [0, 3, 0],
         angularVelocity: [0, 0, 0.2],
       }}
       wireframe={false}
