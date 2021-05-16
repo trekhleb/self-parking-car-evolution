@@ -144,7 +144,6 @@ function Car(props: CarProps) {
   const left = useKeyPress(['a', 'ArrowLeft'], controllable);
   const right = useKeyPress(['d', 'ArrowRight'], controllable);
   const brake = useKeyPress([' '], controllable);
-  const reset = useKeyPress(['r'], controllable);
 
   const [steeringValue, setSteeringValue] = useState<number>(0);
   const [engineForce, setEngineForce] = useState<number>(0);
@@ -158,6 +157,8 @@ function Car(props: CarProps) {
     if (!controllable) {
       return;
     }
+
+    // Left-right.
     if (left && !right) {
       setSteeringValue(maxSteerVal);
     } else if (right && !left) {
@@ -165,6 +166,8 @@ function Car(props: CarProps) {
     } else {
       setSteeringValue(0);
     }
+
+    // Front-back.
     if (forward && !backward) {
       setBrakeForce(0);
       setEngineForce(-maxForce);
@@ -174,19 +177,13 @@ function Car(props: CarProps) {
     } else if (engineForce !== 0) {
       setEngineForce(0);
     }
+
+    // Break.
     if (brake) {
       setBrakeForce(maxBrakeForce);
     }
-    if (!brake) setBrakeForce(0)
-    if (reset) {
-      // @ts-ignore
-      chassis.current.api.position.set(0, 5, 0);
-      // @ts-ignore
-      chassis.current.api.velocity.set(0, 0, 0);
-      // @ts-ignore
-      chassis.current.api.angularVelocity.set(0, 0.5, 0);
-      // @ts-ignore
-      chassis.current.api.rotation.set(0, -Math.PI / 4, 0);
+    if (!brake) {
+      setBrakeForce(0);
     }
   })
 
