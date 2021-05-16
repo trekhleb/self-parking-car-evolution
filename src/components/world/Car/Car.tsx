@@ -80,43 +80,51 @@ function Car(props: CarProps) {
 
   // FrontLeft [-X, Y, Z].
   const wheel_fl = useRef<THREE.Object3D | undefined>();
-  const wheelInfo_fl = { ...wheelInfo };
-  wheelInfo_fl.isFrontWheel = true;
-  wheelInfo_fl.chassisConnectionPointLocal = [
-    -CHASSIS_WHEEL_WIDTH / 2,
-    CHASSIS_GROUND_CLEARANCE,
-    CHASSIS_FRONT_WHEEL_SHIFT,
-  ];
+  const wheelInfo_fl = {
+    ...wheelInfo,
+    isFrontWheel: true,
+    chassisConnectionPointLocal: [
+      -CHASSIS_WHEEL_WIDTH / 2,
+      CHASSIS_GROUND_CLEARANCE,
+      CHASSIS_FRONT_WHEEL_SHIFT,
+    ],
+  };
 
   // FrontRight [X, Y, Z].
   const wheel_fr = useRef<THREE.Object3D | undefined>();
-  const wheelInfo_fr = { ...wheelInfo };
-  wheelInfo_fr.isFrontWheel = true;
-  wheelInfo_fr.chassisConnectionPointLocal = [
-    CHASSIS_WHEEL_WIDTH / 2,
-    CHASSIS_GROUND_CLEARANCE,
-    CHASSIS_FRONT_WHEEL_SHIFT
-  ];
+  const wheelInfo_fr = {
+    ...wheelInfo,
+    isFrontWheel: true,
+    chassisConnectionPointLocal: [
+      CHASSIS_WHEEL_WIDTH / 2,
+      CHASSIS_GROUND_CLEARANCE,
+      CHASSIS_FRONT_WHEEL_SHIFT
+    ],
+  };
 
   // BackLeft [-X, Y, -Z].
   const wheel_bl = useRef<THREE.Object3D | undefined>();
-  const wheelInfo_bl = { ...wheelInfo };
-  wheelInfo_bl.isFrontWheel = false;
-  wheelInfo_bl.chassisConnectionPointLocal = [
-    -CHASSIS_WHEEL_WIDTH / 2,
-    CHASSIS_GROUND_CLEARANCE,
-    CHASSIS_BACK_WHEEL_SHIFT,
-  ];
+  const wheelInfo_bl = {
+    ...wheelInfo,
+    isFrontWheel: false,
+    chassisConnectionPointLocal: [
+      -CHASSIS_WHEEL_WIDTH / 2,
+      CHASSIS_GROUND_CLEARANCE,
+      CHASSIS_BACK_WHEEL_SHIFT,
+    ],
+  };
 
   // BackRight [X, Y, -Z].
   const wheel_br = useRef<THREE.Object3D | undefined>();
-  const wheelInfo_br = { ...wheelInfo };
-  wheelInfo_br.isFrontWheel = false;
-  wheelInfo_br.chassisConnectionPointLocal = [
-    CHASSIS_WHEEL_WIDTH / 2,
-    CHASSIS_GROUND_CLEARANCE,
-    CHASSIS_BACK_WHEEL_SHIFT,
-  ];
+  const wheelInfo_br = {
+    ...wheelInfo,
+    isFrontWheel: false,
+    chassisConnectionPointLocal: [
+      CHASSIS_WHEEL_WIDTH / 2,
+      CHASSIS_GROUND_CLEARANCE,
+      CHASSIS_BACK_WHEEL_SHIFT,
+    ],
+  };
 
   wheels.push(wheel_fl, wheel_fr, wheel_bl, wheel_br)
   wheelInfos.push(wheelInfo_fl, wheelInfo_fr, wheelInfo_bl, wheelInfo_br)
