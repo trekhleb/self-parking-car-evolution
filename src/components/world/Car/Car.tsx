@@ -79,44 +79,44 @@ function Car(props: CarProps) {
   };
 
   // FrontLeft [-X, Y, Z].
-  const wheel_fl = useRef<THREE.Object3D | undefined>()
-  const wheelInfo_fl = { ...wheelInfo }
+  const wheel_fl = useRef<THREE.Object3D | undefined>();
+  const wheelInfo_fl = { ...wheelInfo };
+  wheelInfo_fl.isFrontWheel = true;
   wheelInfo_fl.chassisConnectionPointLocal = [
     -CHASSIS_WHEEL_WIDTH / 2,
     CHASSIS_GROUND_CLEARANCE,
     CHASSIS_FRONT_WHEEL_SHIFT,
-  ]
-  wheelInfo_fl.isFrontWheel = true
+  ];
 
   // FrontRight [X, Y, Z].
-  const wheel_fr = useRef<THREE.Object3D | undefined>()
-  const wheelInfo_fr = { ...wheelInfo }
+  const wheel_fr = useRef<THREE.Object3D | undefined>();
+  const wheelInfo_fr = { ...wheelInfo };
+  wheelInfo_fr.isFrontWheel = true;
   wheelInfo_fr.chassisConnectionPointLocal = [
     CHASSIS_WHEEL_WIDTH / 2,
     CHASSIS_GROUND_CLEARANCE,
     CHASSIS_FRONT_WHEEL_SHIFT
-  ]
-  wheelInfo_fr.isFrontWheel = true
+  ];
 
   // BackLeft [-X, Y, -Z].
-  const wheel_bl = useRef<THREE.Object3D | undefined>()
-  const wheelInfo_bl = { ...wheelInfo }
-  wheelInfo_bl.isFrontWheel = false
+  const wheel_bl = useRef<THREE.Object3D | undefined>();
+  const wheelInfo_bl = { ...wheelInfo };
+  wheelInfo_bl.isFrontWheel = false;
   wheelInfo_bl.chassisConnectionPointLocal = [
     -CHASSIS_WHEEL_WIDTH / 2,
     CHASSIS_GROUND_CLEARANCE,
     CHASSIS_BACK_WHEEL_SHIFT,
-  ]
+  ];
 
   // BackRight [X, Y, -Z].
-  const wheel_br = useRef<THREE.Object3D | undefined>()
-  const wheelInfo_br = { ...wheelInfo }
+  const wheel_br = useRef<THREE.Object3D | undefined>();
+  const wheelInfo_br = { ...wheelInfo };
+  wheelInfo_br.isFrontWheel = false;
   wheelInfo_br.chassisConnectionPointLocal = [
     CHASSIS_WHEEL_WIDTH / 2,
     CHASSIS_GROUND_CLEARANCE,
     CHASSIS_BACK_WHEEL_SHIFT,
-  ]
-  wheelInfo_br.isFrontWheel = false
+  ];
 
   wheels.push(wheel_fl, wheel_fr, wheel_bl, wheel_br)
   wheelInfos.push(wheelInfo_fl, wheelInfo_fr, wheelInfo_bl, wheelInfo_br)
@@ -128,7 +128,7 @@ function Car(props: CarProps) {
     indexForwardAxis: 2,
     indexRightAxis: 0,
     indexUpAxis: 1,
-  }))
+  }));
 
   const forward = useKeyPress(['w', 'ArrowUp'], controllable);
   const backward = useKeyPress(['s', 'ArrowDown'], controllable);
@@ -137,58 +137,58 @@ function Car(props: CarProps) {
   const brake = useKeyPress([' '], controllable);
   const reset = useKeyPress(['r'], controllable);
 
-  const [steeringValue, setSteeringValue] = useState(0)
-  const [engineForce, setEngineForce] = useState(0)
-  const [brakeForce, setBrakeForce] = useState(0)
+  const [steeringValue, setSteeringValue] = useState<number>(0);
+  const [engineForce, setEngineForce] = useState<number>(0);
+  const [brakeForce, setBrakeForce] = useState<number>(0);
 
-  const maxSteerVal = 0.5
-  const maxForce = 1000
-  const maxBrakeForce = 100000
+  const maxSteerVal = 0.5;
+  const maxForce = 1000;
+  const maxBrakeForce = 10000;
 
   useFrame(() => {
     if (!controllable) {
       return;
     }
     if (left && !right) {
-      setSteeringValue(maxSteerVal)
+      setSteeringValue(maxSteerVal);
     } else if (right && !left) {
-      setSteeringValue(-maxSteerVal)
+      setSteeringValue(-maxSteerVal);
     } else {
-      setSteeringValue(0)
+      setSteeringValue(0);
     }
     if (forward && !backward) {
-      setBrakeForce(0)
-      setEngineForce(-maxForce)
+      setBrakeForce(0);
+      setEngineForce(-maxForce);
     } else if (backward && !forward) {
-      setBrakeForce(0)
-      setEngineForce(maxForce)
+      setBrakeForce(0);
+      setEngineForce(maxForce);
     } else if (engineForce !== 0) {
-      setEngineForce(0)
+      setEngineForce(0);
     }
     if (brake) {
-      setBrakeForce(maxBrakeForce)
+      setBrakeForce(maxBrakeForce);
     }
     if (!brake) setBrakeForce(0)
     if (reset) {
       // @ts-ignore
-      chassis.current.api.position.set(0, 5, 0)
+      chassis.current.api.position.set(0, 5, 0);
       // @ts-ignore
-      chassis.current.api.velocity.set(0, 0, 0)
+      chassis.current.api.velocity.set(0, 0, 0);
       // @ts-ignore
-      chassis.current.api.angularVelocity.set(0, 0.5, 0)
+      chassis.current.api.angularVelocity.set(0, 0.5, 0);
       // @ts-ignore
-      chassis.current.api.rotation.set(0, -Math.PI / 4, 0)
+      chassis.current.api.rotation.set(0, -Math.PI / 4, 0);
     }
   })
 
   useEffect(() => {
-    api.applyEngineForce(engineForce, 2)
-    api.applyEngineForce(engineForce, 3)
+    api.applyEngineForce(engineForce, 2);
+    api.applyEngineForce(engineForce, 3);
   }, [engineForce])
 
   useEffect(() => {
-    api.setSteeringValue(steeringValue, 0)
-    api.setSteeringValue(steeringValue, 1)
+    api.setSteeringValue(steeringValue, 0);
+    api.setSteeringValue(steeringValue, 1);
   }, [steeringValue])
 
   useEffect(() => {
