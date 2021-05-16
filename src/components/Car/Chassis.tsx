@@ -26,13 +26,8 @@ type ChassisProps = {
   baseColor?: string,
   chassisPosition: NumVec3,
   bodyProps: BoxProps,
+  onCollide?: (event: any) => void,
   userData?: Record<string, any>,
-}
-
-// @TODO: Move it up to the Car level.
-const onCollide = (e: any) => {
-  // the other body:
-  console.log('Bonk!', e.body.userData)
 }
 
 type BeetleProps = {
@@ -169,6 +164,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     chassisPosition,
     bodyProps,
     userData = {},
+    onCollide = (event) => {},
   } = props;
 
   const boxSize = CHASSIS_SIZE;

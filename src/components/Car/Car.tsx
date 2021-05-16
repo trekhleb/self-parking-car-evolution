@@ -143,6 +143,11 @@ function Car(props: CarProps) {
   const maxForce = 1000
   const maxBrakeForce = 100000
 
+  const onCollide = (event: any) => {
+    // the other body:
+    console.log('Bonk!', event.body.userData)
+  };
+
   useFrame(() => {
     if (!controllable) {
       return;
@@ -209,6 +214,7 @@ function Car(props: CarProps) {
         movable={movable}
         baseColor={baseColor}
         bodyProps={{ ...bodyProps }}
+        onCollide={onCollide}
         userData={{
           id: 'vehicle-chassis-id',
         }}
