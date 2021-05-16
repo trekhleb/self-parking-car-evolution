@@ -34,6 +34,7 @@ type WheelInfoOptions = {
 };
 
 type CarProps = {
+  uuid: string,
   wheelRadius?: number,
   wireframe?: boolean,
   styled?: boolean,
@@ -46,6 +47,7 @@ type CarProps = {
 
 function Car(props: CarProps) {
   const {
+    uuid,
     wheelRadius = WHEEL_RADIUS,
     wireframe = false,
     styled = true,
@@ -218,9 +220,7 @@ function Car(props: CarProps) {
         baseColor={baseColor}
         bodyProps={{ ...bodyProps }}
         onCollide={onCollide}
-        userData={{
-          id: 'vehicle-chassis-id',
-        }}
+        userData={{ uuid }}
       />
       <Wheel
         ref={wheel_fl}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
@@ -9,7 +9,10 @@ import Car from './Car/Car';
 import { NumVec3 } from '../../types/vectors';
 import { CHASSIS_BASE_COLOR } from './Car/parameters';
 
+type CarBaseColors = Record<string, string>;
+
 function ParkingLot() {
+  const [carBaseColors, setCarBaseColors] = useState<CarBaseColors>({});
 
   const onCollide = (event: any) => {
     // the other body:
@@ -18,6 +21,7 @@ function ParkingLot() {
 
   const activeCar = (
     <Car
+      uuid="car-main"
       bodyProps={{
         position: [0, 3, 0],
         angularVelocity: [0, 0, 0.2],
@@ -51,6 +55,7 @@ function ParkingLot() {
     return (
       <Car
         key={index}
+        uuid={`car-static-${index}`}
         bodyProps={{ position }}
         wireframe={false}
         controllable={false}
@@ -69,7 +74,6 @@ function ParkingLot() {
       >
         <OrbitControls />
         <color attach="background" args={['lightblue']} />
-        {/*<color attach="background" args={['lightgreen']} />*/}
         <hemisphereLight intensity={1} groundColor={new THREE.Color( 0x080820 )} />
         <spotLight
           position={[-10, 20, 10]}
