@@ -5,9 +5,7 @@ import * as THREE from 'three';
 
 import Chassis from './Chassis';
 import Wheel from './Wheel';
-import { WHEEL_RADIUS } from './parameters';
-
-export const DEFAULT_CAR_BASE_COLOR = '#FFFFFF';
+import { CHASSIS_BASE_COLOR, WHEEL_RADIUS } from './parameters';
 
 type WheelInfoOptions = {
   radius?: number
@@ -44,7 +42,7 @@ function Car(props: CarProps) {
     styled = true,
     controllable = false,
     movable = false,
-    baseColor = DEFAULT_CAR_BASE_COLOR,
+    baseColor = CHASSIS_BASE_COLOR,
     bodyProps = {},
   } = props;
 

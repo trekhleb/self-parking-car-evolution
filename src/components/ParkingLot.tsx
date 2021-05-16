@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import Ground from './Ground';
 import Car, { DEFAULT_CAR_BASE_COLOR } from './Car/Car';
 import { NumVec3 } from '../types/vectors';
+import { CHASSIS_BASE_COLOR } from './Car/parameters';
 
 function ParkingLot() {
 
@@ -49,7 +50,7 @@ function ParkingLot() {
         controllable={false}
         styled={false}
         movable={false}
-        baseColor={DEFAULT_CAR_BASE_COLOR}
+        baseColor={CHASSIS_BASE_COLOR}
       />
     );
   });

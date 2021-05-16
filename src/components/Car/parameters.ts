@@ -10,3 +10,4 @@ export const CHASSIS_WIDTH = 1.7;
 export const CHASSIS_HEIGHT = 1;
 export const CHASSIS_SIZE: NumVec3 = [CHASSIS_WIDTH, CHASSIS_HEIGHT, CHASSIS_LENGTH];
 export const CHASSIS_MASS = 500;
+export const CHASSIS_BASE_COLOR = '#FFFFFF';
