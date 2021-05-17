@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
@@ -7,15 +7,25 @@ import * as THREE from 'three';
 import Ground from './Ground';
 import Car from './Car/Car';
 import { NumVec3 } from '../../types/vectors';
-import { CHASSIS_BASE_COLOR } from './Car/parameters';
+import { CHASSIS_BASE_COLOR, CHASSIS_BASE_TOUCHED_COLOR } from './Car/parameters';
 
 type CarBaseColors = Record<string, string>;
 
 function ParkingLot() {
   const [carBaseColors, setCarBaseColors] = useState<CarBaseColors>({});
+  const carBaseColorsRef = useRef<CarBaseColors>({});
 
   const onCollide = (event: any) => {
-    // the other body:
+    const touchedCarUUID = event?.body?.userData?.uuid;
+    if (!touchedCarUUID) {
+      return;
+    }
+    const newCarBaseColors = {
+      ...carBaseColorsRef.current,
+      [touchedCarUUID]: CHASSIS_BASE_TOUCHED_COLOR,
+    };
+    carBaseColorsRef.current = newCarBaseColors;
+    setCarBaseColors(newCarBaseColors);
     console.log('Bonk!', event.body.userData)
   };
 
@@ -52,16 +62,18 @@ function ParkingLot() {
     }
   }
   const staticCars = staticCarPositions.map((position: NumVec3, index: number) => {
+    const uuid = `car-static-${index}`;
+    const baseColor = uuid in carBaseColors ? carBaseColors[uuid] : CHASSIS_BASE_COLOR;
     return (
       <Car
         key={index}
-        uuid={`car-static-${index}`}
+        uuid={uuid}
         bodyProps={{ position }}
         wireframe={false}
         controllable={false}
         styled={false}
         movable={false}
-        baseColor={CHASSIS_BASE_COLOR}
+        baseColor={baseColor}
       />
     );
   });
