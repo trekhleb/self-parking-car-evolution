@@ -31,19 +31,21 @@ function ParkingLot() {
 
   const onCollideCallback = useCallback(onCollide, [carBaseColors]);
 
-  const activeCar = (
-    <Car
-      uuid="car-main"
-      bodyProps={{
-        position: [0, 3, 0],
-        angularVelocity: [0, 0, 0.2],
-      }}
-      onCollide={onCollideCallback}
-      wireframe={false}
-      controllable
-      movable
-      styled
-    />
+  const activeCars = (
+    <>
+      <Car
+        uuid="car-main"
+        bodyProps={{
+          position: [0, 3, 0],
+          angularVelocity: [0, 0, 0.2],
+        }}
+        onCollide={onCollideCallback}
+        wireframe={false}
+        controllable
+        movable
+        styled
+      />
+    </>
   );
 
   const rows = 2;
@@ -111,7 +113,7 @@ function ParkingLot() {
           allowSleep
         >
           <Ground userData={{ id: 'ground' }} />
-          {activeCar}
+          {activeCars}
           {staticCars}
           {/*<Pillar position={[-5, 2.5, -5]} userData={{ id: 'pillar-1' }} />*/}
           {/*<Pillar position={[0, 2.5, -5]} userData={{ id: 'pillar-2' }} />*/}
