@@ -34,7 +34,7 @@ function ParkingLot() {
   const activeCars = (
     <>
       <Car
-        uuid="car-main"
+        uuid="car-population-1"
         bodyProps={{
           position: [0, 3, 0],
           angularVelocity: [0, 0, 0.2],
