@@ -4,17 +4,14 @@ import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
 
-import { getModelPath } from '../../../utils/models';
 import { ModelData } from '../../../types/models';
 import { getPlastic, getRubber, getSteel, getGlass } from '../../../utils/materials';
-import { CHASSIS_MASS, CHASSIS_SIZE } from './parameters';
+import { CHASSIS_MASS, CHASSIS_MODEL_PATH, CHASSIS_SIZE } from './parameters';
 import { NumVec3 } from '../../../types/vectors';
 
-const modelPath = getModelPath('beetle.glb');
-
-// @TODO: Do this in global space, not inside a component!
+// Preview the model: https://sandbox.babylonjs.com/
 // @see: https://github.com/pmndrs/drei#usegltf
-useGLTF.preload(modelPath);
+// useGLTF.preload(CHASSIS_MODEL_PATH);
 
 type ChassisProps = {
   weight?: number,
@@ -49,7 +46,7 @@ function Beetle(props: BeetleProps) {
     baseColor: color,
   } = props;
 
-  const { nodes, materials }: ModelData = useGLTF(modelPath)
+  const { nodes, materials }: ModelData = useGLTF(CHASSIS_MODEL_PATH)
 
   return (
     <group {...bodyProps} dispose={null}>

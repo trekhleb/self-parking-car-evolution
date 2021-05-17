@@ -4,17 +4,14 @@ import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
 
-import { getModelPath } from '../../../utils/models';
 import { NumVec3, NumVec4 } from '../../../types/vectors';
 import { ModelData } from '../../../types/models';
 import { getRubber, getSteel } from '../../../utils/materials';
-import { WHEEL_MASS, WHEEL_WIDTH } from './parameters';
+import { WHEEL_MASS, WHEEL_MODEL_PATH, WHEEL_WIDTH } from './parameters';
 
-const modelPath = getModelPath('wheel.glb');
-
-// @TODO: Do this in global space, not inside a component!
+// Preview the model.
 // @see: https://github.com/pmndrs/drei#usegltf
-useGLTF.preload(modelPath);
+// useGLTF.preload(WHEEL_MODEL_PATH);
 
 type WheelModelProps = {
   castShadow?: boolean,
@@ -35,7 +32,7 @@ function WheelModel(props: WheelModelProps) {
     baseColor: color,
   } = props;
 
-  const { nodes, materials }: ModelData = useGLTF(modelPath);
+  const { nodes, materials }: ModelData = useGLTF(WHEEL_MODEL_PATH);
 
   const tire = nodes.wheel_1?.geometry;
   const disc = nodes.wheel_2?.geometry;
