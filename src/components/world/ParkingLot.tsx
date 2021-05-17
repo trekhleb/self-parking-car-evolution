@@ -26,8 +26,10 @@ function ParkingLot() {
     };
     carBaseColorsRef.current = newCarBaseColors;
     setCarBaseColors(newCarBaseColors);
-    console.log('Bonk!', event.body.userData)
+    console.log('Bonk!', event.body.userData);
   };
+
+  const onCollideCallback = useCallback(onCollide, [carBaseColors]);
 
   const activeCar = (
     <Car
@@ -36,7 +38,7 @@ function ParkingLot() {
         position: [0, 3, 0],
         angularVelocity: [0, 0, 0.2],
       }}
-      onCollide={onCollide}
+      onCollide={onCollideCallback}
       wireframe={false}
       controllable
       movable
