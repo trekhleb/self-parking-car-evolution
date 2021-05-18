@@ -25,6 +25,8 @@ type ChassisProps = {
   bodyProps: BoxProps,
   onCollide?: (event: any) => void,
   userData?: Record<string, any>,
+  collisionFilterGroup?: number,
+  collisionFilterMask?: number,
 }
 
 type BeetleProps = {
@@ -161,6 +163,8 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     chassisPosition,
     bodyProps,
     userData = {},
+    collisionFilterGroup,
+    collisionFilterMask,
     onCollide = (event) => {},
   } = props;
 
@@ -170,6 +174,8 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
       mass: weight,
       allowSleep: false,
       args: boxSize,
+      collisionFilterGroup,
+      collisionFilterMask,
       onCollide,
       userData,
       type: movable ? 'Dynamic' : 'Static',

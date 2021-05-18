@@ -42,6 +42,8 @@ type CarProps = {
   movable?: boolean,
   baseColor?: string,
   onCollide?: (event: any) => void,
+  collisionFilterGroup?: number,
+  collisionFilterMask?: number,
   bodyProps: BoxProps,
 }
 
@@ -54,6 +56,8 @@ function Car(props: CarProps) {
     controllable = false,
     movable = false,
     baseColor = CHASSIS_BASE_COLOR,
+    collisionFilterGroup,
+    collisionFilterMask,
     bodyProps = {},
     onCollide = (event) => {},
   } = props;
@@ -221,6 +225,8 @@ function Car(props: CarProps) {
         bodyProps={{ ...bodyProps }}
         onCollide={onCollide}
         userData={{ uuid }}
+        collisionFilterGroup={collisionFilterGroup}
+        collisionFilterMask={collisionFilterMask}
       />
       <Wheel
         ref={wheel_fl}

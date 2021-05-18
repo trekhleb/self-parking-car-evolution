@@ -7,9 +7,15 @@ import * as THREE from 'three';
 import Ground from './Ground';
 import Car from './Car/Car';
 import { NumVec3 } from '../../types/vectors';
-import { CHASSIS_BASE_COLOR, CHASSIS_BASE_TOUCHED_COLOR } from './Car/parameters';
+import { CHASSIS_BASE_COLOR, CHASSIS_BASE_TOUCHED_COLOR, CHASSIS_HEIGHT } from './Car/parameters';
 
 type CarBaseColors = Record<string, string>;
+
+// Collision groups and masks must be powers of 2.
+// @see: https://github.com/schteppe/cannon.js/blob/master/demos/collisionFilter.html
+const COLLISION_GROUP_ACTIVE_CARS = 0b0001;
+const COLLISION_GROUP_STATIC_OBJECTS = 0b0010;
+const COLLISION_FILTER_ACTIVE_CARS = COLLISION_GROUP_STATIC_OBJECTS // It can only collide with static objects.
 
 function ParkingLot() {
   const [carBaseColors, setCarBaseColors] = useState<CarBaseColors>({});
@@ -31,22 +37,30 @@ function ParkingLot() {
 
   const onCollideCallback = useCallback(onCollide, [carBaseColors]);
 
-  const activeCars = (
-    <>
+  const activeCarsNum = 10;
+  const activeCars = new Array(activeCarsNum).fill(null).map((_, index) => {
+    const uuid = `car-population-${index}`;
+    // const position = [0, 3 + 3 * index * CHASSIS_HEIGHT, 4 * Math.random() - 2];
+    const position = [0, 3 + 2 * Math.random(), 4 * Math.random() - 2];
+    const angularVelocity = [-0.2, 0, 0];
+    return (
       <Car
-        uuid="car-population-1"
+        key={index}
+        uuid={uuid}
         bodyProps={{
-          position: [0, 3, 0],
-          angularVelocity: [0, 0, 0.2],
+          position,
+          angularVelocity,
         }}
         onCollide={onCollideCallback}
         wireframe={false}
+        collisionFilterGroup={COLLISION_GROUP_ACTIVE_CARS}
+        collisionFilterMask={COLLISION_FILTER_ACTIVE_CARS}
         controllable
         movable
         styled
       />
-    </>
-  );
+    );
+  });
 
   const rows = 2;
   const cols = 5
@@ -78,6 +92,7 @@ function ParkingLot() {
         styled={false}
         movable={false}
         baseColor={baseColor}
+        collisionFilterGroup={COLLISION_GROUP_STATIC_OBJECTS}
       />
     );
   });
@@ -112,7 +127,7 @@ function ParkingLot() {
           broadphase="SAP"
           allowSleep
         >
-          <Ground userData={{ id: 'ground' }} />
+          <Ground userData={{ id: 'ground' }} collisionFilterGroup={COLLISION_GROUP_STATIC_OBJECTS} />
           {activeCars}
           {staticCars}
           {/*<Pillar position={[-5, 2.5, -5]} userData={{ id: 'pillar-1' }} />*/}
