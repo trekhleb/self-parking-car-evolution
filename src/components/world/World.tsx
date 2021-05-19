@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stats } from '@react-three/drei';
+import { OrbitControls, Stats, Environment} from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
 import * as THREE from 'three';
 
@@ -53,6 +53,7 @@ function World() {
           broadphase="SAP"
           allowSleep
         >
+          <Environment background={false} preset={'night'} />
           <ParkingLot />
         </Physics>
       </Canvas>

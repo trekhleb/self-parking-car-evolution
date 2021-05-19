@@ -5,8 +5,8 @@ import { MeshPhysicalMaterialParameters } from 'three';
 
 export const getSteel = (props: MeshStandardMaterialParameters): Material => {
   return new THREE.MeshStandardMaterial({
-    metalness: 0.5,
-    roughness: 0,
+    metalness: 0.9,
+    roughness: 0.1,
     ...props,
   });
 };
@@ -25,10 +25,11 @@ export const getPlastic = (props: MeshStandardMaterialParameters): Material => {
 
 export const getGlass = (props: MeshPhysicalMaterialParameters): Material => {
   return new THREE.MeshPhysicalMaterial({
-    metalness: 0,
-    roughness: 0.1,
+    metalness: 0.5,
+    roughness: 0,
     transmission: 0.9,
-    transparent: true,
     ...props,
+    transparent: true,
+    color: '#FFFFFF',
   });
 };

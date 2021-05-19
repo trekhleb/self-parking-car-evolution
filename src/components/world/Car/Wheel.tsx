@@ -40,7 +40,7 @@ function WheelModel(props: WheelModelProps) {
 
   const tireMaterial = styled
     ? materials.Rubber
-    : getRubber({ wireframe, color });
+    : getRubber({ wireframe, color: '#000000' });
 
   // const discMaterial = styled
   //   ? materials.Steel

@@ -55,13 +55,13 @@ function Beetle(props: BeetleProps) {
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Black paint'] : getSteel({wireframe, color})}
+        material={styled ? materials['Black paint'] : getSteel({wireframe, color: '#000000'})}
         geometry={nodes.chassis_1.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Rubber'] : getRubber({wireframe, color})}
+        material={styled ? materials['Rubber'] : getRubber({wireframe, color: '#000000'})}
         geometry={nodes.chassis_2.geometry}
       />
       <mesh
@@ -73,7 +73,7 @@ function Beetle(props: BeetleProps) {
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Underbody'] : getSteel({wireframe, color})}
+        material={styled ? materials['Underbody'] : getSteel({wireframe, color: '#000000'})}
         geometry={nodes.chassis_4.geometry}
       />
       <mesh
@@ -85,7 +85,7 @@ function Beetle(props: BeetleProps) {
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Interior (dark)'] : getPlastic({wireframe, color})}
+        material={styled ? materials['Interior (dark)'] : getPlastic({wireframe, color: '#000000'})}
         geometry={nodes.chassis_6.geometry}
       />
       <mesh
@@ -97,7 +97,7 @@ function Beetle(props: BeetleProps) {
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Reflector'] : getSteel({wireframe, color})}
+        material={styled ? materials['Reflector'] : getPlastic({wireframe, color})}
         geometry={nodes.chassis_8.geometry}
       />
       <mesh
@@ -114,19 +114,19 @@ function Beetle(props: BeetleProps) {
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Black plastic'] : getPlastic({wireframe, color})}
+        material={styled ? materials['Black plastic'] : getPlastic({wireframe, color: '#000000'})}
         geometry={nodes.chassis_11.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Headlight'] : getSteel({wireframe, color})}
+        material={styled ? materials['Headlight'] : getGlass({wireframe, color})}
         geometry={nodes.chassis_12.geometry}
       />
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Reverse lights'] : getSteel({wireframe, color})}
+        material={styled ? materials['Reverse lights'] : getGlass({wireframe, color})}
         geometry={nodes.chassis_13.geometry} />
       <mesh
         receiveShadow={receiveShadow}
@@ -137,7 +137,7 @@ function Beetle(props: BeetleProps) {
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
-        material={styled ? materials['Tail lights'] : getSteel({wireframe, color})}
+        material={styled ? materials['Tail lights'] : getGlass({wireframe, color})}
         geometry={nodes.chassis_15.geometry}
       />
       <mesh
