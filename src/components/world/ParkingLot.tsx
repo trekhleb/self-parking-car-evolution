@@ -16,6 +16,7 @@ type CarBaseColors = Record<string, string>;
 const COLLISION_GROUP_ACTIVE_CARS = 0b0001;
 const COLLISION_GROUP_STATIC_OBJECTS = 0b0010;
 const COLLISION_MASK_ACTIVE_CARS = COLLISION_GROUP_STATIC_OBJECTS // It can only collide with static objects.
+const COLLISION_MASK_STATIC_OBJECTS = COLLISION_GROUP_ACTIVE_CARS // It can only collide with active cars.
 
 function ParkingLot() {
   const [carBaseColors, setCarBaseColors] = useState<CarBaseColors>({});
@@ -93,6 +94,7 @@ function ParkingLot() {
         movable={false}
         baseColor={baseColor}
         collisionFilterGroup={COLLISION_GROUP_STATIC_OBJECTS}
+        collisionFilterMask={COLLISION_MASK_STATIC_OBJECTS}
       />
     );
   });
@@ -127,7 +129,11 @@ function ParkingLot() {
           broadphase="SAP"
           allowSleep
         >
-          <Ground userData={{ id: 'ground' }} collisionFilterGroup={COLLISION_GROUP_STATIC_OBJECTS} />
+          <Ground
+            userData={{ id: 'ground' }}
+            collisionFilterGroup={COLLISION_GROUP_STATIC_OBJECTS}
+            collisionFilterMask={COLLISION_MASK_STATIC_OBJECTS}
+          />
           {activeCars}
           {staticCars}
           {/*<Pillar position={[-5, 2.5, -5]} userData={{ id: 'pillar-1' }} />*/}
