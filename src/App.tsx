@@ -1,12 +1,12 @@
 import React from 'react';
 
 import './App.css';
-import ParkingLot from './components/world/ParkingLot';
+import World from './components/world/World';
 
 function App() {
   return (
     <div style={{height: '600px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
-      <ParkingLot />
+      <World />
     </div>
   );
 }
