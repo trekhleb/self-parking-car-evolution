@@ -118,8 +118,8 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
     () => ({
       mass,
       type: 'Kinematic',
-      collisionFilterGroup,
-      collisionFilterMask,
+      collisionFilterGroup: 0,
+      collisionFilterMask: 0,
       args: wheelSize,
       ...bodyProps,
     }),
