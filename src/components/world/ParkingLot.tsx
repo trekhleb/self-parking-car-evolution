@@ -15,7 +15,7 @@ type CarBaseColors = Record<string, string>;
 // @see: https://github.com/schteppe/cannon.js/blob/master/demos/collisionFilter.html
 const COLLISION_GROUP_ACTIVE_CARS = 0b0001;
 const COLLISION_GROUP_STATIC_OBJECTS = 0b0010;
-const COLLISION_FILTER_ACTIVE_CARS = COLLISION_GROUP_STATIC_OBJECTS // It can only collide with static objects.
+const COLLISION_MASK_ACTIVE_CARS = COLLISION_GROUP_STATIC_OBJECTS // It can only collide with static objects.
 
 function ParkingLot() {
   const [carBaseColors, setCarBaseColors] = useState<CarBaseColors>({});
@@ -54,7 +54,7 @@ function ParkingLot() {
         onCollide={onCollideCallback}
         wireframe={false}
         collisionFilterGroup={COLLISION_GROUP_ACTIVE_CARS}
-        collisionFilterMask={COLLISION_FILTER_ACTIVE_CARS}
+        collisionFilterMask={COLLISION_MASK_ACTIVE_CARS}
         controllable
         movable
         styled
