@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { useCylinder, CylinderProps, } from '@react-three/cannon';
+import { useCylinder, CylinderProps } from '@react-three/cannon';
 import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
