@@ -34,11 +34,10 @@ function ParkingLot() {
 
   const onCollideCallback = useCallback(onCollide, [carBaseColors]);
 
-  const activeCarsNum = 10;
+  const activeCarsNum = 1;
   const activeCars = new Array(activeCarsNum).fill(null).map((_, index) => {
     const uuid = `car-population-${index}`;
-    // const position = [0, 3 + 3 * index * CHASSIS_HEIGHT, 4 * Math.random() - 2];
-    const position = [0, 3 + 2 * Math.random(), 4 * Math.random() - 2];
+    const position = [0, 2, 4 * Math.random() - 2];
     const angularVelocity = [-0.2, 0, 0];
     return (
       <Car
