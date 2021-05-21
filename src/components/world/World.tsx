@@ -1,34 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stats, Environment} from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
 import * as THREE from 'three';
+import { Checkbox } from 'baseui/checkbox';
 
 import ParkingLot from './ParkingLot';
 
-const DEBUG_GET_PARAM = 'debug';
-
 function World() {
   const [debug, setDebug] = useState<boolean>(false);
-
-  useEffect(() => {
-    const params = new URLSearchParams(document.location.search.substring(1));
-    if (params.has(DEBUG_GET_PARAM)) {
-      setDebug(true);
-    }
-  }, []);
 
   const stats = debug ? (
     <Stats showPanel={0} />
   ) : null;
 
+  const controls = (
+    <div>
+      <Checkbox
+        checked={debug}
+        onChange={(e: any) => setDebug(e?.target?.checked)}
+      >
+        Stats
+      </Checkbox>
+    </div>
+  );
+
   return (
     <div style={{ height: '100%', width: '100%' }}>
-      {stats}
+      {controls}
       <Canvas
         camera={{ position: [-10, 10, 0], fov: 50 }}
         shadows
       >
+        {stats}
         <OrbitControls />
         <color attach="background" args={['lightblue']} />
         <hemisphereLight intensity={1} groundColor={new THREE.Color( 0x080820 )} />

@@ -1,13 +1,13 @@
 import React from 'react';
 
-import './App.css';
-import World from './components/world/World';
+import Layout from './components/shared/Layout';
+import HomeScreen from './components/screens/HomeScreen';
 
 function App() {
   return (
-    <div style={{height: '600px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
-      <World />
-    </div>
+    <Layout>
+      <HomeScreen />
+    </Layout>
   );
 }
 
