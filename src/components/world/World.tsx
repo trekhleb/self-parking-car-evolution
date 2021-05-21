@@ -5,9 +5,13 @@ import { Physics } from '@react-three/cannon';
 import * as THREE from 'three';
 import { Checkbox } from 'baseui/checkbox';
 
-import ParkingLot from './ParkingLot';
+type WorldProps = {
+  children: React.ReactNode,
+};
 
-function World() {
+function World(props: WorldProps) {
+  const { children } = props;
+
   const [debug, setDebug] = useState<boolean>(false);
 
   const stats = debug ? (
@@ -58,7 +62,7 @@ function World() {
           allowSleep
         >
           <Environment background={false} preset={'night'} />
-          <ParkingLot />
+          {children}
         </Physics>
       </Canvas>
     </div>

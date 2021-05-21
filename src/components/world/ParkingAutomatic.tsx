@@ -14,7 +14,7 @@ const COLLISION_GROUP_STATIC_OBJECTS = 0b0010;
 const COLLISION_MASK_ACTIVE_CARS = COLLISION_GROUP_STATIC_OBJECTS // It can only collide with static objects.
 const COLLISION_MASK_STATIC_OBJECTS = COLLISION_GROUP_ACTIVE_CARS // It can only collide with active cars.
 
-function ParkingLot() {
+function ParkingAutomatic() {
   const [carBaseColors, setCarBaseColors] = useState<CarBaseColors>({});
   const carBaseColorsRef = useRef<CarBaseColors>({});
 
@@ -34,7 +34,7 @@ function ParkingLot() {
 
   const onCollideCallback = useCallback(onCollide, [carBaseColors]);
 
-  const activeCarsNum = 1;
+  const activeCarsNum = 10;
   const activeCars = new Array(activeCarsNum).fill(null).map((_, index) => {
     const uuid = `car-population-${index}`;
     const position = [0, 2, 4 * Math.random() - 2];
@@ -107,4 +107,4 @@ function ParkingLot() {
   );
 }
 
-export default ParkingLot;
+export default ParkingAutomatic;
