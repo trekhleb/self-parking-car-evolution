@@ -1,9 +1,11 @@
 import React from 'react';
 import { Client as Styletron } from 'styletron-engine-atomic';
 import { Provider as StyletronProvider } from 'styletron-react';
-import { LightTheme, BaseProvider, styled } from 'baseui';
+import { BaseProvider, LightTheme } from 'baseui';
 
 import './Layout.css';
+import Header from './Header';
+import { Cell, Grid } from 'baseui/layout-grid';
 
 const engine = new Styletron();
 
@@ -16,20 +18,17 @@ function Layout(props: LayoutProps) {
   return (
     <StyletronProvider value={engine}>
       <BaseProvider theme={LightTheme}>
-        <Container>
-          {children}
-        </Container>
+        <Grid>
+          <Cell span={[4, 8, 12]}>
+            <Header />
+          </Cell>
+          <Cell span={[4, 8, 12]}>
+            {children}
+          </Cell>
+        </Grid>
       </BaseProvider>
     </StyletronProvider>
   );
 }
-
-const Container = styled('div', {
-  height: '600px',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexDirection: 'row',
-});
 
 export default Layout;
