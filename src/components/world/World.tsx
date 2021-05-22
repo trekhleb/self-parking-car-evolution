@@ -4,6 +4,7 @@ import { OrbitControls, Stats, Environment} from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
 import * as THREE from 'three';
 import { Checkbox } from 'baseui/checkbox';
+import { styled } from 'baseui';
 
 type WorldProps = {
   children: React.ReactNode,
@@ -30,7 +31,7 @@ function World(props: WorldProps) {
   );
 
   return (
-    <div style={{ height: '100%', width: '100%' }}>
+    <WorldContainer>
       {controls}
       <Canvas
         camera={{ position: [-10, 10, 0], fov: 50 }}
@@ -65,8 +66,12 @@ function World(props: WorldProps) {
           {children}
         </Physics>
       </Canvas>
-    </div>
+    </WorldContainer>
   );
 }
+
+const WorldContainer = styled('div', {
+  height: '400px',
+});
 
 export default World;
