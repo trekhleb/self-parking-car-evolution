@@ -1,16 +1,25 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter, Switch, Route } from 'react-router-dom';
 
 import Layout from './components/shared/Layout';
-import HomeScreen from './components/screens/HomeScreen';
+import ManualParkingScreen from './components/screens/ManualParkingScreen';
+import AutomaticParkingScreen from './components/screens/AutomaticParkingScreen';
+import { routes } from './constants/routes';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Layout>
-        <HomeScreen />
+        <Switch>
+          <Route path={[routes.main.path, routes.manualParking.path]} exact>
+            <ManualParkingScreen />
+          </Route>
+          <Route path={routes.automaticParking.path} exact>
+            <AutomaticParkingScreen />
+          </Route>
+        </Switch>
       </Layout>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

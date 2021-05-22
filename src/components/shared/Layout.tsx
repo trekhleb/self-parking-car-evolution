@@ -2,10 +2,11 @@ import React from 'react';
 import { Client as Styletron } from 'styletron-engine-atomic';
 import { Provider as StyletronProvider } from 'styletron-react';
 import { BaseProvider, LightTheme } from 'baseui';
+import { Cell, Grid } from 'baseui/layout-grid';
 
 import './Layout.css';
 import Header from './Header';
-import { Cell, Grid } from 'baseui/layout-grid';
+import MainNav from './MainNav';
 
 const engine = new Styletron();
 
@@ -21,6 +22,7 @@ function Layout(props: LayoutProps) {
         <Grid>
           <Cell span={[4, 8, 12]}>
             <Header />
+            <MainNav />
           </Cell>
           <Cell span={[4, 8, 12]}>
             {children}

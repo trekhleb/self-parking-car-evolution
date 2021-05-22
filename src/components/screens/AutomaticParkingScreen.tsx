@@ -1,14 +1,14 @@
 import React from 'react';
 
 import World from '../world/World';
-import ParkingManual from '../world/ParkingManual';
 import { styled } from 'baseui';
+import ParkingAutomatic from '../world/ParkingAutomatic';
 
-function HomeScreen() {
+function AutomaticParkingScreen() {
   return (
     <Container>
       <World>
-        <ParkingManual />
+        <ParkingAutomatic />
       </World>
     </Container>
   );
@@ -22,4 +22,4 @@ const Container = styled('div', {
   flexDirection: 'row',
 });
 
-export default HomeScreen;
+export default AutomaticParkingScreen;
