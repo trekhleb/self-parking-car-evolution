@@ -7,7 +7,7 @@ import { routes } from '../../constants/routes';
 function MainNav() {
   return (
     <nav>
-      <NavLink to={routes.main.path} component={StyledLink} exact>
+      <NavLink to={routes.home.path} component={StyledLink} exact>
         Park by myself
       </NavLink>
       <NavLink to={routes.automaticParking.path} component={StyledLink} exact>

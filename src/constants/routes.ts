@@ -1,4 +1,4 @@
-type RouteID = 'main'
+type RouteID = 'home'
   | 'manualParking'
   | 'automaticParking';
 
@@ -9,7 +9,7 @@ type Route = {
 type Routes = Record<RouteID, Route>;
 
 export const routes: Routes = {
-  main: {
+  home: {
     path: '/',
   },
   manualParking: {

@@ -11,7 +11,7 @@ function App() {
     <HashRouter>
       <Layout>
         <Switch>
-          <Route path={[routes.main.path, routes.manualParking.path]} exact>
+          <Route path={[routes.home.path, routes.manualParking.path]} exact>
             <ManualParkingScreen />
           </Route>
           <Route path={routes.automaticParking.path} exact>
