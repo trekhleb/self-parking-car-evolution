@@ -4,12 +4,34 @@ import { Tab, Tabs } from 'baseui/tabs';
 import World from '../world/World';
 import ParkingAutomatic from '../world/ParkingAutomatic';
 import ParkingManual from '../world/ParkingManual';
+import { StyleObject } from 'styletron-standard';
 
 function HomeScreen() {
   const [activeKey, setActiveKey] = React.useState<string | number>('1');
 
+  const tabBarStyle: StyleObject = {
+    paddingLeft: 0,
+    paddingRight: 0,
+  };
+
+  const tabContentStyle: StyleObject = {
+    padding: 0,
+  };
+
+  const tabStyle: StyleObject = {
+    marginLeft: 0,
+    marginRight: 0,
+    paddingLeft: '20px',
+    paddingRight: '20px',
+  };
+
   return (
     <Tabs
+      overrides={{
+        TabBar: { style: tabBarStyle },
+        TabContent: { style: tabContentStyle },
+        Tab: { style: tabStyle },
+      }}
       onChange={({ activeKey }) => { setActiveKey(activeKey); }}
       activeKey={activeKey}
     >
