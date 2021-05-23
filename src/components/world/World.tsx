@@ -5,10 +5,13 @@ import { Physics } from '@react-three/cannon';
 import * as THREE from 'three';
 import { Checkbox } from 'baseui/checkbox';
 import { styled } from 'baseui';
+import { Spinner } from 'baseui/spinner';
 
 type WorldProps = {
   children: React.ReactNode,
 };
+
+const WORLD_CONTAINER_HEIGHT = 400;
 
 function World(props: WorldProps) {
   const { children } = props;
@@ -30,8 +33,22 @@ function World(props: WorldProps) {
     </div>
   );
 
+  const preLoader = (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'absolute',
+      width: '100%',
+      height: `${WORLD_CONTAINER_HEIGHT}px`,
+    }}>
+      <Spinner color="black" />
+    </div>
+  );
+
   return (
     <div>
+      {preLoader}
       <WorldContainer>
         <Canvas
           camera={{ position: [-10, 10, 0], fov: 50 }}
@@ -73,7 +90,7 @@ function World(props: WorldProps) {
 }
 
 const WorldContainer = styled('div', {
-  height: '400px',
+  height: `${WORLD_CONTAINER_HEIGHT}px`,
   boxSizing: 'border-box',
   borderStyle: 'dashed',
   borderColor: 'rgb(220, 220, 220)',
