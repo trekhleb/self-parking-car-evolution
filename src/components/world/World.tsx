@@ -74,6 +74,10 @@ function World(props: WorldProps) {
 
 const WorldContainer = styled('div', {
   height: '400px',
+  boxSizing: 'border-box',
+  borderStyle: 'dashed',
+  borderColor: 'rgb(220, 220, 220)',
+  borderWidth: 0,
 });
 
 export default World;
