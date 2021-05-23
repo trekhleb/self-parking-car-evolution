@@ -7,6 +7,7 @@ import { Cell, Grid } from 'baseui/layout-grid';
 import './Layout.css';
 import Header from './Header';
 import MainNav from './MainNav';
+import Footer from './Footer';
 
 const engine = new Styletron();
 
@@ -26,6 +27,9 @@ function Layout(props: LayoutProps) {
           </Cell>
           <Cell span={[4, 8, 12]}>
             {children}
+          </Cell>
+          <Cell span={[4, 8, 12]}>
+            <Footer />
           </Cell>
         </Grid>
       </BaseProvider>

@@ -20,53 +20,55 @@ function World(props: WorldProps) {
   ) : null;
 
   const controls = (
-    <div>
+    <div style={{ marginTop: '15px' }}>
       <Checkbox
         checked={debug}
         onChange={(e: any) => setDebug(e?.target?.checked)}
       >
-        Stats
+        Perf stats
       </Checkbox>
     </div>
   );
 
   return (
-    <WorldContainer>
-      {controls}
-      <Canvas
-        camera={{ position: [-10, 10, 0], fov: 50 }}
-        shadows
-      >
-        {stats}
-        <OrbitControls />
-        <color attach="background" args={['lightblue']} />
-        <hemisphereLight intensity={1} groundColor={new THREE.Color( 0x080820 )} />
-        <spotLight
-          position={[-10, 20, 10]}
-          angle={0.8}
-          penumbra={1}
-          intensity={1.5}
-          shadow-mapSize-width={2048}
-          shadow-mapSize-height={2048}
-          castShadow
-        />
-        <Physics
-          step={1 / 60}
-          gravity={[0, -10, 0]}
-          iterations={10}
-          defaultContactMaterial={{
-            friction: 0.001,
-            restitution: 0.01,
-            contactEquationRelaxation: 4,
-          }}
-          broadphase="SAP"
-          allowSleep
+    <div>
+      <WorldContainer>
+        <Canvas
+          camera={{ position: [-10, 10, 0], fov: 50 }}
+          shadows
         >
-          <Environment background={false} preset={'night'} />
-          {children}
-        </Physics>
-      </Canvas>
-    </WorldContainer>
+          <OrbitControls />
+          <color attach="background" args={['lightblue']} />
+          <hemisphereLight intensity={1} groundColor={new THREE.Color( 0x080820 )} />
+          <spotLight
+            position={[-10, 20, 10]}
+            angle={0.8}
+            penumbra={1}
+            intensity={1.5}
+            shadow-mapSize-width={2048}
+            shadow-mapSize-height={2048}
+            castShadow
+          />
+          <Physics
+            step={1 / 60}
+            gravity={[0, -10, 0]}
+            iterations={10}
+            defaultContactMaterial={{
+              friction: 0.001,
+              restitution: 0.01,
+              contactEquationRelaxation: 4,
+            }}
+            broadphase="SAP"
+            allowSleep
+          >
+            <Environment background={false} preset={'night'} />
+            {children}
+          </Physics>
+        </Canvas>
+      </WorldContainer>
+      {controls}
+      {stats}
+    </div>
   );
 }
 
