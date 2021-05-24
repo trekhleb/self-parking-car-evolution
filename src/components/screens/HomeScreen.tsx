@@ -44,7 +44,7 @@ function HomeScreen() {
         </World>
       </Tab>
       <Tab title="Manual Parking">
-        <World>
+        <World withNipple>
           <ParkingManual />
         </World>
       </Tab>
