@@ -33,6 +33,10 @@ type WheelInfoOptions = {
   customSlidingRotationalSpeed?: number
 };
 
+export type CarMetaData = {
+  uuid: string,
+};
+
 type CarProps = {
   uuid: string,
   wheelRadius?: number,
@@ -41,7 +45,7 @@ type CarProps = {
   controllable?: boolean,
   movable?: boolean,
   baseColor?: string,
-  onCollide?: (event: any) => void,
+  onCollide?: (carMetaData: CarMetaData, event: any) => void,
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   bodyProps: BoxProps,
@@ -59,7 +63,7 @@ function Car(props: CarProps) {
     collisionFilterGroup,
     collisionFilterMask,
     bodyProps = {},
-    onCollide = (event) => {},
+    onCollide = (carMetaData, event) => {},
   } = props;
 
   const chassis = useRef<THREE.Object3D | undefined>();
@@ -213,6 +217,8 @@ function Car(props: CarProps) {
     position: bodyProps.position,
   };
 
+  const carMetaData: CarMetaData = { uuid };
+
   return (
     <group ref={vehicle}>
       <Chassis
@@ -223,8 +229,8 @@ function Car(props: CarProps) {
         movable={movable}
         baseColor={baseColor}
         bodyProps={{ ...bodyProps }}
-        onCollide={onCollide}
-        userData={{ uuid }}
+        onCollide={(event) => onCollide(carMetaData, event)}
+        userData={carMetaData}
         collisionFilterGroup={collisionFilterGroup}
         collisionFilterMask={collisionFilterMask}
       />
