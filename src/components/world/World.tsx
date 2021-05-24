@@ -16,17 +16,17 @@ const WORLD_CONTAINER_HEIGHT = 400;
 function World(props: WorldProps) {
   const { children } = props;
 
-  const [debug, setDebug] = useState<boolean>(false);
+  const [showPerfStat, setShowPerfStat] = useState<boolean>(false);
 
-  const stats = debug ? (
+  const stats = showPerfStat ? (
     <Stats showPanel={0} />
   ) : null;
 
   const controls = (
     <div style={{ marginTop: '15px' }}>
       <Checkbox
-        checked={debug}
-        onChange={(e: any) => setDebug(e?.target?.checked)}
+        checked={showPerfStat}
+        onChange={(e: any) => setShowPerfStat(e?.target?.checked)}
       >
         Perf stats
       </Checkbox>
