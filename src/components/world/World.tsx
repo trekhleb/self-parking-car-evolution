@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { Checkbox } from 'baseui/checkbox';
 import { styled } from 'baseui';
 import { Spinner } from 'baseui/spinner';
+import { Block } from 'baseui/block';
 
 type WorldProps = {
   children: React.ReactNode,
@@ -47,7 +48,7 @@ function World(props: WorldProps) {
   );
 
   return (
-    <div>
+    <Block position="relative">
       {preLoader}
       <WorldContainer>
         <Canvas
@@ -85,7 +86,7 @@ function World(props: WorldProps) {
       </WorldContainer>
       {controls}
       {stats}
-    </div>
+    </Block>
   );
 }
 
