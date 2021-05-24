@@ -13,7 +13,7 @@ import {
   CHASSIS_WHEEL_WIDTH,
   WHEEL_RADIUS
 } from './parameters';
-import { useKeyPress } from './useKeyPress';
+import { useKeyPress } from '../../shared/useKeyPress';
 
 type WheelInfoOptions = {
   radius?: number
