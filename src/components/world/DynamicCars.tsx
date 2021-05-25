@@ -6,10 +6,11 @@ type DynamicCarsProps = {
   carsNum?: number,
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
+  withSensors?: boolean,
 };
 
 function DynamicCars(props: DynamicCarsProps) {
-  const { carsNum = 1, collisionFilterGroup, collisionFilterMask } = props;
+  const { carsNum = 1, collisionFilterGroup, collisionFilterMask, withSensors = false } = props;
 
   const activeCars = new Array(carsNum).fill(null).map((_, index) => {
     const uuid = `car-dynamic-${index}`;
@@ -26,6 +27,7 @@ function DynamicCars(props: DynamicCarsProps) {
         wireframe={false}
         collisionFilterGroup={collisionFilterGroup}
         collisionFilterMask={collisionFilterMask}
+        withSensors={withSensors}
         controllable
         movable
         styled
