@@ -19,7 +19,7 @@ const WORLD_CONTAINER_HEIGHT = 400;
 function World(props: WorldProps) {
   const { children, withNipple = false } = props;
 
-  const [showPerfStat, setShowPerfStat] = useState<boolean>(false);
+  const [showPerfStat, setShowPerfStat] = useState<boolean>(true);
 
   const stats = showPerfStat ? (
     <Stats showPanel={0} />
