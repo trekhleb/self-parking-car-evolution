@@ -198,19 +198,9 @@ function Car(props: CarProps) {
     }
 
     if (sensorRef1.current && chassis.current) {
-      const chassisPosition = new THREE.Vector3();
-      chassis.current.getWorldPosition(chassisPosition);
-
-      sensorRef1.current.position.x = chassisPosition.x;
+      chassis.current.getWorldQuaternion(sensorRef1.current.quaternion);
+      chassis.current.getWorldPosition(sensorRef1.current.position);
       sensorRef1.current.position.y = SENSOR_HEIGHT;
-      sensorRef1.current.position.z = chassisPosition.z;
-
-      // const chassisQuaternion = new THREE.Quaternion();
-      // chassis.current.getWorldQuaternion(chassisQuaternion);
-      //
-      // sensorRef1.current.quaternion.x = chassisQuaternion.x;
-      // sensorRef1.current.quaternion.y = chassisQuaternion.y;
-      // sensorRef1.current.quaternion.z = chassisQuaternion.z;
     }
 
     // Left-right.
