@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import Car, { CarMetaData } from './Car/Car';
 import { NumVec3 } from '../../types/vectors';
@@ -44,8 +44,6 @@ function StaticCars(props: StaticCarsProps) {
     console.log('Bonk!', {self: carMetaData, target: event.body.userData});
   };
 
-  const onCollideCallback = useCallback(onCollide, [carBaseColors]);
-
   const staticCarPositions: NumVec3[] = [];
   for (let row = 0; row < rows; row += 1) {
     for (let col = 0; col < cols; col += 1) {
@@ -74,7 +72,7 @@ function StaticCars(props: StaticCarsProps) {
         baseColor={baseColor}
         collisionFilterGroup={collisionFilterGroup}
         collisionFilterMask={collisionFilterMask}
-        onCollide={onCollideCallback}
+        onCollide={onCollide}
       />
     );
   });
