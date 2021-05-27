@@ -1,7 +1,9 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { BoxProps, useRaycastVehicle, useRaycastClosest } from '@react-three/cannon';
+import { BoxProps, useRaycastVehicle } from '@react-three/cannon';
 import * as THREE from 'three';
+import { Line2 } from 'three/examples/jsm/lines/Line2';
+import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 
 import Chassis from './Chassis';
 import Wheel from './Wheel';
@@ -16,8 +18,7 @@ import {
   WHEEL_RADIUS
 } from './parameters';
 import { useKeyPress } from '../../shared/useKeyPress';
-import { Line } from '@react-three/drei';
-import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
+import SensorRay from './SensorRay';
 
 type WheelInfoOptions = {
   radius?: number
@@ -73,7 +74,7 @@ function Car(props: CarProps) {
   } = props;
 
   const chassis = useRef<THREE.Object3D | undefined>();
-  const sensorRef1 = useRef<THREE.Line | undefined>();
+  const sensorRef1 = useRef<Line2 | undefined>();
 
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
   const wheelInfos: WheelInfoOptions[] = [];
@@ -156,28 +157,6 @@ function Car(props: CarProps) {
     indexUpAxis: 1,
   }));
 
-  // useRaycastClosest({
-  //   from: [0, SENSOR_HEIGHT, 0],
-  //   to: [0, SENSOR_HEIGHT, SENSOR_DISTANCE],
-  // }, (event) => {
-  //   if (!sensorRef1.current) {
-  //     return;
-  //   }
-  //   // @ts-ignore
-  //   if (event.hasHit) {
-  //     // @ts-ignore
-  //     if (sensorRef1.current.color) {
-  //       // sensorRef1.current.material.color = 'red';
-  //       // @ts-ignore
-  //       sensorRef1.current.color = 'red';
-  //     }
-  //     // @ts-ignore
-  //     // console.log({distance: event.distance});
-  //   } else {
-  //
-  //   }
-  // });
-
   const forward = useKeyPress(['w', 'ArrowUp'], controllable);
   const backward = useKeyPress(['s', 'ArrowDown'], controllable);
   const left = useKeyPress(['a', 'ArrowLeft'], controllable);
@@ -255,15 +234,14 @@ function Car(props: CarProps) {
   const carMetaData: CarMetaData = { uuid };
 
   const sensors = withSensors ? (
-      <Line
-        points={[[0, SENSOR_HEIGHT, 0], [0, SENSOR_HEIGHT, SENSOR_DISTANCE]]}
-        color="green"
-        lineWidth={0.5}
-        dashed={false}
-        // @ts-ignore
-        ref={sensorRef1}
-      />
-    ) : null;
+    <SensorRay
+      from={[0, SENSOR_HEIGHT, 0]}
+      to={[SENSOR_DISTANCE, SENSOR_HEIGHT, 0]}
+      collisionFilterGroup={collisionFilterGroup}
+      collisionFilterMask={collisionFilterMask}
+      ref={sensorRef1}
+    />
+  ) : null;
 
   return (
     <group ref={vehicle}>
