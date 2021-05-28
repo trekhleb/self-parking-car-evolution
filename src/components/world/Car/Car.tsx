@@ -12,35 +12,14 @@ import {
   CHASSIS_BASE_COLOR,
   CHASSIS_FRONT_WHEEL_SHIFT,
   CHASSIS_GROUND_CLEARANCE,
+  CHASSIS_RELATIVE_POSITION,
   CHASSIS_WHEEL_WIDTH,
-  SENSOR_DISTANCE,
   SENSOR_HEIGHT,
   WHEEL_RADIUS
-} from './parameters';
+} from './constants';
 import { useKeyPress } from '../../shared/useKeyPress';
-import SensorRay from './SensorRay';
-
-type WheelInfoOptions = {
-  radius?: number
-  directionLocal?: number[]
-  suspensionStiffness?: number
-  suspensionRestLength?: number
-  maxSuspensionForce?: number
-  maxSuspensionTravel?: number
-  dampingRelaxation?: number
-  dampingCompression?: number
-  frictionSlip?: number
-  rollInfluence?: number
-  axleLocal?: number[]
-  chassisConnectionPointLocal?: number[]
-  isFrontWheel?: boolean
-  useCustomSlidingRotationalSpeed?: boolean
-  customSlidingRotationalSpeed?: number
-};
-
-export type CarMetaData = {
-  uuid: string,
-};
+import { CarMetaData, WheelInfoOptions } from './types';
+import Sensors from './Sensors';
 
 type CarProps = {
   uuid: string,
@@ -234,12 +213,9 @@ function Car(props: CarProps) {
   const carMetaData: CarMetaData = { uuid };
 
   const sensors = withSensors ? (
-    <SensorRay
-      from={[0, SENSOR_HEIGHT, 0]}
-      to={[SENSOR_DISTANCE, SENSOR_HEIGHT, 0]}
+    <Sensors
       collisionFilterGroup={collisionFilterGroup}
       collisionFilterMask={collisionFilterMask}
-      ref={sensorRef1}
     />
   ) : null;
 
@@ -247,7 +223,7 @@ function Car(props: CarProps) {
     <group ref={vehicle}>
       <Chassis
         ref={chassis}
-        chassisPosition={[0, -0.6, 0]}
+        chassisPosition={CHASSIS_RELATIVE_POSITION}
         styled={styled}
         wireframe={wireframe}
         movable={movable}

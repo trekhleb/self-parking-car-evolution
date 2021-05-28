@@ -6,7 +6,7 @@ import { GroupProps } from '@react-three/fiber';
 
 import { ModelData } from '../../../types/models';
 import { getPlastic, getRubber, getSteel, getGlass } from '../../../utils/materials';
-import { CHASSIS_MASS, CHASSIS_MODEL_PATH, CHASSIS_SIZE } from './parameters';
+import { CHASSIS_MASS, CHASSIS_MODEL_PATH, CHASSIS_SIZE } from './constants';
 import { NumVec3 } from '../../../types/vectors';
 
 // Preview the model: https://sandbox.babylonjs.com/

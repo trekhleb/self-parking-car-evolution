@@ -6,7 +6,7 @@ import { useRaycastClosest } from '@react-three/cannon';
 import { Line } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
-import { SENSOR_HEIGHT } from './parameters';
+import { SENSOR_HEIGHT } from './constants';
 import { MathUtils } from 'three';
 
 type SensorRayProps = {

@@ -7,7 +7,7 @@ import { GroupProps } from '@react-three/fiber';
 import { NumVec3, NumVec4 } from '../../../types/vectors';
 import { ModelData } from '../../../types/models';
 import { getRubber, getSteel } from '../../../utils/materials';
-import { WHEEL_MASS, WHEEL_MODEL_PATH, WHEEL_WIDTH } from './parameters';
+import { WHEEL_MASS, WHEEL_MODEL_PATH, WHEEL_WIDTH } from './constants';
 
 // Preview the model.
 // @see: https://github.com/pmndrs/drei#usegltf

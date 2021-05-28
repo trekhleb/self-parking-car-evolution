@@ -19,6 +19,7 @@ export const CHASSIS_BACK_WHEEL_SHIFT = -1.15;
 export const CHASSIS_GROUND_CLEARANCE = -0.04;
 export const CHASSIS_WHEEL_WIDTH = 1.2;
 export const CHASSIS_MODEL_PATH = getModelPath('beetle.glb');
+export const CHASSIS_RELATIVE_POSITION: NumVec3 = [0, -0.6, 0];
 
 export const SENSOR_HEIGHT = CHASSIS_HEIGHT / 4;
 export const SENSOR_DISTANCE = 4;

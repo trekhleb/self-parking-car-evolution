@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 
-import Car, { CarMetaData } from './Car/Car';
+import Car from './Car/Car';
 import { NumVec3 } from '../../types/vectors';
-import { CHASSIS_BASE_COLOR, CHASSIS_BASE_TOUCHED_COLOR } from './Car/parameters';
+import { CHASSIS_BASE_COLOR, CHASSIS_BASE_TOUCHED_COLOR } from './Car/constants';
+import { CarMetaData } from './Car/types';
 
 type CarBaseColors = Record<string, string>;
 
