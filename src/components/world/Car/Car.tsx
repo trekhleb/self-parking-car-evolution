@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useRef } from 'react';
+import React, { MutableRefObject, useEffect, useRef } from 'react';
 import { BoxProps, useRaycastVehicle } from '@react-three/cannon';
 import * as THREE from 'three';
 
@@ -22,13 +22,20 @@ import {
   WHEEL_SUSPENSION_REST_LENGTH,
   WHEEL_SUSPENSION_STIFFNESS
 } from './constants';
-import { CarMetaData, WheelInfoOptions } from './types';
+import { CarMetaData, RaycastVehiclePublicApi, WheelInfoOptions } from './types';
 import Sensors from './Sensors';
 import KeyboardController from './KeyboardController';
 import JoystickController from './JoystickController';
 
+export type OnCarReadyArgs = {
+  api: RaycastVehiclePublicApi,
+  wheels: MutableRefObject<THREE.Object3D | undefined>[],
+  chassis: THREE.Object3D,
+};
+
 type CarProps = {
   uuid: string,
+  bodyProps: BoxProps,
   wheelRadius?: number,
   wireframe?: boolean,
   styled?: boolean,
@@ -40,7 +47,7 @@ type CarProps = {
   onCollide?: (carMetaData: CarMetaData, event: any) => void,
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
-  bodyProps: BoxProps,
+  onCarReady?: (args: OnCarReadyArgs) => void,
 }
 
 function Car(props: CarProps) {
@@ -57,10 +64,13 @@ function Car(props: CarProps) {
     collisionFilterGroup,
     collisionFilterMask,
     bodyProps = {},
-    onCollide = (carMetaData, event) => {},
+    onCollide = () => {},
+    onCarReady = () => {},
   } = props;
 
   const chassis = useRef<THREE.Object3D | undefined>();
+  const apiRef = useRef<RaycastVehiclePublicApi | undefined>();
+  const wheelsRef = useRef<MutableRefObject<THREE.Object3D | undefined>[]>([]);
 
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
   const wheelInfos: WheelInfoOptions[] = [];
@@ -169,6 +179,21 @@ function Car(props: CarProps) {
       wheels={wheels}
     />
   ) : null;
+
+  apiRef.current = vehicleAPI;
+  wheelsRef.current = wheels;
+
+  useEffect(() => {
+    if (!apiRef.current || !chassis.current) {
+      return;
+    }
+    console.log('+++++++');
+    onCarReady({
+      api: apiRef.current,
+      wheels: wheelsRef.current,
+      chassis: chassis.current,
+    });
+  }, []);
 
   return (
     <>

@@ -1,14 +1,6 @@
 import React, { MutableRefObject, useEffect, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 
-import {
-  CAR_MAX_BREAK_FORCE,
-  CAR_MAX_FORCE,
-  CAR_MAX_STEER_VALUE,
-} from './constants';
-import { useKeyPress } from '../../hooks/useKeyPress';
 import { RaycastVehiclePublicApi } from './types';
 import ReactNipple from 'react-nipple';
 
@@ -18,7 +10,7 @@ type JoystickControllerProps = {
 }
 
 function JoystickController(props: JoystickControllerProps) {
-  const { vehicleAPI, wheels } = props;
+  // const { vehicleAPI, wheels } = props;
 
   // const forward = useKeyPress(['w', 'ArrowUp']);
   // const backward = useKeyPress(['s', 'ArrowDown']);
@@ -78,9 +70,7 @@ function JoystickController(props: JoystickControllerProps) {
 
   const nippleSize = 100;
 
-  return null;
-
-  return (
+  const nipple = (
     <ReactNipple
       style={{
         width: nippleSize,
@@ -91,6 +81,7 @@ function JoystickController(props: JoystickControllerProps) {
       }}
       // @see: https://github.com/yoannmoinet/nipplejs#options
       options={{
+        dynamicPage: true,
         color: 'white',
         mode: 'static',
         size: nippleSize,
@@ -101,6 +92,8 @@ function JoystickController(props: JoystickControllerProps) {
       onEnd={(evt: any, data: any) => console.log('end')}
     />
   );
+
+  return null;
 }
 
 export default JoystickController;
