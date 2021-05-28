@@ -7,17 +7,15 @@ import { Checkbox } from 'baseui/checkbox';
 import { styled } from 'baseui';
 import { Spinner } from 'baseui/spinner';
 import { Block } from 'baseui/block';
-import ReactNipple from 'react-nipple';
 
 type WorldProps = {
   children: React.ReactNode,
-  withNipple?: boolean,
 };
 
 const WORLD_CONTAINER_HEIGHT = 400;
 
 function World(props: WorldProps) {
-  const { children, withNipple = false } = props;
+  const { children } = props;
 
   const [showPerfStat, setShowPerfStat] = useState<boolean>(true);
 
@@ -48,29 +46,6 @@ function World(props: WorldProps) {
       <Spinner color="black" />
     </div>
   );
-
-  const nippleSize = 100;
-  const nipple = withNipple ? (
-    <ReactNipple
-      style={{
-        width: nippleSize,
-        height: nippleSize,
-        marginTop: -nippleSize - 20,
-        marginLeft: `calc(50% - ${Math.floor(nippleSize / 2)}px)`,
-        position: 'absolute',
-      }}
-      // @see: https://github.com/yoannmoinet/nipplejs#options
-      options={{
-        color: 'white',
-        mode: 'static',
-        size: nippleSize,
-        position: { top: '50%', left: '50%' }
-      }}
-      // @see: https://github.com/yoannmoinet/nipplejs#start
-      onMove={(evt: any, data: any) => console.log(data.direction)}
-      onEnd={(evt: any, data: any) => console.log('end')}
-    />
-  ) : null;
 
   return (
     <Block position="relative">
@@ -108,7 +83,6 @@ function World(props: WorldProps) {
             {children}
           </Physics>
         </Canvas>
-        {nipple}
       </WorldContainer>
       {controls}
       {stats}

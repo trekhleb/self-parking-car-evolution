@@ -16,7 +16,7 @@ function ParkingManual() {
   return (
     <>
       <Ground
-        userData={{ id: 'ground' }}
+        userData={{ uuid: 'ground' }}
         collisionFilterGroup={COLLISION_GROUP_STATIC_OBJECTS}
         collisionFilterMask={COLLISION_MASK_STATIC_OBJECTS}
       />
@@ -24,6 +24,8 @@ function ParkingManual() {
         carsNum={1}
         collisionFilterGroup={COLLISION_GROUP_ACTIVE_CARS}
         collisionFilterMask={COLLISION_MASK_ACTIVE_CARS}
+        withJoystickController
+        withKeyboardController
         withSensors
       />
       <StaticCars

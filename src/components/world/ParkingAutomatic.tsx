@@ -12,17 +12,17 @@ const COLLISION_MASK_ACTIVE_CARS = COLLISION_GROUP_STATIC_OBJECTS // It can only
 const COLLISION_MASK_STATIC_OBJECTS = COLLISION_GROUP_ACTIVE_CARS // It can only collide with active cars.
 
 function ParkingAutomatic() {
-  const activeCarsNum = 10;
+  const dynamicCarsNum = 10;
 
   return (
     <>
       <Ground
-        userData={{ id: 'ground' }}
+        userData={{ uuid: 'ground' }}
         collisionFilterGroup={COLLISION_GROUP_STATIC_OBJECTS}
         collisionFilterMask={COLLISION_MASK_STATIC_OBJECTS}
       />
       <DynamicCars
-        carsNum={activeCarsNum}
+        carsNum={dynamicCarsNum}
         collisionFilterGroup={COLLISION_GROUP_ACTIVE_CARS}
         collisionFilterMask={COLLISION_MASK_ACTIVE_CARS}
       />

@@ -2,7 +2,7 @@ import React from 'react';
 import { usePlane, PlaneProps, } from '@react-three/cannon';
 
 function Ground(props: PlaneProps) {
-  const args: [number, number] = [100, 100];
+  const args: [number, number] = [200, 200];
   const [ref] = usePlane(() => ({
     type: 'Static',
     rotation: [-Math.PI / 2, 0, 0],

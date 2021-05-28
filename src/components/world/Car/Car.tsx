@@ -25,6 +25,7 @@ import {
 import { CarMetaData, WheelInfoOptions } from './types';
 import Sensors from './Sensors';
 import KeyboardController from './KeyboardController';
+import JoystickController from './JoystickController';
 
 type CarProps = {
   uuid: string,
@@ -32,6 +33,7 @@ type CarProps = {
   wireframe?: boolean,
   styled?: boolean,
   withKeyboardController?: boolean,
+  withJoystickController?: boolean,
   movable?: boolean,
   withSensors?: boolean,
   baseColor?: string,
@@ -49,6 +51,7 @@ function Car(props: CarProps) {
     styled = true,
     withSensors = false,
     withKeyboardController = false,
+    withJoystickController = false,
     movable = false,
     baseColor = CHASSIS_BASE_COLOR,
     collisionFilterGroup,
@@ -160,9 +163,17 @@ function Car(props: CarProps) {
     />
   ) : null;
 
+  const joystickController = withJoystickController ? (
+    <JoystickController
+      vehicleAPI={vehicleAPI}
+      wheels={wheels}
+    />
+  ) : null;
+
   return (
     <>
       {keyboardController}
+      {joystickController}
       <group ref={vehicle}>
         <Chassis
           ref={chassis}

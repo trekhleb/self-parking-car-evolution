@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 
 import Car from './Car/Car';
 import { NumVec3 } from '../../types/vectors';
-import { CHASSIS_BASE_COLOR, CHASSIS_BASE_TOUCHED_COLOR } from './Car/constants';
+import { CHASSIS_BASE_COLOR, CHASSIS_BASE_TOUCHED_COLOR, CHASSIS_LENGTH } from './Car/constants';
 import { CarMetaData } from './Car/types';
 
 type CarBaseColors = Record<string, string>;
@@ -15,6 +15,8 @@ type StaticCarsProps = {
   skipCells?: number[][],
   carLength?: number,
   carWidth?: number,
+  withKeyboardController?: boolean,
+  withJoystickController?: boolean,
 };
 
 function StaticCars(props: StaticCarsProps) {
@@ -24,8 +26,10 @@ function StaticCars(props: StaticCarsProps) {
     collisionFilterGroup,
     collisionFilterMask,
     skipCells = [[]],
-    carLength = 4,
+    carLength = CHASSIS_LENGTH,
     carWidth = 1.7,
+    withKeyboardController = false,
+    withJoystickController = false,
   } = props;
 
   const [carBaseColors, setCarBaseColors] = useState<CarBaseColors>({});
@@ -67,7 +71,8 @@ function StaticCars(props: StaticCarsProps) {
         uuid={uuid}
         bodyProps={{ position }}
         wireframe={false}
-        withKeyboardController={false}
+        withKeyboardController={withKeyboardController}
+        withJoystickController={withJoystickController}
         styled={false}
         movable={false}
         baseColor={baseColor}
