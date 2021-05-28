@@ -5,6 +5,7 @@ import World from '../world/World';
 import ParkingAutomatic from '../world/ParkingAutomatic';
 import ParkingManual from '../world/ParkingManual';
 import { StyleObject } from 'styletron-standard';
+import ErrorBoundary from '../shared/ErrorBoundary';
 
 function HomeScreen() {
   const [activeKey, setActiveKey] = React.useState<string | number>('1');
@@ -39,14 +40,18 @@ function HomeScreen() {
       activeKey={activeKey}
     >
       <Tab title="Automatic Parking">
-        <World>
-          <ParkingAutomatic />
-        </World>
+        <ErrorBoundary>
+          <World>
+            <ParkingAutomatic />
+          </World>
+        </ErrorBoundary>
       </Tab>
       <Tab title="Manual Parking">
-        <World>
-          <ParkingManual />
-        </World>
+        <ErrorBoundary>
+          <World>
+            <ParkingManual />
+          </World>
+        </ErrorBoundary>
       </Tab>
     </Tabs>
   );
