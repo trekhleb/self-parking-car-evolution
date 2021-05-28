@@ -53,7 +53,7 @@ function WheelModel(props: WheelModelProps) {
     : getSteel({ wireframe, color });
 
   return (
-    <group {...groupProps} dispose={null}>
+    <group {...groupProps}>
       <mesh
         geometry={tire}
         material={tireMaterial}
