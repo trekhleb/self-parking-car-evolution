@@ -1,15 +1,10 @@
-import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
+import React, { MutableRefObject, useRef } from 'react';
 import { BoxProps, useRaycastVehicle } from '@react-three/cannon';
 import * as THREE from 'three';
-import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 
 import Chassis from './Chassis';
 import Wheel from './Wheel';
 import {
-  CAR_MAX_BREAK_FORCE,
-  CAR_MAX_FORCE,
-  CAR_MAX_STEER_VALUE,
   CHASSIS_BACK_WHEEL_SHIFT,
   CHASSIS_BASE_COLOR,
   CHASSIS_FRONT_WHEEL_SHIFT,
@@ -27,16 +22,16 @@ import {
   WHEEL_SUSPENSION_REST_LENGTH,
   WHEEL_SUSPENSION_STIFFNESS
 } from './constants';
-import { useKeyPress } from '../../shared/useKeyPress';
 import { CarMetaData, WheelInfoOptions } from './types';
 import Sensors from './Sensors';
+import KeyboardController from './KeyboardController';
 
 type CarProps = {
   uuid: string,
   wheelRadius?: number,
   wireframe?: boolean,
   styled?: boolean,
-  controllable?: boolean,
+  withKeyboardController?: boolean,
   movable?: boolean,
   withSensors?: boolean,
   baseColor?: string,
@@ -53,7 +48,7 @@ function Car(props: CarProps) {
     wireframe = false,
     styled = true,
     withSensors = false,
-    controllable = false,
+    withKeyboardController = false,
     movable = false,
     baseColor = CHASSIS_BASE_COLOR,
     collisionFilterGroup,
@@ -136,7 +131,7 @@ function Car(props: CarProps) {
   wheels.push(wheel_fl, wheel_fr, wheel_bl, wheel_br)
   wheelInfos.push(wheelInfo_fl, wheelInfo_fr, wheelInfo_bl, wheelInfo_br)
 
-  const [vehicle, api] = useRaycastVehicle(() => ({
+  const [vehicle, vehicleAPI] = useRaycastVehicle(() => ({
     chassisBody: chassis,
     wheels,
     wheelInfos,
@@ -144,66 +139,6 @@ function Car(props: CarProps) {
     indexRightAxis: 0,
     indexUpAxis: 1,
   }));
-
-  const forward = useKeyPress(['w', 'ArrowUp'], controllable);
-  const backward = useKeyPress(['s', 'ArrowDown'], controllable);
-  const left = useKeyPress(['a', 'ArrowLeft'], controllable);
-  const right = useKeyPress(['d', 'ArrowRight'], controllable);
-  const brake = useKeyPress([' '], controllable);
-
-  const [steeringValue, setSteeringValue] = useState<number>(0);
-  const [engineForce, setEngineForce] = useState<number>(0);
-  const [brakeForce, setBrakeForce] = useState<number>(0);
-
-  useFrame((state: RootState, delta: number) => {
-    if (!controllable) {
-      return;
-    }
-
-    // Left-right.
-    if (left && !right) {
-      setSteeringValue(CAR_MAX_STEER_VALUE);
-    } else if (right && !left) {
-      setSteeringValue(-CAR_MAX_STEER_VALUE);
-    } else {
-      setSteeringValue(0);
-    }
-
-    // Front-back.
-    if (forward && !backward) {
-      setBrakeForce(0);
-      setEngineForce(-CAR_MAX_FORCE);
-    } else if (backward && !forward) {
-      setBrakeForce(0);
-      setEngineForce(CAR_MAX_FORCE);
-    } else if (engineForce !== 0) {
-      setEngineForce(0);
-    }
-
-    // Break.
-    if (brake) {
-      setBrakeForce(CAR_MAX_BREAK_FORCE);
-    }
-    if (!brake) {
-      setBrakeForce(0);
-    }
-  })
-
-  useEffect(() => {
-    api.applyEngineForce(engineForce, 2);
-    api.applyEngineForce(engineForce, 3);
-  }, [engineForce]);
-
-  useEffect(() => {
-    api.setSteeringValue(steeringValue, 0);
-    api.setSteeringValue(steeringValue, 1);
-  }, [steeringValue]);
-
-  useEffect(() => {
-    wheels.forEach((wheel, i) => {
-      api.setBrake(brakeForce, i);
-    })
-  }, [brakeForce]);
 
   const wheelBodyProps = {
     position: bodyProps.position,
@@ -218,57 +153,67 @@ function Car(props: CarProps) {
     />
   ) : null;
 
+  const keyboardController = withKeyboardController ? (
+    <KeyboardController
+      vehicleAPI={vehicleAPI}
+      wheels={wheels}
+    />
+  ) : null;
+
   return (
-    <group ref={vehicle}>
-      <Chassis
-        ref={chassis}
-        chassisPosition={CHASSIS_RELATIVE_POSITION}
-        styled={styled}
-        wireframe={wireframe}
-        movable={movable}
-        baseColor={baseColor}
-        bodyProps={{ ...bodyProps }}
-        onCollide={(event) => onCollide(carMetaData, event)}
-        userData={carMetaData}
-        collisionFilterGroup={collisionFilterGroup}
-        collisionFilterMask={collisionFilterMask}
-      />
-      <Wheel
-        ref={wheel_fl}
-        radius={wheelRadius}
-        bodyProps={wheelBodyProps}
-        styled={styled}
-        wireframe={wireframe}
-        baseColor={baseColor}
-        isLeft
-      />
-      <Wheel
-        ref={wheel_fr}
-        radius={wheelRadius}
-        bodyProps={wheelBodyProps}
-        styled={styled}
-        wireframe={wireframe}
-        baseColor={baseColor}
-      />
-      <Wheel
-        ref={wheel_bl}
-        radius={wheelRadius}
-        bodyProps={wheelBodyProps}
-        styled={styled}
-        wireframe={wireframe}
-        baseColor={baseColor}
-        isLeft
-      />
-      <Wheel
-        ref={wheel_br}
-        radius={wheelRadius}
-        bodyProps={wheelBodyProps}
-        styled={styled}
-        wireframe={wireframe}
-        baseColor={baseColor}
-      />
-      {sensors}
-    </group>
+    <>
+      {keyboardController}
+      <group ref={vehicle}>
+        <Chassis
+          ref={chassis}
+          chassisPosition={CHASSIS_RELATIVE_POSITION}
+          styled={styled}
+          wireframe={wireframe}
+          movable={movable}
+          baseColor={baseColor}
+          bodyProps={{ ...bodyProps }}
+          onCollide={(event) => onCollide(carMetaData, event)}
+          userData={carMetaData}
+          collisionFilterGroup={collisionFilterGroup}
+          collisionFilterMask={collisionFilterMask}
+        />
+        <Wheel
+          ref={wheel_fl}
+          radius={wheelRadius}
+          bodyProps={wheelBodyProps}
+          styled={styled}
+          wireframe={wireframe}
+          baseColor={baseColor}
+          isLeft
+        />
+        <Wheel
+          ref={wheel_fr}
+          radius={wheelRadius}
+          bodyProps={wheelBodyProps}
+          styled={styled}
+          wireframe={wireframe}
+          baseColor={baseColor}
+        />
+        <Wheel
+          ref={wheel_bl}
+          radius={wheelRadius}
+          bodyProps={wheelBodyProps}
+          styled={styled}
+          wireframe={wireframe}
+          baseColor={baseColor}
+          isLeft
+        />
+        <Wheel
+          ref={wheel_br}
+          radius={wheelRadius}
+          bodyProps={wheelBodyProps}
+          styled={styled}
+          wireframe={wireframe}
+          baseColor={baseColor}
+        />
+        {sensors}
+      </group>
+    </>
   )
 }
 

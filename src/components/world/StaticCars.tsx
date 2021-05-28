@@ -67,7 +67,7 @@ function StaticCars(props: StaticCarsProps) {
         uuid={uuid}
         bodyProps={{ position }}
         wireframe={false}
-        controllable={false}
+        withKeyboardController={false}
         styled={false}
         movable={false}
         baseColor={baseColor}

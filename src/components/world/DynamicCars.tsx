@@ -28,7 +28,7 @@ function DynamicCars(props: DynamicCarsProps) {
         collisionFilterGroup={collisionFilterGroup}
         collisionFilterMask={collisionFilterMask}
         withSensors={withSensors}
-        controllable
+        withKeyboardController
         movable
         styled
       />

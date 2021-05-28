@@ -2,6 +2,12 @@ export type CarMetaData = {
   uuid: string,
 };
 
+export type RaycastVehiclePublicApi = {
+  setSteeringValue: (value: number, wheelIndex: number) => void
+  applyEngineForce: (value: number, wheelIndex: number) => void
+  setBrake: (brake: number, wheelIndex: number) => void
+};
+
 export type WheelInfoOptions = {
   radius?: number
   directionLocal?: number[]

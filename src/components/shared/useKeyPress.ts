@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export function useKeyPress(target: string[], active: boolean = true): boolean {
+export function useKeyPress(target: string[]): boolean {
   const [keyPressed, setKeyPressed] = useState(false)
 
   const downHandler = ({ key }: KeyboardEvent) => {
@@ -16,9 +16,6 @@ export function useKeyPress(target: string[], active: boolean = true): boolean {
   };
 
   useEffect(() => {
-    if (!active) {
-      return;
-    }
     window.addEventListener('keydown', downHandler)
     window.addEventListener('keyup', upHandler)
     return () => {
