@@ -1,10 +1,20 @@
 import { NumVec3 } from '../../../types/vectors';
 import { getModelPath } from '../../../utils/models';
 
+// Wheels.
 export const WHEEL_MASS = 1;
 export const WHEEL_RADIUS = 0.3;
 export const WHEEL_WIDTH = 0.5;
 export const WHEEL_MODEL_PATH = getModelPath('wheel.glb');
+export const WHEEL_SUSPENSION_STIFFNESS = 30;
+export const WHEEL_SUSPENSION_REST_LENGTH = 0.3;
+export const WHEEL_MAX_SUSPENSION_FORCE = 10000;
+export const WHEEL_MAX_SUSPENSION_TRAVEL = 0.3;
+export const WHEEL_DAMPING_RELAXATION = 2.3;
+export const WHEEL_DAMPING_COMPRESSION = 4.4;
+export const WHEEL_FRICTION_SLIP = 5;
+export const WHEEL_ROLL_INFLUENCE = 0.01;
+export const WHEEL_CUSTOM_SLIDING_ROTATION_SPEED = -30;
 
 // Roughly the cars' visual dimensions.
 export const CHASSIS_LENGTH = 4;

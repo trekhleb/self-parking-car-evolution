@@ -16,7 +16,16 @@ import {
   CHASSIS_GROUND_CLEARANCE,
   CHASSIS_RELATIVE_POSITION,
   CHASSIS_WHEEL_WIDTH,
-  WHEEL_RADIUS
+  WHEEL_CUSTOM_SLIDING_ROTATION_SPEED,
+  WHEEL_DAMPING_COMPRESSION,
+  WHEEL_DAMPING_RELAXATION,
+  WHEEL_FRICTION_SLIP,
+  WHEEL_MAX_SUSPENSION_FORCE,
+  WHEEL_MAX_SUSPENSION_TRAVEL,
+  WHEEL_RADIUS,
+  WHEEL_ROLL_INFLUENCE,
+  WHEEL_SUSPENSION_REST_LENGTH,
+  WHEEL_SUSPENSION_STIFFNESS
 } from './constants';
 import { useKeyPress } from '../../shared/useKeyPress';
 import { CarMetaData, WheelInfoOptions } from './types';
@@ -59,21 +68,21 @@ function Car(props: CarProps) {
   const wheelInfos: WheelInfoOptions[] = [];
 
   const wheelInfo = {
+    isFrontWheel: false,
     radius: wheelRadius,
     directionLocal: [0, -1, 0], // Same as Physics gravity.
-    suspensionStiffness: 30,
-    suspensionRestLength: 0.3,
-    maxSuspensionForce: 10000,
-    maxSuspensionTravel: 0.3,
-    dampingRelaxation: 2.3,
-    dampingCompression: 4.4,
-    frictionSlip: 5,
-    rollInfluence: 0.01,
     axleLocal: [-1, 0, 0], // wheel rotates around X-axis, invert if wheels rotate the wrong way
     chassisConnectionPointLocal: [1, 0, 1],
-    isFrontWheel: false,
+    suspensionStiffness: WHEEL_SUSPENSION_STIFFNESS,
+    suspensionRestLength: WHEEL_SUSPENSION_REST_LENGTH,
+    maxSuspensionForce: WHEEL_MAX_SUSPENSION_FORCE,
+    maxSuspensionTravel: WHEEL_MAX_SUSPENSION_TRAVEL,
+    dampingRelaxation: WHEEL_DAMPING_RELAXATION,
+    dampingCompression: WHEEL_DAMPING_COMPRESSION,
+    frictionSlip: WHEEL_FRICTION_SLIP,
+    rollInfluence: WHEEL_ROLL_INFLUENCE,
     useCustomSlidingRotationalSpeed: true,
-    customSlidingRotationalSpeed: -30,
+    customSlidingRotationalSpeed: WHEEL_CUSTOM_SLIDING_ROTATION_SPEED,
   };
 
   // FrontLeft [-X, Y, Z].
