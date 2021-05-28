@@ -21,5 +21,11 @@ export const CHASSIS_WHEEL_WIDTH = 1.2;
 export const CHASSIS_MODEL_PATH = getModelPath('beetle.glb');
 export const CHASSIS_RELATIVE_POSITION: NumVec3 = [0, -0.6, 0];
 
+// Sensors.
 export const SENSOR_HEIGHT = CHASSIS_HEIGHT / 4;
 export const SENSOR_DISTANCE = 4;
+
+// Car.
+export const CAR_MAX_STEER_VALUE = 0.5;
+export const CAR_MAX_FORCE = 1000;
+export const CAR_MAX_BREAK_FORCE = 10000;

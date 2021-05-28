@@ -2,19 +2,20 @@ import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { BoxProps, useRaycastVehicle } from '@react-three/cannon';
 import * as THREE from 'three';
-import { Line2 } from 'three/examples/jsm/lines/Line2';
 import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 
 import Chassis from './Chassis';
 import Wheel from './Wheel';
 import {
+  CAR_MAX_BREAK_FORCE,
+  CAR_MAX_FORCE,
+  CAR_MAX_STEER_VALUE,
   CHASSIS_BACK_WHEEL_SHIFT,
   CHASSIS_BASE_COLOR,
   CHASSIS_FRONT_WHEEL_SHIFT,
   CHASSIS_GROUND_CLEARANCE,
   CHASSIS_RELATIVE_POSITION,
   CHASSIS_WHEEL_WIDTH,
-  SENSOR_HEIGHT,
   WHEEL_RADIUS
 } from './constants';
 import { useKeyPress } from '../../shared/useKeyPress';
@@ -53,7 +54,6 @@ function Car(props: CarProps) {
   } = props;
 
   const chassis = useRef<THREE.Object3D | undefined>();
-  const sensorRef1 = useRef<Line2 | undefined>();
 
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
   const wheelInfos: WheelInfoOptions[] = [];
@@ -146,26 +146,16 @@ function Car(props: CarProps) {
   const [engineForce, setEngineForce] = useState<number>(0);
   const [brakeForce, setBrakeForce] = useState<number>(0);
 
-  const maxSteerVal = 0.5;
-  const maxForce = 1000;
-  const maxBrakeForce = 10000;
-
   useFrame((state: RootState, delta: number) => {
     if (!controllable) {
       return;
     }
 
-    if (sensorRef1.current && chassis.current) {
-      chassis.current.getWorldQuaternion(sensorRef1.current.quaternion);
-      chassis.current.getWorldPosition(sensorRef1.current.position);
-      sensorRef1.current.position.y = SENSOR_HEIGHT;
-    }
-
     // Left-right.
     if (left && !right) {
-      setSteeringValue(maxSteerVal);
+      setSteeringValue(CAR_MAX_STEER_VALUE);
     } else if (right && !left) {
-      setSteeringValue(-maxSteerVal);
+      setSteeringValue(-CAR_MAX_STEER_VALUE);
     } else {
       setSteeringValue(0);
     }
@@ -173,17 +163,17 @@ function Car(props: CarProps) {
     // Front-back.
     if (forward && !backward) {
       setBrakeForce(0);
-      setEngineForce(-maxForce);
+      setEngineForce(-CAR_MAX_FORCE);
     } else if (backward && !forward) {
       setBrakeForce(0);
-      setEngineForce(maxForce);
+      setEngineForce(CAR_MAX_FORCE);
     } else if (engineForce !== 0) {
       setEngineForce(0);
     }
 
     // Break.
     if (brake) {
-      setBrakeForce(maxBrakeForce);
+      setBrakeForce(CAR_MAX_BREAK_FORCE);
     }
     if (!brake) {
       setBrakeForce(0);
@@ -193,18 +183,18 @@ function Car(props: CarProps) {
   useEffect(() => {
     api.applyEngineForce(engineForce, 2);
     api.applyEngineForce(engineForce, 3);
-  }, [engineForce])
+  }, [engineForce]);
 
   useEffect(() => {
     api.setSteeringValue(steeringValue, 0);
     api.setSteeringValue(steeringValue, 1);
-  }, [steeringValue])
+  }, [steeringValue]);
 
   useEffect(() => {
     wheels.forEach((wheel, i) => {
       api.setBrake(brakeForce, i);
     })
-  }, [brakeForce])
+  }, [brakeForce]);
 
   const wheelBodyProps = {
     position: bodyProps.position,
