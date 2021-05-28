@@ -8,7 +8,7 @@ import {
   CAR_MAX_FORCE,
   CAR_MAX_STEER_VALUE,
 } from './constants';
-import { useKeyPress } from '../../shared/useKeyPress';
+import { useKeyPress } from '../../hooks/useKeyPress';
 import { RaycastVehiclePublicApi } from './types';
 import ReactNipple from 'react-nipple';
 
