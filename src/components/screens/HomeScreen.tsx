@@ -2,8 +2,8 @@ import React from 'react';
 import { Tab, Tabs } from 'baseui/tabs';
 
 import World from '../world/World';
-import ParkingAutomatic from '../world/ParkingAutomatic';
-import ParkingManual from '../world/ParkingManual';
+import ParkingAutomatic from '../world/parkings/ParkingAutomatic';
+import ParkingManual from '../world/parkings/ParkingManual';
 import { StyleObject } from 'styletron-standard';
 import ErrorBoundary from '../shared/ErrorBoundary';
 
