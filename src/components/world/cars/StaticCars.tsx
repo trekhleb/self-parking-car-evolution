@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
 
-import Car from './Car/Car';
-import { NumVec3 } from '../../types/vectors';
-import { CHASSIS_BASE_COLOR, CHASSIS_BASE_TOUCHED_COLOR, CHASSIS_LENGTH } from './Car/constants';
-import { CarMetaData } from './Car/types';
+import Car from '../car/Car';
+import { NumVec3 } from '../../../types/vectors';
+import { CHASSIS_BASE_COLOR, CHASSIS_BASE_TOUCHED_COLOR, CHASSIS_LENGTH, CHASSIS_WIDTH } from '../car/constants';
+import { CarMetaData } from '../car/types';
+import { generateStaticCarUUID } from '../utils/uuid';
 
 type CarBaseColors = Record<string, string>;
 
@@ -13,10 +14,6 @@ type StaticCarsProps = {
   collisionFilterGroup: number,
   collisionFilterMask: number,
   skipCells?: number[][],
-  carLength?: number,
-  carWidth?: number,
-  withKeyboardController?: boolean,
-  withJoystickController?: boolean,
 };
 
 function StaticCars(props: StaticCarsProps) {
@@ -26,10 +23,6 @@ function StaticCars(props: StaticCarsProps) {
     collisionFilterGroup,
     collisionFilterMask,
     skipCells = [[]],
-    carLength = CHASSIS_LENGTH,
-    carWidth = 1.7,
-    withKeyboardController = false,
-    withJoystickController = false,
   } = props;
 
   const [carBaseColors, setCarBaseColors] = useState<CarBaseColors>({});
@@ -55,15 +48,16 @@ function StaticCars(props: StaticCarsProps) {
       if (skipCells.find(([skipRow, skipCol]) => (skipRow === row && skipCol === col))) {
         continue;
       }
-      const marginedLength = 1.4 * carLength;
-      const marginedWidth = 3.5 * carWidth;
+      const marginedLength = 1.4 * CHASSIS_LENGTH;
+      const marginedWidth = 3.5 * CHASSIS_WIDTH;
       const x = -0.5 * marginedWidth + row * marginedWidth;
       const z = -2 * marginedLength + col * marginedLength;
       staticCarPositions.push([x, 0.6, z]);
     }
   }
+
   const staticCars = staticCarPositions.map((position: NumVec3, index: number) => {
-    const uuid = `car-static-${index}`;
+    const uuid = generateStaticCarUUID(index);
     const baseColor = uuid in carBaseColors ? carBaseColors[uuid] : CHASSIS_BASE_COLOR;
     return (
       <Car
@@ -71,8 +65,6 @@ function StaticCars(props: StaticCarsProps) {
         uuid={uuid}
         bodyProps={{ position }}
         wireframe={false}
-        withKeyboardController={withKeyboardController}
-        withJoystickController={withJoystickController}
         styled={false}
         movable={false}
         baseColor={baseColor}
