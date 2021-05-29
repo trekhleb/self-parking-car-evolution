@@ -1,23 +1,22 @@
-import React, { MutableRefObject, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
 import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 
 import {
   CAR_MAX_BREAK_FORCE,
   CAR_MAX_FORCE,
   CAR_MAX_STEER_VALUE,
-} from './constants';
+} from '../car/constants';
 import { useKeyPress } from '../../hooks/useKeyPress';
-import { RaycastVehiclePublicApi } from './types';
+import { RaycastVehiclePublicApi } from '../car/types';
 
-type KeyboardControllerProps = {
+type CarKeyboardControllerProps = {
   vehicleAPI: RaycastVehiclePublicApi,
-  wheels: MutableRefObject<THREE.Object3D | undefined>[],
+  wheelsNum?: number,
 }
 
-function KeyboardController(props: KeyboardControllerProps) {
-  const { vehicleAPI, wheels } = props;
+function CarKeyboardController(props: CarKeyboardControllerProps) {
+  const { vehicleAPI, wheelsNum = 4 } = props;
 
   const forward = useKeyPress(['w', 'ArrowUp']);
   const backward = useKeyPress(['s', 'ArrowDown']);
@@ -70,12 +69,12 @@ function KeyboardController(props: KeyboardControllerProps) {
   }, [steeringValue]);
 
   useEffect(() => {
-    wheels.forEach((wheel, i) => {
-      vehicleAPI.setBrake(brakeForce, i);
-    })
+    for (let wheelIdx = 0; wheelIdx < wheelsNum; wheelIdx += 1) {
+      vehicleAPI.setBrake(brakeForce, wheelIdx);
+    }
   }, [brakeForce]);
 
   return null;
 }
 
-export default KeyboardController;
+export default CarKeyboardController;
