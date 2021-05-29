@@ -1,5 +1,7 @@
 type CarPartType = 'chassis' | 'wheel';
 
+export type userCarUUID = string;
+
 export type CarMetaData = {
   uuid: string,
   type: CarPartType,
