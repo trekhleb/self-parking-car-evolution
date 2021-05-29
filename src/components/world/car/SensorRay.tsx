@@ -5,7 +5,7 @@ import { Line } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 
-import { NumVec3 } from '../../../types/vectors';
+import { NumVec3 } from '../types/vectors';
 
 type SensorRayProps = {
   from: NumVec3,

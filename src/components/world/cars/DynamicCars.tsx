@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Car, { OnCarReadyArgs } from '../car/Car';
 import CarKeyboardController from '../controlls/CarKeyboardController';
 import { generateDynamicCarUUID } from '../utils/uuid';
-import { userCarUUID } from '../car/types';
+import { userCarUUID } from '../types/car';
 
 type DynamicCarsProps = {
   carsNum?: number,

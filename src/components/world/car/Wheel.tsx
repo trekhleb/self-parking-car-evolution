@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { useCylinder, CylinderProps } from '@react-three/cannon';
 import * as THREE from 'three';
 
-import { NumVec3, NumVec4 } from '../../../types/vectors';
+import { NumVec3, NumVec4 } from '../types/vectors';
 import { WHEEL_MASS, WHEEL_WIDTH } from './constants';
 import WheelModel from './WheelModel';
 

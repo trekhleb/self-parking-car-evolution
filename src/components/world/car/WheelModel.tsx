@@ -2,8 +2,8 @@ import React from 'react';
 import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
 
-import { ModelData } from '../../../types/models';
-import { getRubber, getSteel } from '../../../utils/materials';
+import { ModelData } from '../types/models';
+import { getRubber, getSteel } from '../utils/materials';
 import { WHEEL_MODEL_PATH } from './constants';
 
 // Preview the model.

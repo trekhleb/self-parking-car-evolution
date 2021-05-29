@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { GroupProps } from '@react-three/fiber';
 
 import { CHASSIS_MASS, CHASSIS_SIZE } from './constants';
-import { NumVec3 } from '../../../types/vectors';
+import { NumVec3 } from '../types/vectors';
 import ChassisModel from './ChassisModel';
 
 type ChassisProps = {

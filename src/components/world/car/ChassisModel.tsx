@@ -2,8 +2,8 @@ import React from 'react';
 import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
 
-import { ModelData } from '../../../types/models';
-import { getPlastic, getRubber, getSteel, getGlass } from '../../../utils/materials';
+import { ModelData } from '../types/models';
+import { getPlastic, getRubber, getSteel, getGlass } from '../utils/materials';
 import { CHASSIS_MODEL_PATH } from './constants';
 
 // Preview the model: https://sandbox.babylonjs.com/

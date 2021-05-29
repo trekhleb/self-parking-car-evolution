@@ -22,7 +22,7 @@ import {
   WHEEL_SUSPENSION_REST_LENGTH,
   WHEEL_SUSPENSION_STIFFNESS
 } from './constants';
-import { CarMetaData, RaycastVehiclePublicApi, WheelInfoOptions } from './types';
+import { CarMetaData, RaycastVehiclePublicApi, WheelInfoOptions } from '../types/car';
 import Sensors from './Sensors';
 
 export type OnCarReadyArgs = {

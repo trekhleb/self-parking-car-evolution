@@ -1,4 +1,4 @@
-import { userCarUUID } from '../car/types';
+import { userCarUUID } from '../types/car';
 
 export const generateDynamicCarUUID = (carIndex: number): userCarUUID => {
   return `car-dynamic-${carIndex}`;

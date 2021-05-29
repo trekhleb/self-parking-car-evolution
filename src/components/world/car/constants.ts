@@ -1,5 +1,5 @@
-import { NumVec3 } from '../../../types/vectors';
-import { getModelPath } from '../../../utils/models';
+import { NumVec3 } from '../types/vectors';
+import { getModelPath } from '../utils/models';
 
 // Wheels.
 export const WHEEL_MASS = 1;

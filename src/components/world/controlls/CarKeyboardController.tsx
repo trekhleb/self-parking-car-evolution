@@ -8,7 +8,7 @@ import {
   CAR_MAX_STEER_VALUE,
 } from '../car/constants';
 import { useKeyPress } from '../../hooks/useKeyPress';
-import { RaycastVehiclePublicApi } from '../car/types';
+import { RaycastVehiclePublicApi } from '../types/car';
 
 type CarKeyboardControllerProps = {
   vehicleAPI: RaycastVehiclePublicApi,

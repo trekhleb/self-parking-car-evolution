@@ -1,15 +1,15 @@
 import React, { MutableRefObject, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
-import { RaycastVehiclePublicApi } from './types';
+import { RaycastVehiclePublicApi } from '../types/car';
 import ReactNipple from 'react-nipple';
 
-type JoystickControllerProps = {
+type CarJoystickControllerProps = {
   vehicleAPI: RaycastVehiclePublicApi,
   wheels: MutableRefObject<THREE.Object3D | undefined>[],
 }
 
-function JoystickController(props: JoystickControllerProps) {
+function CarJoystickController(props: CarJoystickControllerProps) {
   // const { vehicleAPI, wheels } = props;
 
   // const forward = useKeyPress(['w', 'ArrowUp']);
@@ -96,4 +96,4 @@ function JoystickController(props: JoystickControllerProps) {
   return null;
 }
 
-export default JoystickController;
+export default CarJoystickController;
