@@ -1,5 +1,5 @@
 import React, { MutableRefObject, useEffect, useRef } from 'react';
-import { BoxProps, useRaycastVehicle } from '@react-three/cannon';
+import { BoxProps, CylinderProps, useRaycastVehicle } from '@react-three/cannon';
 import * as THREE from 'three';
 
 import Chassis from './Chassis';
@@ -24,13 +24,11 @@ import {
 } from './constants';
 import { CarMetaData, RaycastVehiclePublicApi, WheelInfoOptions } from './types';
 import Sensors from './Sensors';
-import KeyboardController from './KeyboardController';
-import JoystickController from './JoystickController';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
-  wheels: MutableRefObject<THREE.Object3D | undefined>[],
   chassis: THREE.Object3D,
+  wheelsNum: number,
 };
 
 type CarProps = {
@@ -39,8 +37,6 @@ type CarProps = {
   wheelRadius?: number,
   wireframe?: boolean,
   styled?: boolean,
-  withKeyboardController?: boolean,
-  withJoystickController?: boolean,
   movable?: boolean,
   withSensors?: boolean,
   baseColor?: string,
@@ -57,8 +53,6 @@ function Car(props: CarProps) {
     wireframe = false,
     styled = true,
     withSensors = false,
-    withKeyboardController = false,
-    withJoystickController = false,
     movable = false,
     baseColor = CHASSIS_BASE_COLOR,
     collisionFilterGroup,
@@ -153,30 +147,25 @@ function Car(props: CarProps) {
     indexUpAxis: 1,
   }));
 
-  const wheelBodyProps = {
-    position: bodyProps.position,
+  const wheelMetaData: CarMetaData = {
+    uuid: 'wheel',
+    type: 'wheel',
   };
 
-  const carMetaData: CarMetaData = { uuid };
+  const wheelBodyProps: CylinderProps = {
+    position: bodyProps.position,
+    userData: wheelMetaData,
+  };
+
+  const carMetaData: CarMetaData = {
+    uuid,
+    type: 'chassis',
+  };
 
   const sensors = withSensors ? (
     <Sensors
       collisionFilterGroup={collisionFilterGroup}
       collisionFilterMask={collisionFilterMask}
-    />
-  ) : null;
-
-  const keyboardController = withKeyboardController ? (
-    <KeyboardController
-      vehicleAPI={vehicleAPI}
-      wheels={wheels}
-    />
-  ) : null;
-
-  const joystickController = withJoystickController ? (
-    <JoystickController
-      vehicleAPI={vehicleAPI}
-      wheels={wheels}
     />
   ) : null;
 
@@ -187,69 +176,64 @@ function Car(props: CarProps) {
     if (!apiRef.current || !chassis.current) {
       return;
     }
-    console.log('+++++++');
     onCarReady({
       api: apiRef.current,
-      wheels: wheelsRef.current,
       chassis: chassis.current,
+      wheelsNum: wheelsRef.current.length,
     });
   }, []);
 
   return (
-    <>
-      {keyboardController}
-      {joystickController}
-      <group ref={vehicle}>
-        <Chassis
-          ref={chassis}
-          chassisPosition={CHASSIS_RELATIVE_POSITION}
-          styled={styled}
-          wireframe={wireframe}
-          movable={movable}
-          baseColor={baseColor}
-          bodyProps={{ ...bodyProps }}
-          onCollide={(event) => onCollide(carMetaData, event)}
-          userData={carMetaData}
-          collisionFilterGroup={collisionFilterGroup}
-          collisionFilterMask={collisionFilterMask}
-        />
-        <Wheel
-          ref={wheel_fl}
-          radius={wheelRadius}
-          bodyProps={wheelBodyProps}
-          styled={styled}
-          wireframe={wireframe}
-          baseColor={baseColor}
-          isLeft
-        />
-        <Wheel
-          ref={wheel_fr}
-          radius={wheelRadius}
-          bodyProps={wheelBodyProps}
-          styled={styled}
-          wireframe={wireframe}
-          baseColor={baseColor}
-        />
-        <Wheel
-          ref={wheel_bl}
-          radius={wheelRadius}
-          bodyProps={wheelBodyProps}
-          styled={styled}
-          wireframe={wireframe}
-          baseColor={baseColor}
-          isLeft
-        />
-        <Wheel
-          ref={wheel_br}
-          radius={wheelRadius}
-          bodyProps={wheelBodyProps}
-          styled={styled}
-          wireframe={wireframe}
-          baseColor={baseColor}
-        />
-        {sensors}
-      </group>
-    </>
+    <group ref={vehicle}>
+      <Chassis
+        ref={chassis}
+        chassisPosition={CHASSIS_RELATIVE_POSITION}
+        styled={styled}
+        wireframe={wireframe}
+        movable={movable}
+        baseColor={baseColor}
+        bodyProps={{ ...bodyProps }}
+        onCollide={(event) => onCollide(carMetaData, event)}
+        userData={carMetaData}
+        collisionFilterGroup={collisionFilterGroup}
+        collisionFilterMask={collisionFilterMask}
+      />
+      <Wheel
+        ref={wheel_fl}
+        radius={wheelRadius}
+        bodyProps={wheelBodyProps}
+        styled={styled}
+        wireframe={wireframe}
+        baseColor={baseColor}
+        isLeft
+      />
+      <Wheel
+        ref={wheel_fr}
+        radius={wheelRadius}
+        bodyProps={wheelBodyProps}
+        styled={styled}
+        wireframe={wireframe}
+        baseColor={baseColor}
+      />
+      <Wheel
+        ref={wheel_bl}
+        radius={wheelRadius}
+        bodyProps={wheelBodyProps}
+        styled={styled}
+        wireframe={wireframe}
+        baseColor={baseColor}
+        isLeft
+      />
+      <Wheel
+        ref={wheel_br}
+        radius={wheelRadius}
+        bodyProps={wheelBodyProps}
+        styled={styled}
+        wireframe={wireframe}
+        baseColor={baseColor}
+      />
+      {sensors}
+    </group>
   )
 }
 

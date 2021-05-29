@@ -1,35 +1,16 @@
-import { BoxProps, useBox } from '@react-three/cannon';
-import React, { forwardRef } from 'react';
-import * as THREE from 'three';
+import React from 'react';
 import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
 
 import { ModelData } from '../../../types/models';
 import { getPlastic, getRubber, getSteel, getGlass } from '../../../utils/materials';
-import { CHASSIS_MASS, CHASSIS_MODEL_PATH, CHASSIS_SIZE } from './constants';
-import { NumVec3 } from '../../../types/vectors';
+import { CHASSIS_MODEL_PATH } from './constants';
 
 // Preview the model: https://sandbox.babylonjs.com/
 // @see: https://github.com/pmndrs/drei#usegltf
 // useGLTF.preload(CHASSIS_MODEL_PATH);
 
-type ChassisProps = {
-  weight?: number,
-  wireframe?: boolean,
-  castShadow?: boolean,
-  receiveShadow?: boolean,
-  styled?: boolean,
-  movable?: boolean,
-  baseColor?: string,
-  chassisPosition: NumVec3,
-  bodyProps: BoxProps,
-  onCollide?: (event: any) => void,
-  userData?: Record<string, any>,
-  collisionFilterGroup?: number,
-  collisionFilterMask?: number,
-}
-
-type BeetleProps = {
+type ChassisModelProps = {
   bodyProps?: GroupProps,
   wireframe?: boolean,
   castShadow?: boolean,
@@ -38,7 +19,7 @@ type BeetleProps = {
   baseColor?: string,
 };
 
-function Beetle(props: BeetleProps) {
+function ChassisModel(props: ChassisModelProps) {
   const {
     bodyProps = {},
     wireframe = false,
@@ -150,57 +131,4 @@ function Beetle(props: BeetleProps) {
   )
 }
 
-// The vehicle chassis
-const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref) => {
-  const {
-    wireframe = false,
-    styled = true,
-    castShadow = true,
-    receiveShadow = true,
-    movable = true,
-    weight = CHASSIS_MASS,
-    baseColor,
-    chassisPosition,
-    bodyProps,
-    userData = {},
-    collisionFilterGroup,
-    collisionFilterMask,
-    onCollide = (event) => {},
-  } = props;
-
-  const boxSize = CHASSIS_SIZE;
-  useBox(
-    () => ({
-      mass: weight,
-      allowSleep: false,
-      args: boxSize,
-      collisionFilterGroup,
-      collisionFilterMask,
-      onCollide,
-      userData,
-      type: movable ? 'Dynamic' : 'Static',
-      ...bodyProps,
-    }),
-    // @ts-ignore
-    ref
-  )
-
-  const groupProps: GroupProps = {
-    position: chassisPosition,
-  };
-
-  return (
-    <mesh ref={ref}>
-      <Beetle
-        bodyProps={groupProps}
-        castShadow={castShadow}
-        receiveShadow={receiveShadow}
-        wireframe={wireframe}
-        styled={styled}
-        baseColor={baseColor}
-      />
-    </mesh>
-  )
-})
-
-export default Chassis;
+export default ChassisModel;

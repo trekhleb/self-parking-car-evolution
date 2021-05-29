@@ -1,13 +1,11 @@
-import { NumVec3 } from '../../../types/vectors';
-import React, { forwardRef, useEffect } from 'react';
+import React, { forwardRef } from 'react';
 import { Line2 } from 'three/examples/jsm/lines/Line2';
 import * as THREE from 'three';
-import { useRaycastClosest } from '@react-three/cannon';
 import { Line } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
-import { SENSOR_HEIGHT } from './constants';
-import { MathUtils } from 'three';
+
+import { NumVec3 } from '../../../types/vectors';
 
 type SensorRayProps = {
   from: NumVec3,

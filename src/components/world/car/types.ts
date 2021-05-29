@@ -1,5 +1,8 @@
+type CarPartType = 'chassis' | 'wheel';
+
 export type CarMetaData = {
   uuid: string,
+  type: CarPartType,
 };
 
 export type RaycastVehiclePublicApi = {
