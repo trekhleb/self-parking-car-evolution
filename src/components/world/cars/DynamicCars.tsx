@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import Car, { OnCarReadyArgs } from '../car/Car';
-import CarKeyboardController from '../controlls/CarKeyboardController';
+import CarKeyboardController from '../controllers/CarKeyboardController';
 import { generateDynamicCarUUID } from '../utils/uuid';
 import { userCarUUID } from '../types/car';
 
