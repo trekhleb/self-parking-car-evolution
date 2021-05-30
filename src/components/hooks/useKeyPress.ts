@@ -28,5 +28,5 @@ export function useKeyPress(target: string[]): boolean {
     }
   }, [upHandlerCallback, downHandlerCallback]);
 
-  return keyPressed
+  return keyPressed;
 }

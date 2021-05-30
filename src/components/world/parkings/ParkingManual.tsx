@@ -23,8 +23,7 @@ function ParkingManual() {
         carsNum={1}
         collisionFilterGroup={COLLISION_GROUP_ACTIVE_CARS}
         collisionFilterMask={COLLISION_MASK_ACTIVE_CARS}
-        withJoystickController
-        withKeyboardController
+        controllable
         withSensors
       />
       <StaticCars

@@ -7,15 +7,23 @@ import { Checkbox } from 'baseui/checkbox';
 import { styled } from 'baseui';
 import { Spinner } from 'baseui/spinner';
 import { Block } from 'baseui/block';
+import CarJoystickController from './controllers/CarJoystickController';
+import CarKeyboardController from './controllers/CarKeyboardController';
 
 type WorldProps = {
   children: React.ReactNode,
+  withJoystickControl?: boolean,
+  withKeyboardControl?: boolean,
 };
 
 const WORLD_CONTAINER_HEIGHT = 400;
 
 function World(props: WorldProps) {
-  const { children } = props;
+  const {
+    children,
+    withJoystickControl = false,
+    withKeyboardControl = false,
+  } = props;
 
   const [showPerfStat, setShowPerfStat] = useState<boolean>(true);
 
@@ -46,6 +54,14 @@ function World(props: WorldProps) {
       <Spinner color="black" />
     </div>
   );
+
+  const joystickController = withJoystickControl ? (
+    <CarJoystickController />
+  ) : null;
+
+  const keyboardController = withKeyboardControl ? (
+    <CarKeyboardController />
+  ) : null;
 
   return (
     <Block position="relative">
@@ -84,6 +100,8 @@ function World(props: WorldProps) {
           </Physics>
         </Canvas>
       </WorldContainer>
+      {joystickController}
+      {keyboardController}
       {controls}
       {stats}
     </Block>

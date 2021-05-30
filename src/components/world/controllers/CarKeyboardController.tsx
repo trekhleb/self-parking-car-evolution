@@ -1,78 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
+import React, { useEffect } from 'react';
 
-import {
-  CAR_MAX_BREAK_FORCE,
-  CAR_MAX_FORCE,
-  CAR_MAX_STEER_VALUE,
-} from '../car/constants';
 import { useKeyPress } from '../../hooks/useKeyPress';
-import { RaycastVehiclePublicApi } from '../types/car';
+import { trigger, carEvents } from '../utils/events';
 
-type CarKeyboardControllerProps = {
-  vehicleAPI: RaycastVehiclePublicApi,
-  wheelsNum?: number,
-}
-
-function CarKeyboardController(props: CarKeyboardControllerProps) {
-  const { vehicleAPI, wheelsNum = 4 } = props;
-
+function CarKeyboardController() {
   const forward = useKeyPress(['w', 'ArrowUp']);
   const backward = useKeyPress(['s', 'ArrowDown']);
   const left = useKeyPress(['a', 'ArrowLeft']);
   const right = useKeyPress(['d', 'ArrowRight']);
   const brake = useKeyPress([' ']);
 
-  const [steeringValue, setSteeringValue] = useState<number>(0);
-  const [engineForce, setEngineForce] = useState<number>(0);
-  const [brakeForce, setBrakeForce] = useState<number>(0);
-
-  useFrame((state: RootState, delta: number) => {
+  useEffect(() => {
     // Left-right.
     if (left && !right) {
-      setSteeringValue(CAR_MAX_STEER_VALUE);
+      trigger(carEvents.wheelsLeft);
     } else if (right && !left) {
-      setSteeringValue(-CAR_MAX_STEER_VALUE);
+      trigger(carEvents.wheelsRight);
     } else {
-      setSteeringValue(0);
+      trigger(carEvents.wheelsStraight);
     }
 
     // Front-back.
     if (forward && !backward) {
-      setBrakeForce(0);
-      setEngineForce(-CAR_MAX_FORCE);
+      trigger(carEvents.engineForward);
     } else if (backward && !forward) {
-      setBrakeForce(0);
-      setEngineForce(CAR_MAX_FORCE);
-    } else if (engineForce !== 0) {
-      setEngineForce(0);
+      trigger(carEvents.engineBackward);
+    } else {
+      trigger(carEvents.engineNeutral);
     }
 
     // Break.
     if (brake) {
-      setBrakeForce(CAR_MAX_BREAK_FORCE);
+      trigger(carEvents.pressBreak);
     }
     if (!brake) {
-      setBrakeForce(0);
+      trigger(carEvents.releaseBreak);
     }
-  })
-
-  useEffect(() => {
-    vehicleAPI.applyEngineForce(engineForce, 2);
-    vehicleAPI.applyEngineForce(engineForce, 3);
-  }, [engineForce]);
-
-  useEffect(() => {
-    vehicleAPI.setSteeringValue(steeringValue, 0);
-    vehicleAPI.setSteeringValue(steeringValue, 1);
-  }, [steeringValue]);
-
-  useEffect(() => {
-    for (let wheelIdx = 0; wheelIdx < wheelsNum; wheelIdx += 1) {
-      vehicleAPI.setBrake(brakeForce, wheelIdx);
-    }
-  }, [brakeForce]);
+  }, [forward, backward, left, right, brake]);
 
   return null;
 }

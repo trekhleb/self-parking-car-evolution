@@ -48,7 +48,7 @@ function Worlds() {
       </Tab>
       <Tab title="Manual Parking">
         <ErrorBoundary>
-          <World>
+          <World withJoystickControl withKeyboardControl>
             <ParkingManual />
           </World>
         </ErrorBoundary>

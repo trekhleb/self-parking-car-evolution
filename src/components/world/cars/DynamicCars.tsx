@@ -1,17 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
 import Car, { OnCarReadyArgs } from '../car/Car';
-import CarKeyboardController from '../controllers/CarKeyboardController';
 import { generateDynamicCarUUID } from '../utils/uuid';
 import { userCarUUID } from '../types/car';
+import { carEvents, on } from '../utils/events';
+import {
+  onEngineBackward,
+  onEngineForward,
+  onEngineNeutral, onPressBreak, onReleaseBreak,
+  onWheelsLeft,
+  onWheelsRight,
+  onWheelsStraight
+} from '../utils/controllers';
 
 type DynamicCarsProps = {
   carsNum?: number,
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   withSensors?: boolean,
-  withKeyboardController?: boolean,
-  withJoystickController?: boolean,
+  controllable?: boolean,
 };
 
 function DynamicCars(props: DynamicCarsProps) {
@@ -20,21 +27,32 @@ function DynamicCars(props: DynamicCarsProps) {
     collisionFilterGroup,
     collisionFilterMask,
     withSensors = false,
-    withKeyboardController = false,
-    withJoystickController = false,
+    controllable = false,
   } = props;
-  const [controllableUUID, setControllableUUID] = useState<userCarUUID | undefined>();
   const carsUUIDs = useRef<userCarUUID[]>([]);
   const carsAPIs = useRef<Record<userCarUUID, OnCarReadyArgs>>({});
 
   const activeCars = new Array(carsNum).fill(null).map((_, index) => {
     const uuid = generateDynamicCarUUID(index);
     carsUUIDs.current.push(uuid);
+
     const onCarReady = (args: OnCarReadyArgs) => {
       carsAPIs.current[uuid] = args;
+      if (controllable) {
+        on(carEvents.engineForward, () => { onEngineForward(args.api) });
+        on(carEvents.engineBackward, () => { onEngineBackward(args.api) });
+        on(carEvents.engineNeutral, () => { onEngineNeutral(args.api) });
+        on(carEvents.wheelsLeft, () => { onWheelsLeft(args.api) });
+        on(carEvents.wheelsRight, () => { onWheelsRight(args.api) });
+        on(carEvents.wheelsStraight, () => { onWheelsStraight(args.api) });
+        on(carEvents.pressBreak, () => { onPressBreak(args.api) });
+        on(carEvents.releaseBreak, () => { onReleaseBreak(args.api) });
+      }
     };
+
     const position = [0, 2, 4 * Math.random() - 2];
     const angularVelocity = [-0.2, 0, 0];
+
     return (
       <Car
         key={index}
@@ -54,25 +72,9 @@ function DynamicCars(props: DynamicCarsProps) {
     );
   });
 
-  // Attach keyboard controller.
-  useEffect(() => {
-    if (!withKeyboardController || !carsUUIDs.current.length || !carsAPIs.current[carsUUIDs.current[0]]) {
-      return;
-    }
-    setControllableUUID(carsUUIDs.current[0]);
-  }, [withKeyboardController])
-
-  const keyboardControls = controllableUUID && withKeyboardController ? (
-    <CarKeyboardController
-      vehicleAPI={carsAPIs.current[controllableUUID].api}
-      wheelsNum={carsAPIs.current[controllableUUID].wheelsNum}
-    />
-  ) : null;
-
   return (
     <>
       {activeCars}
-      {keyboardControls}
     </>
   );
 }
