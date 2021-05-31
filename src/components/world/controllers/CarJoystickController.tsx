@@ -7,7 +7,7 @@ import { carEvents, trigger } from '../utils/events';
 function CarJoystickController() {
   const nippleSize = 100;
   const delta = 30;
-  const throttleTimeout = 300;
+  const throttleTimeout = 250;
 
   const onMove = (event: any, data: any) => {
     const angle = data.angle.degree;
