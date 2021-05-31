@@ -1,17 +1,44 @@
 import React from 'react';
-
+import throttle from 'lodash/throttle';
 import ReactNipple from 'react-nipple';
+
+import { carEvents, trigger } from '../utils/events';
 
 function CarJoystickController() {
   const nippleSize = 100;
+  const delta = 30;
+  const throttleTimeout = 300;
 
   const onMove = (event: any, data: any) => {
-    console.log(data.direction, data.angle);
+    const angle = data.angle.degree;
+    if (angle < (90 - delta) || angle > (270 + delta)) {
+      trigger(carEvents.wheelsRight);
+    } else if (angle > (90 + delta) && angle < (270 - delta)) {
+      trigger(carEvents.wheelsLeft);
+    }
+    if (angle > delta && angle < (180 - delta)) {
+      trigger(carEvents.engineForward);
+    } else if (angle > (180 + delta) && angle < (360 - delta)) {
+      trigger(carEvents.engineBackward);
+    }
   };
+
+  const onMoveThrottled = throttle(onMove, throttleTimeout, {
+    leading: false,
+    trailing: true,
+  });
 
   const onEnd = (event: any, data: any) => {
     console.log('onEnd');
+    trigger(carEvents.releaseBreak);
+    trigger(carEvents.engineNeutral);
+    trigger(carEvents.wheelsStraight);
   };
+
+  const onEndThrottled = throttle(onEnd, throttleTimeout + 10, {
+    leading: false,
+    trailing: true,
+  });
 
   return <ReactNipple
     style={{
@@ -27,11 +54,11 @@ function CarJoystickController() {
       color: 'white',
       mode: 'static',
       size: nippleSize,
-      position: { top: '50%', left: '50%' }
+      position: { top: '50%', left: '50%' },
     }}
     // @see: https://github.com/yoannmoinet/nipplejs#start
-    onMove={onMove}
-    onEnd={onEnd}
+    onMove={onMoveThrottled}
+    onEnd={onEndThrottled}
   />
 }
 
