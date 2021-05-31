@@ -1,0 +1,1 @@
+export const WORLD_CONTAINER_HEIGHT = 400;

@@ -1,7 +1,10 @@
+import { Paragraph4 } from 'baseui/typography';
 import React, { useEffect } from 'react';
 
 import { useKeyPress } from '../../hooks/useKeyPress';
 import { trigger, carEvents } from '../utils/events';
+import { Block } from 'baseui/block';
+import { WORLD_CONTAINER_HEIGHT } from '../constants/world';
 
 function CarKeyboardController() {
   const forward = useKeyPress(['w', 'ArrowUp']);
@@ -38,7 +41,17 @@ function CarKeyboardController() {
     }
   }, [forward, backward, left, right, brake]);
 
-  return null;
+  return (
+    <Block
+      position="relative"
+      marginTop={`${-WORLD_CONTAINER_HEIGHT}px`}
+      paddingLeft="15px"
+    >
+      <Paragraph4 $style={{color: 'white'}}>
+        <code>WASD</code> or <code>↑→↓←</code> to drive. <code>SPACE</code> to break.
+      </Paragraph4>
+    </Block>
+  );
 }
 
 export default CarKeyboardController;

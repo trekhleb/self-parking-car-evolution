@@ -9,14 +9,13 @@ import { Spinner } from 'baseui/spinner';
 import { Block } from 'baseui/block';
 import CarJoystickController from './controllers/CarJoystickController';
 import CarKeyboardController from './controllers/CarKeyboardController';
+import { WORLD_CONTAINER_HEIGHT } from './constants/world';
 
 type WorldProps = {
   children: React.ReactNode,
   withJoystickControl?: boolean,
   withKeyboardControl?: boolean,
 };
-
-const WORLD_CONTAINER_HEIGHT = 400;
 
 function World(props: WorldProps) {
   const {
