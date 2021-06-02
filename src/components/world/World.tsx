@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stats, Environment} from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
 import * as THREE from 'three';
-import { Checkbox } from 'baseui/checkbox';
 import { styled } from 'baseui';
 import { Spinner } from 'baseui/spinner';
 import { Block } from 'baseui/block';
@@ -24,22 +23,18 @@ function World(props: WorldProps) {
     withKeyboardControl = false,
   } = props;
 
-  const [showPerfStat, setShowPerfStat] = useState<boolean>(true);
+  const [showPerfStat, setShowPerfStat] = useState<boolean>(false);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(document.location.search.substring(1));
+    if (searchParams.get('debug')) {
+      setShowPerfStat(true);
+    }
+  }, []);
 
   const stats = showPerfStat ? (
     <Stats showPanel={0} />
   ) : null;
-
-  const controls = (
-    <div style={{ marginTop: '15px' }}>
-      <Checkbox
-        checked={showPerfStat}
-        onChange={(e: any) => setShowPerfStat(e?.target?.checked)}
-      >
-        Perf stats
-      </Checkbox>
-    </div>
-  );
 
   const preLoader = (
     <div style={{
@@ -48,7 +43,14 @@ function World(props: WorldProps) {
       alignItems: 'center',
       position: 'absolute',
       width: '100%',
+      boxSizing: 'border-box',
       height: `${WORLD_CONTAINER_HEIGHT}px`,
+      borderStyle: 'dashed',
+      borderColor: 'rgb(220, 220, 220)',
+      borderLeftWidth: 0,
+      borderRightWidth: 0,
+      borderBottomWidth: 0,
+      borderTopWidth: 0,
     }}>
       <Spinner color="black" />
     </div>
@@ -63,7 +65,7 @@ function World(props: WorldProps) {
   ) : null;
 
   return (
-    <Block position="relative">
+    <Block position="relative" overflow="hidden" display="block" height={`${WORLD_CONTAINER_HEIGHT}px`}>
       {preLoader}
       <WorldContainer>
         <Canvas
@@ -101,7 +103,6 @@ function World(props: WorldProps) {
       </WorldContainer>
       {joystickController}
       {keyboardController}
-      {controls}
       {stats}
     </Block>
   );

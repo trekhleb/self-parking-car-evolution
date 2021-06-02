@@ -2,7 +2,7 @@ import React from 'react';
 
 function Footer() {
   return (
-    <div style={{ marginBottom: '30px' }} />
+    <div style={{ marginBottom: '50px' }} />
   );
 }
 
