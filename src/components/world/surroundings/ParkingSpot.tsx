@@ -5,12 +5,12 @@ import { CHASSIS_LENGTH, CHASSIS_WIDTH } from '../car/constants';
 import { NumVec3 } from '../types/vectors';
 
 type ParkingSpotProps = {
-  position: NumVec3,
+  position?: NumVec3,
   color?: string,
 };
 
 function ParkingSpot(props: ParkingSpotProps) {
-  const { position, color = 'yellow' } = props;
+  const { position = [-3.6, 0, -2.1], color = 'yellow' } = props;
 
   const [x, y, z] = position;
 
@@ -28,7 +28,7 @@ function ParkingSpot(props: ParkingSpotProps) {
         [x, y, z],
       ]}
       color={color}
-      lineWidth={2}
+      lineWidth={4}
       dashed={false}
     />
   );

@@ -20,7 +20,7 @@ function ParkingManual() {
         collisionFilterGroup={COLLISION_GROUP_STATIC_OBJECTS}
         collisionFilterMask={COLLISION_MASK_STATIC_OBJECTS}
       />
-      <ParkingSpot position={[-3.6, 0, -2.1]} />
+      <ParkingSpot />
       <DynamicCars
         carsNum={1}
         collisionFilterGroup={COLLISION_GROUP_ACTIVE_CARS}

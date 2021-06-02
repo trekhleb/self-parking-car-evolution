@@ -3,6 +3,7 @@ import React from 'react';
 import Ground from '../surroundings/Ground';
 import StaticCars from '../cars/StaticCars';
 import DynamicCars from '../cars/DynamicCars';
+import ParkingSpot from '../surroundings/ParkingSpot';
 
 // Collision groups and masks must be powers of 2.
 // @see: https://github.com/schteppe/cannon.js/blob/master/demos/collisionFilter.html
@@ -21,6 +22,7 @@ function ParkingAutomatic() {
         collisionFilterGroup={COLLISION_GROUP_STATIC_OBJECTS}
         collisionFilterMask={COLLISION_MASK_STATIC_OBJECTS}
       />
+      <ParkingSpot />
       <DynamicCars
         carsNum={dynamicCarsNum}
         collisionFilterGroup={COLLISION_GROUP_ACTIVE_CARS}
