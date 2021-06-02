@@ -44,6 +44,7 @@ type CarProps = {
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   onCarReady?: (args: OnCarReadyArgs) => void,
+  onCarDestroy?: () => void,
 }
 
 function Car(props: CarProps) {
@@ -60,6 +61,7 @@ function Car(props: CarProps) {
     bodyProps = {},
     onCollide = () => {},
     onCarReady = () => {},
+    onCarDestroy = () => {},
   } = props;
 
   const chassis = useRef<THREE.Object3D | undefined>();
@@ -174,13 +176,18 @@ function Car(props: CarProps) {
 
   useEffect(() => {
     if (!apiRef.current || !chassis.current) {
-      return;
+      return () => {
+        onCarDestroy();
+      };
     }
     onCarReady({
       api: apiRef.current,
       chassis: chassis.current,
       wheelsNum: wheelsRef.current.length,
     });
+    return () => {
+      onCarDestroy();
+    };
   }, []);
 
   return (

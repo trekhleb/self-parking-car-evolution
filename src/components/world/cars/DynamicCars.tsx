@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import Car, { OnCarReadyArgs } from '../car/Car';
 import { generateDynamicCarUUID } from '../utils/uuid';
 import { userCarUUID } from '../types/car';
-import { carEvents, on } from '../utils/events';
+import { carEvents, off, on } from '../utils/events';
 import {
   onEngineBackward,
   onEngineForward,
@@ -36,17 +36,39 @@ function DynamicCars(props: DynamicCarsProps) {
     const uuid = generateDynamicCarUUID(index);
     carsUUIDs.current.push(uuid);
 
+    const onForward = () => { onEngineForward(carsAPIs.current[uuid].api) };
+    const onBackward = () => { onEngineBackward(carsAPIs.current[uuid].api) };
+    const onNeutral = () => { onEngineNeutral(carsAPIs.current[uuid].api) };
+    const onLeft = () => { onWheelsLeft(carsAPIs.current[uuid].api) };
+    const onRight = () => { onWheelsRight(carsAPIs.current[uuid].api) };
+    const onStraight = () => { onWheelsStraight(carsAPIs.current[uuid].api) };
+    const onBreak = () => { onPressBreak(carsAPIs.current[uuid].api) };
+    const onBreakRelease = () => { onReleaseBreak(carsAPIs.current[uuid].api) };
+
     const onCarReady = (args: OnCarReadyArgs) => {
       carsAPIs.current[uuid] = args;
       if (controllable) {
-        on(carEvents.engineForward, () => { onEngineForward(args.api) });
-        on(carEvents.engineBackward, () => { onEngineBackward(args.api) });
-        on(carEvents.engineNeutral, () => { onEngineNeutral(args.api) });
-        on(carEvents.wheelsLeft, () => { onWheelsLeft(args.api) });
-        on(carEvents.wheelsRight, () => { onWheelsRight(args.api) });
-        on(carEvents.wheelsStraight, () => { onWheelsStraight(args.api) });
-        on(carEvents.pressBreak, () => { onPressBreak(args.api) });
-        on(carEvents.releaseBreak, () => { onReleaseBreak(args.api) });
+        on(carEvents.engineForward, onForward);
+        on(carEvents.engineBackward, onBackward);
+        on(carEvents.engineNeutral, onNeutral);
+        on(carEvents.wheelsLeft, onLeft);
+        on(carEvents.wheelsRight, onRight);
+        on(carEvents.wheelsStraight, onStraight);
+        on(carEvents.pressBreak, onBreak);
+        on(carEvents.releaseBreak, onBreakRelease);
+      }
+    };
+
+    const onCarDestroy = () => {
+      if (controllable) {
+        off(carEvents.engineForward, onForward);
+        off(carEvents.engineBackward, onBackward);
+        off(carEvents.engineNeutral, onNeutral);
+        off(carEvents.wheelsLeft, onLeft);
+        off(carEvents.wheelsRight, onRight);
+        off(carEvents.wheelsStraight, onStraight);
+        off(carEvents.pressBreak, onBreak);
+        off(carEvents.releaseBreak, onBreakRelease);
       }
     };
 
@@ -66,6 +88,7 @@ function DynamicCars(props: DynamicCarsProps) {
         collisionFilterMask={collisionFilterMask}
         withSensors={withSensors}
         onCarReady={onCarReady}
+        onCarDestroy={onCarDestroy}
         movable
         styled
       />
