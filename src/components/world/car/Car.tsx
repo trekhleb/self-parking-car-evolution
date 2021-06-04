@@ -24,6 +24,8 @@ import {
 } from './constants';
 import { CarMetaData, RaycastVehiclePublicApi, WheelInfoOptions } from '../types/car';
 import Sensors from './Sensors';
+import { useFrame } from '@react-three/fiber';
+import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
@@ -70,6 +72,14 @@ function Car(props: CarProps) {
 
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
   const wheelInfos: WheelInfoOptions[] = [];
+
+  useFrame((state: RootState, delta: number) => {
+    // if (sensorRef1.current && chassis.current) {
+    //   chassis.current.getWorldQuaternion(sensorRef1.current.quaternion);
+    //   chassis.current.getWorldPosition(sensorRef1.current.position);
+    //   sensorRef1.current.position.y = SENSOR_HEIGHT;
+    // }
+  })
 
   const wheelInfo = {
     isFrontWheel: false,
