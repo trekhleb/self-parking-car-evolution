@@ -22,10 +22,7 @@ import {
   WHEEL_SUSPENSION_REST_LENGTH,
   WHEEL_SUSPENSION_STIFFNESS
 } from './constants';
-import { CarMetaData, RaycastVehiclePublicApi, WheelInfoOptions } from '../types/car';
-import Sensors from './Sensors';
-import { useFrame } from '@react-three/fiber';
-import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
+import { CarMetaData, RaycastVehiclePublicApi, userCarUUID, WheelInfoOptions } from '../types/car';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
@@ -34,7 +31,7 @@ export type OnCarReadyArgs = {
 };
 
 type CarProps = {
-  uuid: string,
+  uuid: userCarUUID,
   bodyProps: BoxProps,
   wheelRadius?: number,
   wireframe?: boolean,
@@ -72,14 +69,6 @@ function Car(props: CarProps) {
 
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
   const wheelInfos: WheelInfoOptions[] = [];
-
-  useFrame((state: RootState, delta: number) => {
-    // if (sensorRef1.current && chassis.current) {
-    //   chassis.current.getWorldQuaternion(sensorRef1.current.quaternion);
-    //   chassis.current.getWorldPosition(sensorRef1.current.position);
-    //   sensorRef1.current.position.y = SENSOR_HEIGHT;
-    // }
-  })
 
   const wheelInfo = {
     isFrontWheel: false,
@@ -174,13 +163,6 @@ function Car(props: CarProps) {
     type: 'chassis',
   };
 
-  const sensors = withSensors ? (
-    <Sensors
-      collisionFilterGroup={collisionFilterGroup}
-      collisionFilterMask={collisionFilterMask}
-    />
-  ) : null;
-
   apiRef.current = vehicleAPI;
   wheelsRef.current = wheels;
 
@@ -203,11 +185,13 @@ function Car(props: CarProps) {
   return (
     <group ref={vehicle}>
       <Chassis
+        carUUID={uuid}
         ref={chassis}
         chassisPosition={CHASSIS_RELATIVE_POSITION}
         styled={styled}
         wireframe={wireframe}
         movable={movable}
+        withSensors={withSensors}
         baseColor={baseColor}
         bodyProps={{ ...bodyProps }}
         onCollide={(event) => onCollide(carMetaData, event)}
@@ -249,7 +233,6 @@ function Car(props: CarProps) {
         wireframe={wireframe}
         baseColor={baseColor}
       />
-      {sensors}
     </group>
   )
 }

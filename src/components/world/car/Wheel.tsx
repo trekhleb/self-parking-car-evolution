@@ -3,7 +3,7 @@ import { useCylinder, CylinderProps } from '@react-three/cannon';
 import * as THREE from 'three';
 
 import { NumVec3, NumVec4 } from '../types/vectors';
-import { WHEEL_MASS, WHEEL_WIDTH } from './constants';
+import { WHEEL_MASS, WHEEL_OBJECT_NAME, WHEEL_WIDTH } from './constants';
 import WheelModel from './WheelModel';
 
 type WheelProps = {
@@ -55,7 +55,7 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
   )
 
   return (
-    <mesh ref={ref}>
+    <mesh ref={ref} name={WHEEL_OBJECT_NAME}>
       <mesh rotation={rotation}>
         <WheelModel
           castShadow={castShadow}

@@ -2,6 +2,7 @@ import { NumVec3 } from '../types/vectors';
 import { getModelPath } from '../utils/models';
 
 // Wheels.
+export const WHEEL_OBJECT_NAME = 'wheel';
 export const WHEEL_MASS = 1;
 export const WHEEL_RADIUS = 0.3;
 export const WHEEL_WIDTH = 0.5;
@@ -17,6 +18,7 @@ export const WHEEL_ROLL_INFLUENCE = 0.01;
 export const WHEEL_CUSTOM_SLIDING_ROTATION_SPEED = -30;
 
 // Roughly the cars' visual dimensions.
+export const CHASSIS_OBJECT_NAME = 'chassis';
 export const CHASSIS_LENGTH = 4;
 export const CHASSIS_WIDTH = 1.5;
 export const CHASSIS_HEIGHT = 1;
@@ -32,7 +34,7 @@ export const CHASSIS_MODEL_PATH = getModelPath('beetle.glb');
 export const CHASSIS_RELATIVE_POSITION: NumVec3 = [0, -0.6, 0];
 
 // Sensors.
-export const SENSOR_HEIGHT = CHASSIS_HEIGHT / 4;
+export const SENSOR_HEIGHT = -0.15;
 export const SENSOR_DISTANCE = 4;
 
 // Car.
