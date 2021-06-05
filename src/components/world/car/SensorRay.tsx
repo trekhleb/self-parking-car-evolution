@@ -1,39 +1,39 @@
-import React, { forwardRef, useRef } from 'react';
+import React, { forwardRef, useEffect, useRef } from 'react';
 import { Line2 } from 'three/examples/jsm/lines/Line2';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
+import { Intersection } from 'three/src/core/Raycaster';
 
 import { NumVec3 } from '../types/vectors';
-import { Intersection } from 'three/src/core/Raycaster';
-import { CHASSIS_OBJECT_NAME, SENSOR_DISTANCE } from './constants';
 import { userCarUUID } from '../types/car';
+import { CHASSIS_OBJECT_NAME, SENSOR_DISTANCE } from './constants';
+
+const beamColor = new THREE.Color(0x009900);
+const beamWarningColor = new THREE.Color(0xFFFF00);
+const beamDangerColor = new THREE.Color(0xFF0000);
+const lineWidth = 0.5;
 
 type SensorRayProps = {
   carUUID: userCarUUID,
-  from: NumVec3,
   to: NumVec3,
-  beamColor?: THREE.Color,
-  beamWarningColor?: THREE.Color,
-  beamDangerColor?: THREE.Color,
-  lineWidth?: number,
+  from: NumVec3,
+  angleX: number,
+  obstacles?: THREE.Object3D[],
 };
 
 const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef) => {
   const {
     carUUID,
-    from,
     to,
-    beamColor = new THREE.Color(0x009900),
-    beamWarningColor = new THREE.Color(0xFFFF00),
-    beamDangerColor = new THREE.Color(0xFF0000),
-    lineWidth = 0.5,
+    from,
+    angleX,
+    obstacles = [],
   } = props;
 
   const lineRef = useRef<Line2>();
 
   useFrame((state: RootState, delta: number) => {
-    // return;
     if (!lineRef?.current) {
       return;
     }
@@ -66,6 +66,12 @@ const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef)
     // debugger
   });
 
+  useEffect(() => {
+    if (!lineRef.current) {
+      return;
+    }
+    lineRef.current.rotateY(angleX);
+  }, [angleX]);
 
   const lineGeometry = new THREE.BufferGeometry().setFromPoints([
     new THREE.Vector3(...from),

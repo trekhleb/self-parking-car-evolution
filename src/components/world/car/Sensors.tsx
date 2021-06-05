@@ -11,12 +11,24 @@ type SensorsProps = {
 const Sensors = (props: SensorsProps) => {
   const { carUUID } = props;
 
+  const sensorsNum = 16;
+  const angleStep = 2 * Math.PI / sensorsNum;
+  const sensorRays = new Array(sensorsNum).fill(null).map((_, index) => {
+    return (
+      <SensorRay
+        key={index}
+        from={[0, SENSOR_HEIGHT, 0]}
+        to={[0, SENSOR_HEIGHT, SENSOR_DISTANCE]}
+        angleX={angleStep * index}
+        carUUID={carUUID}
+      />
+    );
+  });
+
   return (
-    <SensorRay
-      from={[0, SENSOR_HEIGHT, 0]}
-      to={[0, SENSOR_HEIGHT, SENSOR_DISTANCE]}
-      carUUID={carUUID}
-    />
+    <>
+      {sensorRays}
+    </>
   )
 };
 
