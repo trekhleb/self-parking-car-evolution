@@ -7,10 +7,8 @@ import { CHASSIS_MASS, CHASSIS_OBJECT_NAME, CHASSIS_SIZE } from './constants';
 import { NumVec3 } from '../types/vectors';
 import ChassisModel from './ChassisModel';
 import Sensors from './Sensors';
-import { userCarUUID } from '../types/car';
 
 type ChassisProps = {
-  carUUID: userCarUUID,
   weight?: number,
   wireframe?: boolean,
   castShadow?: boolean,
@@ -30,7 +28,6 @@ type ChassisProps = {
 
 const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref) => {
   const {
-    carUUID,
     wireframe = false,
     styled = true,
     castShadow = true,
@@ -70,7 +67,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
   };
 
   const sensors = withSensors ? (
-    <Sensors visibleSensors={visibleSensors} carUUID={carUUID} />
+    <Sensors visibleSensors={visibleSensors} />
   ) : null;
 
   return (

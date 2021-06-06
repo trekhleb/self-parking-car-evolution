@@ -138,8 +138,10 @@ function Car(props: CarProps) {
     ],
   };
 
-  wheels.push(wheel_fl, wheel_fr, wheel_bl, wheel_br)
-  wheelInfos.push(wheelInfo_fl, wheelInfo_fr, wheelInfo_bl, wheelInfo_br)
+  wheels.push(wheel_fl, wheel_fr, wheel_bl, wheel_br);
+  wheelInfos.push(wheelInfo_fl, wheelInfo_fr, wheelInfo_bl, wheelInfo_br);
+
+  const isSensorObstacle = !movable;
 
   const [vehicle, vehicleAPI] = useRaycastVehicle(() => ({
     chassisBody: chassis,
@@ -153,6 +155,7 @@ function Car(props: CarProps) {
   const wheelMetaData: CarMetaData = {
     uuid: 'wheel',
     type: 'wheel',
+    isSensorObstacle,
   };
 
   const wheelBodyProps: CylinderProps = {
@@ -163,6 +166,7 @@ function Car(props: CarProps) {
   const carMetaData: CarMetaData = {
     uuid,
     type: 'chassis',
+    isSensorObstacle,
   };
 
   apiRef.current = vehicleAPI;
@@ -187,7 +191,6 @@ function Car(props: CarProps) {
   return (
     <group ref={vehicle}>
       <Chassis
-        carUUID={uuid}
         ref={chassis}
         chassisPosition={CHASSIS_RELATIVE_POSITION}
         styled={styled}

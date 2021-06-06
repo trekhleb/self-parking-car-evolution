@@ -6,8 +6,7 @@ import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 import { Intersection } from 'three/src/core/Raycaster';
 
 import { NumVec3 } from '../types/vectors';
-import { userCarUUID } from '../types/car';
-import { CHASSIS_OBJECT_NAME, SENSOR_DISTANCE, SENSOR_HEIGHT } from './constants';
+import { SENSOR_DISTANCE } from './constants';
 
 const beamColor = new THREE.Color(0x009900);
 const beamWarningColor = new THREE.Color(0xFFFF00);
@@ -15,9 +14,8 @@ const beamDangerColor = new THREE.Color(0xFF0000);
 const lineWidth = 0.5;
 
 type SensorRayProps = {
-  carUUID: userCarUUID,
-  to: NumVec3,
   from: NumVec3,
+  to: NumVec3,
   angleX: number,
   obstacles?: THREE.Object3D[],
   visible?: boolean,
@@ -25,9 +23,8 @@ type SensorRayProps = {
 
 const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef) => {
   const {
-    carUUID,
-    to,
     from,
+    to,
     angleX,
     obstacles = [],
     visible = false,
@@ -48,13 +45,7 @@ const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef)
 
     const raycaster = new THREE.Raycaster(position, direction, 0, SENSOR_DISTANCE);
 
-    // @ts-ignore
-    const objects: Object3D[] = state.scene.children
-      .filter((object: THREE.Object3D) => object.type === 'Group')
-      .map((object: THREE.Object3D) => object.getObjectByName(CHASSIS_OBJECT_NAME))
-      .filter((object: THREE.Object3D | undefined) => object && object.userData.uuid !== carUUID);
-
-    const intersection: Intersection[] = raycaster.intersectObjects(objects, true);
+    const intersection: Intersection[] = raycaster.intersectObjects(obstacles, true);
     const distance = intersection.length ? intersection[0].distance : undefined;
 
     if (distance === undefined) {

@@ -5,6 +5,7 @@ export type userCarUUID = string;
 export type CarMetaData = {
   uuid: string,
   type: CarPartType,
+  isSensorObstacle: boolean,
 };
 
 export type RaycastVehiclePublicApi = {
