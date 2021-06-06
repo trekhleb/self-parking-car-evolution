@@ -2,6 +2,7 @@ import React, { forwardRef, useEffect, useRef } from 'react';
 import { Line2 } from 'three/examples/jsm/lines/Line2';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
+import throttle from 'lodash/throttle';
 import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 import { Intersection } from 'three/src/core/Raycaster';
 
@@ -12,6 +13,8 @@ const beamColor = new THREE.Color(0x009900);
 const beamWarningColor = new THREE.Color(0xFFFF00);
 const beamDangerColor = new THREE.Color(0xFF0000);
 const lineWidth = 0.5;
+
+const intersectThrottleTimeout = 200;
 
 type SensorRayProps = {
   from: NumVec3,
@@ -32,21 +35,38 @@ const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef)
 
   const lineRef = useRef<Line2>();
 
+  const positionRef = useRef<THREE.Vector3>(new THREE.Vector3());
+  const directionRef = useRef<THREE.Vector3>(new THREE.Vector3());
+  const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
+
+  const intersectionRef = useRef<Intersection[]>([]);
+  raycasterRef.current.near = 0;
+  raycasterRef.current.far = SENSOR_DISTANCE;
+
+  const intersectObjects = () => {
+    intersectionRef.current = raycasterRef.current.intersectObjects(obstacles, true);
+  };
+
+  const intersectObjectsThrottled = throttle(intersectObjects, intersectThrottleTimeout, {
+    leading: true,
+    trailing: true,
+  });
+
   useFrame((state: RootState, delta: number) => {
     if (!lineRef?.current) {
       return;
     }
 
-    const position = new THREE.Vector3();
-    const direction = new THREE.Vector3();
+    lineRef.current.getWorldPosition(positionRef.current);
+    lineRef.current.getWorldDirection(directionRef.current);
 
-    lineRef.current.getWorldPosition(position);
-    lineRef.current.getWorldDirection(direction);
+    raycasterRef.current.set(positionRef.current, directionRef.current);
 
-    const raycaster = new THREE.Raycaster(position, direction, 0, SENSOR_DISTANCE);
+    intersectObjectsThrottled();
 
-    const intersection: Intersection[] = raycaster.intersectObjects(obstacles, true);
-    const distance = intersection.length ? intersection[0].distance : undefined;
+    const distance = intersectionRef.current.length
+      ? intersectionRef.current[0].distance
+      : undefined;
 
     if (distance === undefined) {
       lineRef.current.material.color = beamColor;
@@ -55,13 +75,6 @@ const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef)
     } else {
       lineRef.current.material.color = beamDangerColor;
     }
-
-    // if (distance === undefined) {
-    //   lineRef.current.scale = new THREE.Vector3(1, 1, 1);
-    // } else {
-    //   // [0, SENSOR_HEIGHT, SENSOR_DISTANCE]
-    // }
-    // debugger
   });
 
   useEffect(() => {
