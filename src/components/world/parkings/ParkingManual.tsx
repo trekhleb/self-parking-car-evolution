@@ -27,6 +27,7 @@ function ParkingManual() {
         collisionFilterMask={COLLISION_MASK_ACTIVE_CARS}
         controllable
         withSensors
+        visibleSensors
       />
       <StaticCars
         rows={2}

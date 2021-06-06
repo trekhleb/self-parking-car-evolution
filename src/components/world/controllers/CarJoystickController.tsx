@@ -29,7 +29,6 @@ function CarJoystickController() {
   });
 
   const onEnd = (event: any, data: any) => {
-    console.log('onEnd');
     trigger(carEvents.releaseBreak);
     trigger(carEvents.engineNeutral);
     trigger(carEvents.wheelsStraight);

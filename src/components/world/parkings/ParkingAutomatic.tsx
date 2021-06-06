@@ -27,6 +27,7 @@ function ParkingAutomatic() {
         carsNum={dynamicCarsNum}
         collisionFilterGroup={COLLISION_GROUP_ACTIVE_CARS}
         collisionFilterMask={COLLISION_MASK_ACTIVE_CARS}
+        visibleSensors
       />
       <StaticCars
         rows={2}

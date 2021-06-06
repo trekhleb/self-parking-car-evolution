@@ -16,6 +16,7 @@ type ChassisProps = {
   castShadow?: boolean,
   receiveShadow?: boolean,
   withSensors?: boolean,
+  visibleSensors?: boolean,
   styled?: boolean,
   movable?: boolean,
   baseColor?: string,
@@ -36,6 +37,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     receiveShadow = true,
     movable = true,
     withSensors = false,
+    visibleSensors = false,
     weight = CHASSIS_MASS,
     baseColor,
     chassisPosition,
@@ -68,7 +70,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
   };
 
   const sensors = withSensors ? (
-    <Sensors carUUID={carUUID} />
+    <Sensors visibleSensors={visibleSensors} carUUID={carUUID} />
   ) : null;
 
   return (

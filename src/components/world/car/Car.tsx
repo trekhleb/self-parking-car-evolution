@@ -38,6 +38,7 @@ type CarProps = {
   styled?: boolean,
   movable?: boolean,
   withSensors?: boolean,
+  visibleSensors?: boolean,
   baseColor?: string,
   onCollide?: (carMetaData: CarMetaData, event: any) => void,
   collisionFilterGroup?: number,
@@ -53,6 +54,7 @@ function Car(props: CarProps) {
     wireframe = false,
     styled = true,
     withSensors = false,
+    visibleSensors = false,
     movable = false,
     baseColor = CHASSIS_BASE_COLOR,
     collisionFilterGroup,
@@ -192,6 +194,7 @@ function Car(props: CarProps) {
         wireframe={wireframe}
         movable={movable}
         withSensors={withSensors}
+        visibleSensors={visibleSensors}
         baseColor={baseColor}
         bodyProps={{ ...bodyProps }}
         onCollide={(event) => onCollide(carMetaData, event)}

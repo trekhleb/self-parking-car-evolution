@@ -18,6 +18,7 @@ type DynamicCarsProps = {
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   withSensors?: boolean,
+  visibleSensors?: boolean,
   controllable?: boolean,
 };
 
@@ -27,6 +28,7 @@ function DynamicCars(props: DynamicCarsProps) {
     collisionFilterGroup,
     collisionFilterMask,
     withSensors = false,
+    visibleSensors = false,
     controllable = false,
   } = props;
   const carsUUIDs = useRef<userCarUUID[]>([]);
@@ -87,6 +89,7 @@ function DynamicCars(props: DynamicCarsProps) {
         collisionFilterGroup={collisionFilterGroup}
         collisionFilterMask={collisionFilterMask}
         withSensors={withSensors}
+        visibleSensors={visibleSensors}
         onCarReady={onCarReady}
         onCarDestroy={onCarDestroy}
         movable

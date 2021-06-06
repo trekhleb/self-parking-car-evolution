@@ -6,10 +6,11 @@ import { userCarUUID } from '../types/car';
 
 type SensorsProps = {
   carUUID: userCarUUID,
+  visibleSensors?: boolean,
 };
 
 const Sensors = (props: SensorsProps) => {
-  const { carUUID } = props;
+  const { carUUID, visibleSensors = false } = props;
 
   const sensorsNum = 16;
   const angleStep = 2 * Math.PI / sensorsNum;
@@ -21,6 +22,7 @@ const Sensors = (props: SensorsProps) => {
         to={[0, SENSOR_HEIGHT, SENSOR_DISTANCE]}
         angleX={angleStep * index}
         carUUID={carUUID}
+        visible={visibleSensors}
       />
     );
   });

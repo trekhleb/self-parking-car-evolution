@@ -7,7 +7,7 @@ import { Intersection } from 'three/src/core/Raycaster';
 
 import { NumVec3 } from '../types/vectors';
 import { userCarUUID } from '../types/car';
-import { CHASSIS_OBJECT_NAME, SENSOR_DISTANCE } from './constants';
+import { CHASSIS_OBJECT_NAME, SENSOR_DISTANCE, SENSOR_HEIGHT } from './constants';
 
 const beamColor = new THREE.Color(0x009900);
 const beamWarningColor = new THREE.Color(0xFFFF00);
@@ -20,6 +20,7 @@ type SensorRayProps = {
   from: NumVec3,
   angleX: number,
   obstacles?: THREE.Object3D[],
+  visible?: boolean,
 };
 
 const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef) => {
@@ -29,6 +30,7 @@ const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef)
     from,
     angleX,
     obstacles = [],
+    visible = false,
   } = props;
 
   const lineRef = useRef<Line2>();
@@ -63,6 +65,11 @@ const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef)
       lineRef.current.material.color = beamDangerColor;
     }
 
+    // if (distance === undefined) {
+    //   lineRef.current.scale = new THREE.Vector3(1, 1, 1);
+    // } else {
+    //   // [0, SENSOR_HEIGHT, SENSOR_DISTANCE]
+    // }
     // debugger
   });
 
@@ -86,6 +93,7 @@ const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef)
           attach="material"
           color={beamColor}
           linewidth={lineWidth}
+          visible={visible}
         />
       </line>
     </group>

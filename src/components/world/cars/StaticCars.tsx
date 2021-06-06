@@ -39,7 +39,6 @@ function StaticCars(props: StaticCarsProps) {
     };
     carBaseColorsRef.current = newCarBaseColors;
     setCarBaseColors(newCarBaseColors);
-    console.log('Bonk!', {self: carMetaData, target: event.body.userData});
   };
 
   const staticCarPositions: NumVec3[] = [];
