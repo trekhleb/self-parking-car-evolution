@@ -16,6 +16,8 @@ type WorldProps = {
   withKeyboardControl?: boolean,
 };
 
+const worldBackgroundColor = 'lightblue';
+
 function World(props: WorldProps) {
   const {
     children,
@@ -51,6 +53,7 @@ function World(props: WorldProps) {
       borderRightWidth: 0,
       borderBottomWidth: 0,
       borderTopWidth: 0,
+      backgroundColor: worldBackgroundColor,
     }}>
       <Spinner color="black" />
     </div>
@@ -73,7 +76,7 @@ function World(props: WorldProps) {
           shadows
         >
           <OrbitControls />
-          <color attach="background" args={['lightblue']} />
+          <color attach="background" args={[worldBackgroundColor]} />
           <hemisphereLight intensity={1} groundColor={new THREE.Color( 0x080820 )} />
           <spotLight
             position={[-10, 20, 10]}
