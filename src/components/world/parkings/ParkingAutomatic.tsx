@@ -13,7 +13,7 @@ const COLLISION_MASK_ACTIVE_CARS = COLLISION_GROUP_STATIC_OBJECTS // It can only
 const COLLISION_MASK_STATIC_OBJECTS = COLLISION_GROUP_ACTIVE_CARS // It can only collide with active cars.
 
 function ParkingAutomatic() {
-  const dynamicCarsNum = 10;
+  const dynamicCarsNum = 3;
 
   return (
     <>

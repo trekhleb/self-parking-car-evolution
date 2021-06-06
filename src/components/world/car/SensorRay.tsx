@@ -14,7 +14,7 @@ const beamWarningColor = new THREE.Color(0xFFFF00);
 const beamDangerColor = new THREE.Color(0xFF0000);
 const lineWidth = 0.5;
 
-const intersectThrottleTimeout = 200;
+const intersectThrottleTimeout = 100;
 
 type SensorRayProps = {
   from: NumVec3,
