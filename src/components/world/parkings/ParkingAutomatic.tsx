@@ -12,8 +12,18 @@ const COLLISION_GROUP_STATIC_OBJECTS = 0b0010;
 const COLLISION_MASK_ACTIVE_CARS = COLLISION_GROUP_STATIC_OBJECTS // It can only collide with static objects.
 const COLLISION_MASK_STATIC_OBJECTS = COLLISION_GROUP_ACTIVE_CARS // It can only collide with active cars.
 
-function ParkingAutomatic() {
-  const dynamicCarsNum = 3;
+type ParkingAutomaticProps = {
+  dynamicCarsNum?: number,
+  withVisibleSensors?: boolean,
+  withLabels?: boolean,
+};
+
+function ParkingAutomatic(props: ParkingAutomaticProps) {
+  const {
+    dynamicCarsNum = 3,
+    withVisibleSensors = false,
+    withLabels = false,
+  } = props;
 
   return (
     <>
@@ -29,7 +39,8 @@ function ParkingAutomatic() {
         collisionFilterMask={COLLISION_MASK_ACTIVE_CARS}
         controllable
         withSensors
-        visibleSensors
+        visibleSensors={withVisibleSensors}
+        withLabels={withLabels}
       />
       <StaticCars
         rows={2}

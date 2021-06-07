@@ -57,9 +57,10 @@ function Worlds() {
     >
       <Tab title="Automatic Parking">
         <ErrorBoundary>
-          <World withKeyboardControl>
-            <ParkingAutomatic />
+          <World withKeyboardControl withPerfStats={withStat}>
+            <ParkingAutomatic withVisibleSensors={withSensors} withLabels={withLabels} />
           </World>
+          {worldParamsController}
         </ErrorBoundary>
       </Tab>
       <Tab title="Manual Parking">
