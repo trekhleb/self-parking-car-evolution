@@ -45,6 +45,7 @@ type CarProps = {
   collisionFilterMask?: number,
   onCarReady?: (args: OnCarReadyArgs) => void,
   onCarDestroy?: () => void,
+  label?: React.ReactNode,
 }
 
 function Car(props: CarProps) {
@@ -63,6 +64,7 @@ function Car(props: CarProps) {
     onCollide = () => {},
     onCarReady = () => {},
     onCarDestroy = () => {},
+    label = null,
   } = props;
 
   const chassis = useRef<THREE.Object3D | undefined>();
@@ -196,6 +198,7 @@ function Car(props: CarProps) {
         styled={styled}
         wireframe={wireframe}
         movable={movable}
+        label={label}
         withSensors={withSensors}
         visibleSensors={visibleSensors}
         baseColor={baseColor}

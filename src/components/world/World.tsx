@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stats, Environment} from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { styled } from 'baseui';
 import { Spinner } from 'baseui/spinner';
 import { Block } from 'baseui/block';
+
 import CarJoystickController from './controllers/CarJoystickController';
 import CarKeyboardController from './controllers/CarKeyboardController';
 import { WORLD_CONTAINER_HEIGHT } from './constants/world';
@@ -14,6 +15,7 @@ type WorldProps = {
   children: React.ReactNode,
   withJoystickControl?: boolean,
   withKeyboardControl?: boolean,
+  withPerfStats?: boolean,
 };
 
 const worldBackgroundColor = 'lightblue';
@@ -23,18 +25,10 @@ function World(props: WorldProps) {
     children,
     withJoystickControl = false,
     withKeyboardControl = false,
+    withPerfStats = false,
   } = props;
 
-  const [showPerfStat, setShowPerfStat] = useState<boolean>(false);
-
-  useEffect(() => {
-    const searchParams = new URLSearchParams(document.location.search.substring(1));
-    if (searchParams.get('debug')) {
-      setShowPerfStat(true);
-    }
-  }, []);
-
-  const stats = showPerfStat ? (
+  const stats = withPerfStats ? (
     <Stats showPanel={0} />
   ) : null;
 

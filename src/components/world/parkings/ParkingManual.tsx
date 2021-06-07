@@ -12,7 +12,14 @@ const COLLISION_GROUP_STATIC_OBJECTS = 0b0010;
 const COLLISION_MASK_ACTIVE_CARS = COLLISION_GROUP_STATIC_OBJECTS // It can only collide with static objects.
 const COLLISION_MASK_STATIC_OBJECTS = COLLISION_GROUP_ACTIVE_CARS // It can only collide with active cars.
 
-function ParkingManual() {
+type ParkingManualProps = {
+  withLabels?: boolean,
+  withSensors?: boolean,
+};
+
+function ParkingManual(props: ParkingManualProps) {
+  const { withLabels = false, withSensors = false} = props;
+
   return (
     <>
       <Ground
@@ -25,8 +32,9 @@ function ParkingManual() {
         carsNum={1}
         collisionFilterGroup={COLLISION_GROUP_ACTIVE_CARS}
         collisionFilterMask={COLLISION_MASK_ACTIVE_CARS}
+        withSensors={withSensors}
+        withLabels={withLabels}
         controllable
-        withSensors
         visibleSensors
       />
       <StaticCars

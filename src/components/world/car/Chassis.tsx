@@ -1,5 +1,5 @@
 import { BoxProps, useBox } from '@react-three/cannon';
-import React, { forwardRef } from 'react';
+import React, { CSSProperties, forwardRef } from 'react';
 import * as THREE from 'three';
 import { GroupProps } from '@react-three/fiber';
 
@@ -7,6 +7,7 @@ import { CHASSIS_MASS, CHASSIS_OBJECT_NAME, CHASSIS_SIZE } from './constants';
 import { NumVec3 } from '../types/vectors';
 import ChassisModel from './ChassisModel';
 import Sensors from './Sensors';
+import CarLabel from './CarLabel';
 
 type ChassisProps = {
   weight?: number,
@@ -16,6 +17,7 @@ type ChassisProps = {
   withSensors?: boolean,
   visibleSensors?: boolean,
   styled?: boolean,
+  label?: React.ReactNode,
   movable?: boolean,
   baseColor?: string,
   chassisPosition: NumVec3,
@@ -36,6 +38,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     withSensors = false,
     visibleSensors = false,
     weight = CHASSIS_MASS,
+    label = null,
     baseColor,
     chassisPosition,
     bodyProps,
@@ -70,6 +73,10 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     <Sensors visibleSensors={visibleSensors} />
   ) : null;
 
+  const carLabel = label ? (
+    <CarLabel content={label} />
+  ) : null;
+
   return (
     <group ref={ref} name={CHASSIS_OBJECT_NAME}>
       <mesh>
@@ -83,6 +90,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
         />
       </mesh>
       {sensors}
+      {carLabel}
     </group>
   )
 })

@@ -18,6 +18,7 @@ type DynamicCarsProps = {
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   withSensors?: boolean,
+  withLabels?: boolean,
   visibleSensors?: boolean,
   controllable?: boolean,
 };
@@ -29,6 +30,7 @@ function DynamicCars(props: DynamicCarsProps) {
     collisionFilterMask,
     withSensors = false,
     visibleSensors = false,
+    withLabels = false,
     controllable = false,
   } = props;
   const carsUUIDs = useRef<userCarUUID[]>([]);
@@ -77,10 +79,15 @@ function DynamicCars(props: DynamicCarsProps) {
     const position = [0, 2, 4 * Math.random() - 2];
     const angularVelocity = [-0.2, 0, 0];
 
+    const label = withLabels ? (
+      <span>score: <span style={{color: 'red'}}>??</span></span>
+    ) : null;
+
     return (
       <Car
         key={index}
         uuid={uuid}
+        label={label}
         bodyProps={{
           position,
           angularVelocity,

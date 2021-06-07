@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tab, Tabs } from 'baseui/tabs';
 
 import World from '../world/World';
@@ -6,9 +6,14 @@ import ParkingAutomatic from './parkings/ParkingAutomatic';
 import ParkingManual from './parkings/ParkingManual';
 import { StyleObject } from 'styletron-standard';
 import ErrorBoundary from '../shared/ErrorBoundary';
+import WorldParamsController from './controllers/WorldParamsController';
 
 function Worlds() {
   const [activeKey, setActiveKey] = React.useState<string | number>('1');
+
+  const [withStat, setWithStat] = useState<boolean>(true);
+  const [withSensors, setWithSensors] = useState<boolean>(true);
+  const [withLabels, setWithLabels] = useState<boolean>(false);
 
   const tabBarStyle: StyleObject = {
     paddingLeft: 0,
@@ -29,6 +34,17 @@ function Worlds() {
     paddingRight: '20px',
   };
 
+  const worldParamsController = (
+    <WorldParamsController
+      withSensors={withSensors}
+      withLabels={withLabels}
+      withStat={withStat}
+      onWithLabelsChange={setWithLabels}
+      onWithStatChange={setWithStat}
+      onWithSensorsChange={setWithSensors}
+    />
+  );
+
   return (
     <Tabs
       overrides={{
@@ -48,9 +64,10 @@ function Worlds() {
       </Tab>
       <Tab title="Manual Parking">
         <ErrorBoundary>
-          <World withJoystickControl withKeyboardControl>
-            <ParkingManual />
+          <World withJoystickControl withKeyboardControl withPerfStats={withStat}>
+            <ParkingManual withLabels={withLabels} withSensors={withSensors} />
           </World>
+          {worldParamsController}
         </ErrorBoundary>
       </Tab>
     </Tabs>
