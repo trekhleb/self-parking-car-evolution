@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Worlds from '../world/Worlds';
+import EvolutionBoard from '../evolution/EvolutionBoard';
 
 function HomeScreen() {
   return (
-    <Worlds />
+    <EvolutionBoard />
   );
 }
 

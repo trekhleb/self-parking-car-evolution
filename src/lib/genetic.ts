@@ -1,20 +1,19 @@
-type Gene = 0 | 1;
+export type Gene = 0 | 1;
 
-type Genome = Gene[];
+export type Genome = Gene[];
 
-type Population = Genome[];
+export type Population = Genome[];
+
+export type PopulationOptions = {
+  populationSize: number,
+  genomeLength: number,
+};
 
 function generateGenome(length: number): Genome {
   return new Array(length)
     .fill(null)
     .map(() => (Math.random() < 0.5 ? 0 : 1));
 }
-
-
-type PopulationOptions = {
-  populationSize: number,
-  genomeLength: number,
-};
 
 function generatePopulation(options: PopulationOptions): Population {
   const { populationSize, genomeLength } = options;
