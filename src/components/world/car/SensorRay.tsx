@@ -5,6 +5,7 @@ import { useFrame } from '@react-three/fiber';
 import throttle from 'lodash/throttle';
 import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 import { Intersection } from 'three/src/core/Raycaster';
+import { acceleratedRaycast } from 'three-mesh-bvh';
 
 import { NumVec3 } from '../types/vectors';
 import { SENSOR_DISTANCE } from './constants';
@@ -15,6 +16,8 @@ const beamDangerColor = new THREE.Color(0xFF0000);
 const lineWidth = 0.5;
 
 const intersectThrottleTimeout = 100;
+
+THREE.Mesh.prototype.raycast = acceleratedRaycast;
 
 type SensorRayProps = {
   from: NumVec3,
@@ -42,6 +45,9 @@ const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef)
   const intersectionRef = useRef<Intersection[]>([]);
   raycasterRef.current.near = 0;
   raycasterRef.current.far = SENSOR_DISTANCE;
+
+  // @ts-ignore
+  raycasterRef.current.firstHitOnly = true;
 
   const intersectObjects = () => {
     intersectionRef.current = raycasterRef.current.intersectObjects(obstacles, true);

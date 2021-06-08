@@ -20,7 +20,7 @@ type ParkingAutomaticProps = {
 
 function ParkingAutomatic(props: ParkingAutomaticProps) {
   const {
-    dynamicCarsNum = 3,
+    dynamicCarsNum = 10,
     withVisibleSensors = false,
     withLabels = false,
   } = props;

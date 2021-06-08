@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
+import { MeshBVH } from 'three-mesh-bvh';
 
 import { ModelData } from '../types/models';
 import { getPlastic, getRubber, getSteel, getGlass } from '../utils/materials';
@@ -29,7 +30,14 @@ function ChassisModel(props: ChassisModelProps) {
     baseColor: color,
   } = props;
 
-  const { nodes, materials }: ModelData = useGLTF(CHASSIS_MODEL_PATH)
+  const { nodes, materials }: ModelData = useGLTF(CHASSIS_MODEL_PATH);
+
+  Object.keys(nodes).forEach((geometryKey) => {
+    if (geometryKey.startsWith('chassis_')) {
+      // @ts-ignore
+      nodes[geometryKey].geometry.boundsTree = new MeshBVH(nodes[geometryKey].geometry);
+    }
+  });
 
   return (
     <group {...bodyProps}>
