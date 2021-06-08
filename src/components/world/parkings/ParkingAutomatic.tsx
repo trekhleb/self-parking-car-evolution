@@ -41,6 +41,7 @@ function ParkingAutomatic(props: ParkingAutomaticProps) {
         withSensors
         visibleSensors={withVisibleSensors}
         withLabels={withLabels}
+        withRandomColors={false}
       />
       <StaticCars
         rows={2}

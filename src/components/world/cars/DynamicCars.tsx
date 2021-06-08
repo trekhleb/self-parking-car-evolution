@@ -12,6 +12,7 @@ import {
   onWheelsRight,
   onWheelsStraight
 } from '../utils/controllers';
+import { getRandomColor } from '../../../utils/colors';
 
 type DynamicCarsProps = {
   carsNum?: number,
@@ -21,6 +22,7 @@ type DynamicCarsProps = {
   withLabels?: boolean,
   visibleSensors?: boolean,
   controllable?: boolean,
+  withRandomColors?: boolean,
 };
 
 function DynamicCars(props: DynamicCarsProps) {
@@ -32,6 +34,7 @@ function DynamicCars(props: DynamicCarsProps) {
     visibleSensors = false,
     withLabels = false,
     controllable = false,
+    withRandomColors = false,
   } = props;
   const carsUUIDs = useRef<userCarUUID[]>([]);
   const carsAPIs = useRef<Record<userCarUUID, OnCarReadyArgs>>({});
@@ -83,6 +86,9 @@ function DynamicCars(props: DynamicCarsProps) {
       <span>score: <span style={{color: 'red'}}>??</span></span>
     ) : null;
 
+    const styledCar = !withRandomColors;
+    const carColor = withRandomColors ? getRandomColor() : undefined;
+
     return (
       <Car
         key={index}
@@ -100,7 +106,8 @@ function DynamicCars(props: DynamicCarsProps) {
         onCarReady={onCarReady}
         onCarDestroy={onCarDestroy}
         movable
-        styled
+        styled={styledCar}
+        baseColor={carColor}
       />
     );
   });
