@@ -32,7 +32,7 @@ function ChassisModel(props: ChassisModelProps) {
   const { nodes, materials }: ModelData = useGLTF(CHASSIS_MODEL_PATH)
 
   return (
-    <group {...bodyProps} dispose={null}>
+    <group {...bodyProps}>
       <mesh
         receiveShadow={receiveShadow}
         castShadow={castShadow}
