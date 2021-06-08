@@ -27,7 +27,7 @@ type SensorRayProps = {
   visible?: boolean,
 };
 
-const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef) => {
+const SensorRay = (props: SensorRayProps) => {
   const {
     from,
     to,
@@ -108,6 +108,6 @@ const SensorRay = forwardRef<Line2 | undefined, SensorRayProps>((props, beamRef)
       </line>
     </group>
   )
-});
+};
 
 export default SensorRay;
