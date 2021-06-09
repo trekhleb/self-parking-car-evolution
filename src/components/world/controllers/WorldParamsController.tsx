@@ -25,16 +25,6 @@ function WorldParamsController(props: WorldParamsControllerProps) {
     <Block marginTop="15px" marginBottom="15px" display="flex" flexDirection="row">
       <Block marginRight="25px">
         <Checkbox
-          checked={withStat}
-          // @ts-ignore
-          onChange={(e) => onWithStatChange(e.target.checked)}
-          labelPlacement={LABEL_PLACEMENT.right}
-        >
-          Perf stat
-        </Checkbox>
-      </Block>
-      <Block marginRight="25px">
-        <Checkbox
           checked={withSensors}
           // @ts-ignore
           onChange={(e) => onWithSensorsChange(e.target.checked)}
@@ -51,6 +41,16 @@ function WorldParamsController(props: WorldParamsControllerProps) {
           labelPlacement={LABEL_PLACEMENT.right}
         >
           Score
+        </Checkbox>
+      </Block>
+      <Block marginRight="25px">
+        <Checkbox
+          checked={withStat}
+          // @ts-ignore
+          onChange={(e) => onWithStatChange(e.target.checked)}
+          labelPlacement={LABEL_PLACEMENT.right}
+        >
+          Perf stat
         </Checkbox>
       </Block>
     </Block>
