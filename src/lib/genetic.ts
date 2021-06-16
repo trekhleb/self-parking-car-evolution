@@ -4,21 +4,21 @@ export type Genome = Gene[];
 
 export type Population = Genome[];
 
-export type PopulationOptions = {
+export type PopulationParams = {
   populationSize: number,
   genomeLength: number,
 };
 
-function generateGenome(length: number): Genome {
+function createGenome(length: number): Genome {
   return new Array(length)
     .fill(null)
     .map(() => (Math.random() < 0.5 ? 0 : 1));
 }
 
-function generatePopulation(options: PopulationOptions): Population {
-  const { populationSize, genomeLength } = options;
+export function createPopulation(params: PopulationParams): Population {
+  const { populationSize, genomeLength } = params;
   return new Array(populationSize)
     .fill(null)
-    .map(() => generateGenome(genomeLength));
+    .map(() => createGenome(genomeLength));
 }
 
