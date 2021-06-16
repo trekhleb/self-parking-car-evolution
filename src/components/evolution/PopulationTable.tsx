@@ -1,6 +1,7 @@
 import React from 'react';
 import { Block } from 'baseui/block';
-import { Table } from 'baseui/table-semantic';
+import { Table, DIVIDER } from 'baseui/table-semantic';
+import { Tag, VARIANT as TAG_VARIANT, KIND as TAG_KIND } from 'baseui/tag';
 
 import { CarsType, CarType } from '../world/car/Car';
 
@@ -14,12 +15,25 @@ function PopulationTable(props: PopulationTableProps) {
 
   const columns = [
     'Licence Plate',
-    'Car Fitness',
+    'Fitness',
   ];
 
   const rowsData: React.ReactNode[][] = carsArray.map((car: CarType) => {
-    const licencePlateCell = car.licencePlate;
-    const fitness = 0;
+    const licencePlateCell = (
+      <Tag
+        closeable={false}
+        kind={TAG_KIND.neutral}
+        variant={TAG_VARIANT.solid}
+      >
+        {car.licencePlate}
+      </Tag>
+    );
+
+    const fitness = (
+      <code>
+        {Math.random()}
+      </code>
+    );
     return [
       licencePlateCell,
       fitness,
@@ -32,6 +46,7 @@ function PopulationTable(props: PopulationTableProps) {
         columns={columns}
         data={rowsData}
         emptyMessage="No population yet"
+        divider={DIVIDER.grid}
       />
     </Block>
   );
