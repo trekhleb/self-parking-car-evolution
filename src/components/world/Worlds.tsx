@@ -7,8 +7,16 @@ import ParkingManual from './parkings/ParkingManual';
 import { StyleObject } from 'styletron-standard';
 import ErrorBoundary from '../shared/ErrorBoundary';
 import WorldParamsController from './controllers/WorldParamsController';
+import { CarsType } from './types/car';
 
-function Worlds() {
+type WorldsProps = {
+  cars: CarsType,
+  onWorldSwitch?: (worldKey: React.Key) => void,
+};
+
+function Worlds(props: WorldsProps) {
+  const { cars, onWorldSwitch = (worldKey) => {} } = props;
+
   const [activeKey, setActiveKey] = React.useState<string | number>('1');
 
   const [withStat, setWithStat] = useState<boolean>(true);
@@ -34,6 +42,11 @@ function Worlds() {
     paddingRight: '20px',
   };
 
+  const onTabSwitch = ({ activeKey }: {activeKey: React.Key}) => {
+    setActiveKey(activeKey);
+    onWorldSwitch(activeKey);
+  }
+
   const worldParamsController = (
     <WorldParamsController
       withSensors={withSensors}
@@ -52,21 +65,36 @@ function Worlds() {
         TabContent: { style: tabContentStyle },
         Tab: { style: tabStyle },
       }}
-      onChange={({ activeKey }) => { setActiveKey(activeKey); }}
+      onChange={onTabSwitch}
       activeKey={activeKey}
     >
       <Tab title="Automatic Parking">
         <ErrorBoundary>
-          <World withKeyboardControl withPerfStats={withStat}>
-            <ParkingAutomatic withVisibleSensors={withSensors} withLabels={withLabels} />
+          <World
+            withKeyboardControl
+            withPerfStats={withStat}
+          >
+            <ParkingAutomatic
+              withVisibleSensors={withSensors}
+              withLabels={withLabels}
+              cars={cars}
+            />
           </World>
           {worldParamsController}
         </ErrorBoundary>
       </Tab>
+
       <Tab title="Manual Parking">
         <ErrorBoundary>
-          <World withJoystickControl withKeyboardControl withPerfStats={withStat}>
-            <ParkingManual withLabels={withLabels} withSensors={withSensors} />
+          <World
+            withPerfStats={withStat}
+            withJoystickControl
+            withKeyboardControl
+          >
+            <ParkingManual
+              withLabels={withLabels}
+              withSensors={withSensors}
+            />
           </World>
           {worldParamsController}
         </ErrorBoundary>
