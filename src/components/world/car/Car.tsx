@@ -22,22 +22,18 @@ import {
   WHEEL_SUSPENSION_REST_LENGTH,
   WHEEL_SUSPENSION_STIFFNESS
 } from './constants';
-import { CarMetaData, RaycastVehiclePublicApi, userCarUUID, WheelInfoOptions } from '../types/car';
+import {
+  CarMetaData, CarType,
+  RaycastVehiclePublicApi,
+  userCarUUID,
+  WheelInfoOptions,
+} from '../types/car';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
   chassis: THREE.Object3D,
   wheelsNum: number,
 };
-
-export type CarLicencePlateType = string;
-
-export type CarType = {
-  licencePlate: CarLicencePlateType,
-  meta?: Record<string, any>,
-};
-
-export type CarsType = Record<CarLicencePlateType, CarType>;
 
 type CarProps = {
   uuid: userCarUUID,
