@@ -30,6 +30,15 @@ export type OnCarReadyArgs = {
   wheelsNum: number,
 };
 
+export type CarLicencePlateType = string;
+
+export type CarType = {
+  licencePlate: CarLicencePlateType,
+  meta?: Record<string, any>,
+};
+
+export type CarsType = Record<CarLicencePlateType, CarType>;
+
 type CarProps = {
   uuid: userCarUUID,
   bodyProps: BoxProps,
@@ -46,6 +55,7 @@ type CarProps = {
   onCarReady?: (args: OnCarReadyArgs) => void,
   onCarDestroy?: () => void,
   label?: React.ReactNode,
+  car?: CarType,
 }
 
 function Car(props: CarProps) {
@@ -65,6 +75,7 @@ function Car(props: CarProps) {
     onCarReady = () => {},
     onCarDestroy = () => {},
     label = null,
+    car = { licencePlate: '' },
   } = props;
 
   const chassis = useRef<THREE.Object3D | undefined>();
@@ -169,6 +180,7 @@ function Car(props: CarProps) {
     uuid,
     type: 'chassis',
     isSensorObstacle,
+    car,
   };
 
   apiRef.current = vehicleAPI;
