@@ -3,7 +3,7 @@ import { Block } from 'baseui/block';
 import { Table, DIVIDER } from 'baseui/table-semantic';
 import { Tag, VARIANT as TAG_VARIANT, KIND as TAG_KIND } from 'baseui/tag';
 
-import { CarsType, CarType } from '../world/car/Car';
+import { CarsType, CarType } from '../world/types/car';
 
 type PopulationTableProps = {
   cars: CarsType,
