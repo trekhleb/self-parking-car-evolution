@@ -1,3 +1,10 @@
+export type CarLicencePlateType = string;
+
+export type CarType = {
+  licencePlate: CarLicencePlateType,
+  meta?: Record<string, any>,
+};
+
 type CarPartType = 'chassis' | 'wheel';
 
 export type userCarUUID = string;
@@ -6,7 +13,10 @@ export type CarMetaData = {
   uuid: string,
   type: CarPartType,
   isSensorObstacle: boolean,
+  car?: CarType,
 };
+
+export type CarsType = Record<CarLicencePlateType, CarType>;
 
 export type RaycastVehiclePublicApi = {
   setSteeringValue: (value: number, wheelIndex: number) => void
