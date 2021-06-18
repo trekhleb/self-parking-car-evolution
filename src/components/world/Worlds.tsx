@@ -9,15 +9,17 @@ import ErrorBoundary from '../shared/ErrorBoundary';
 import WorldParamsController from './controllers/WorldParamsController';
 import { CarsType } from './types/car';
 
+export const EVOLUTION_WORLD_KEY = '0';
+export const MANUAL_PARKING_WORLD_KEY = '1';
+
 type WorldsProps = {
   cars: CarsType,
+  activeWorldKey: string | number,
   onWorldSwitch?: (worldKey: React.Key) => void,
 };
 
 function Worlds(props: WorldsProps) {
-  const { cars, onWorldSwitch = (worldKey) => {} } = props;
-
-  const [activeKey, setActiveKey] = React.useState<string | number>('1');
+  const { cars, activeWorldKey, onWorldSwitch = (worldKey) => {} } = props;
 
   const [withStat, setWithStat] = useState<boolean>(true);
   const [withSensors, setWithSensors] = useState<boolean>(true);
@@ -43,7 +45,6 @@ function Worlds(props: WorldsProps) {
   };
 
   const onTabSwitch = ({ activeKey }: {activeKey: React.Key}) => {
-    setActiveKey(activeKey);
     onWorldSwitch(activeKey);
   }
 
@@ -66,7 +67,7 @@ function Worlds(props: WorldsProps) {
         Tab: { style: tabStyle },
       }}
       onChange={onTabSwitch}
-      activeKey={activeKey}
+      activeKey={activeWorldKey}
     >
       <Tab title="Automatic Parking">
         <ErrorBoundary>
