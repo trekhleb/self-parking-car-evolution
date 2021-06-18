@@ -71,10 +71,7 @@ function Worlds(props: WorldsProps) {
     >
       <Tab title="Automatic Parking">
         <ErrorBoundary>
-          <World
-            withKeyboardControl
-            withPerfStats={withStat}
-          >
+          <World withPerfStats={withStat}>
             <ParkingAutomatic
               withVisibleSensors={withSensors}
               withLabels={withLabels}
