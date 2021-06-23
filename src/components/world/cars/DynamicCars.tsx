@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 
 import Car, { OnCarReadyArgs } from '../car/Car';
 import { generateDynamicCarUUID } from '../utils/uuid';
-import { CarsType, userCarUUID } from '../types/car';
+import { CarType, userCarUUID } from '../types/car';
 import { carEvents, off, on } from '../utils/events';
 import {
   onEngineBackward,
@@ -15,7 +15,7 @@ import {
 import { getRandomColor } from '../../../utils/colors';
 
 type DynamicCarsProps = {
-  cars: CarsType,
+  cars: CarType[],
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   withSensors?: boolean,
@@ -39,7 +39,7 @@ function DynamicCars(props: DynamicCarsProps) {
   const carsUUIDs = useRef<userCarUUID[]>([]);
   const carsAPIs = useRef<Record<userCarUUID, OnCarReadyArgs>>({});
 
-  const activeCars = Object.values(cars).map((car, index) => {
+  const activeCars = cars.map((car, index) => {
     const uuid = generateDynamicCarUUID(index);
     carsUUIDs.current.push(uuid);
 
