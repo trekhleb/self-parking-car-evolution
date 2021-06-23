@@ -1,6 +1,6 @@
 import React from 'react';
 import { Block } from 'baseui/block';
-import { Table, DIVIDER } from 'baseui/table-semantic';
+import { Table, DIVIDER, SIZE as TABLE_SIZE } from 'baseui/table-semantic';
 import { Tag, VARIANT as TAG_VARIANT, KIND as TAG_KIND } from 'baseui/tag';
 
 import { CarsType, CarType } from '../world/types/car';
@@ -31,7 +31,7 @@ function PopulationTable(props: PopulationTableProps) {
 
     const fitness = (
       <code>
-        {Math.random()}
+        todo
       </code>
     );
     return [
@@ -47,6 +47,7 @@ function PopulationTable(props: PopulationTableProps) {
         data={rowsData}
         emptyMessage="No population yet"
         divider={DIVIDER.grid}
+        size={TABLE_SIZE.compact}
       />
     </Block>
   );
