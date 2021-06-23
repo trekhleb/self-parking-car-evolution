@@ -14,8 +14,8 @@ const genomeLength = 10;
 const generationSizes = [10, 20, 50, 100];
 const carsBatchSizes = [1, 5, 10];
 
-const s = 1000;
-const generationLifetime = 10 * s;
+const second = 1000;
+const generationLifetime = 10 * second;
 
 function EvolutionBoard() {
   const [generationSize, setGenerationSize] = useState<number>(generationSizes[0]);
@@ -30,7 +30,7 @@ function EvolutionBoard() {
   const [evolutionPaused, setEvolutionPaused] = useState<boolean>(true);
   const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(EVOLUTION_WORLD_KEY);
 
-  const carsBatchesTotal = Object.keys(cars).length / carsBatchSize;
+  const carsBatchesTotal = Math.ceil(Object.keys(cars).length / carsBatchSize);
 
   const onWorldSwitch = (worldKey: React.Key): void => {
     setActiveWorldKey(worldKey);
@@ -91,7 +91,7 @@ function EvolutionBoard() {
     if (!cars || !Object.keys(cars).length) {
       return;
     }
-    if (carsBatchIndex <= carsBatchesTotal) {
+    if (carsBatchIndex < carsBatchesTotal) {
       const batchStart = carsBatchSize * carsBatchIndex;
       const batchEnd = batchStart + carsBatchSize;
       const carsBatch: CarType[] = Object.values(cars).slice(batchStart, batchEnd);
@@ -112,7 +112,11 @@ function EvolutionBoard() {
       return;
     }
     setTimeout(() => {
-      setCarsBatchIndex(carsBatchIndex + 1);
+      const nextBatchIndex = carsBatchIndex + 1;
+      if (nextBatchIndex >= carsBatchesTotal) {
+        return;
+      }
+      setCarsBatchIndex(nextBatchIndex);
     }, generationLifetime);
   }, [carsBatch]);
 
