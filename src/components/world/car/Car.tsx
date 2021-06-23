@@ -176,7 +176,6 @@ function Car(props: CarProps) {
     uuid,
     type: 'chassis',
     isSensorObstacle,
-    car,
   };
 
   apiRef.current = vehicleAPI;
