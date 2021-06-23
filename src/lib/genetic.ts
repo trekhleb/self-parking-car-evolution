@@ -2,10 +2,10 @@ export type Gene = 0 | 1;
 
 export type Genome = Gene[];
 
-export type Population = Genome[];
+export type Generation = Genome[];
 
-export type PopulationParams = {
-  populationSize: number,
+export type GenerationParams = {
+  generationSize: number,
   genomeLength: number,
 };
 
@@ -15,9 +15,9 @@ function createGenome(length: number): Genome {
     .map(() => (Math.random() < 0.5 ? 0 : 1));
 }
 
-export function createPopulation(params: PopulationParams): Population {
-  const { populationSize, genomeLength } = params;
-  return new Array(populationSize)
+export function createGeneration(params: GenerationParams): Generation {
+  const { generationSize, genomeLength } = params;
+  return new Array(generationSize)
     .fill(null)
     .map(() => createGenome(genomeLength));
 }
