@@ -24,7 +24,7 @@ function EvolutionBoard() {
 
   const [cars, setCars] = useState<CarsType>({});
   const [carsBatch, setCarsBatch] = useState<CarType[]>([]);
-  const [carsBatchSize, setCarsBatchSize] = useState<number>(carsBatchSizes[0]);
+  const [carsBatchSize, setCarsBatchSize] = useState<number>(carsBatchSizes[1]);
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
 
   const [evolutionPaused, setEvolutionPaused] = useState<boolean>(true);
@@ -100,7 +100,6 @@ function EvolutionBoard() {
       const batchEnd = batchStart + carsBatchSize;
       const carsBatch: CarType[] = Object.values(cars).slice(batchStart, batchEnd);
       setCarsBatch(carsBatch);
-      console.log(carsBatch);
     } else {
       // All batches are passed. We need to move to another generation.
       setGenerationIndex(generationIndex + 1);
@@ -118,6 +117,7 @@ function EvolutionBoard() {
     setTimeout(() => {
       const nextBatchIndex = carsBatchIndex + 1;
       if (nextBatchIndex >= carsBatchesTotal) {
+        setCarsBatch([]);
         return;
       }
       setCarsBatchIndex(nextBatchIndex);
