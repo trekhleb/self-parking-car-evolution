@@ -2,6 +2,10 @@ export type CarLicencePlateType = string;
 
 export type CarType = {
   licencePlate: CarLicencePlateType,
+  onHit?: () => void,
+  onEngine?: () => void,
+  onWheel?: () => void,
+  onMove?: () => void,
   meta?: Record<string, any>,
 };
 
@@ -13,7 +17,6 @@ export type CarMetaData = {
   uuid: string,
   type: CarPartType,
   isSensorObstacle: boolean,
-  car?: CarType,
 };
 
 export type CarsType = Record<CarLicencePlateType, CarType>;
