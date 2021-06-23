@@ -1,5 +1,5 @@
-import { Generation, Genome } from '../lib/genetic';
-import { CarLicencePlateType, CarsType } from '../components/world/types/car';
+import { Generation, Genome } from '../../../lib/genetic';
+import { CarLicencePlateType, CarsType } from '../../world/types/car';
 
 type CarMetadataType = {
   genomeIndex: number,
