@@ -4,7 +4,7 @@ import Ground from '../surroundings/Ground';
 import StaticCars from '../cars/StaticCars';
 import DynamicCars from '../cars/DynamicCars';
 import ParkingSpot from '../surroundings/ParkingSpot';
-import { CarsType } from '../types/car';
+import { CarType } from '../types/car';
 
 // Collision groups and masks must be powers of 2.
 // @see: https://github.com/schteppe/cannon.js/blob/master/demos/collisionFilter.html
@@ -14,7 +14,7 @@ const COLLISION_MASK_ACTIVE_CARS = COLLISION_GROUP_STATIC_OBJECTS // It can only
 const COLLISION_MASK_STATIC_OBJECTS = COLLISION_GROUP_ACTIVE_CARS // It can only collide with active cars.
 
 type ParkingAutomaticProps = {
-  cars: CarsType,
+  cars: CarType[],
   withVisibleSensors?: boolean,
   withLabels?: boolean,
 };
