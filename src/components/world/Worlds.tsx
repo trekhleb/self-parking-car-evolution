@@ -7,13 +7,13 @@ import ParkingManual from './parkings/ParkingManual';
 import { StyleObject } from 'styletron-standard';
 import ErrorBoundary from '../shared/ErrorBoundary';
 import WorldParamsController from './controllers/WorldParamsController';
-import { CarsType } from './types/car';
+import { CarType } from './types/car';
 
 export const EVOLUTION_WORLD_KEY = '0';
 export const MANUAL_PARKING_WORLD_KEY = '1';
 
 type WorldsProps = {
-  cars: CarsType,
+  cars: CarType[],
   activeWorldKey: string | number,
   onWorldSwitch?: (worldKey: React.Key) => void,
 };
