@@ -56,6 +56,13 @@ function PopulationTable(props: PopulationTableProps) {
         emptyMessage="No population yet"
         divider={DIVIDER.grid}
         size={TABLE_SIZE.compact}
+        overrides={{
+          TableBodyCell: {
+            style: {
+              verticalAlign: 'center',
+            },
+          },
+        }}
       />
     </Block>
   );
