@@ -13,17 +13,19 @@ import { generationToCars } from './utils/evolution';
 const genomeLength = 10;
 const generationSizes = [10, 20, 50, 100];
 const carsBatchSizes = [1, 5, 10];
-const generationLifetime = 1000;
+
+const s = 1000;
+const generationLifetime = 10 * s;
 
 function EvolutionBoard() {
   const [generationSize, setGenerationSize] = useState<number>(generationSizes[0]);
-  const [generationIndex, setGenerationIndex] = useState<number>(0);
+  const [generationIndex, setGenerationIndex] = useState<number | null>(null);
   const [generation, setGeneration] = useState<Generation>([]);
 
   const [cars, setCars] = useState<CarsType>({});
   const [carsBatch, setCarsBatch] = useState<CarType[]>([]);
   const [carsBatchSize, setCarsBatchSize] = useState<number>(carsBatchSizes[0]);
-  const [carsBatchIndex, setCarsBatchIndex] = useState<number>(0);
+  const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
 
   const [evolutionPaused, setEvolutionPaused] = useState<boolean>(true);
   const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(EVOLUTION_WORLD_KEY);
@@ -45,17 +47,20 @@ function EvolutionBoard() {
 
   const onEvolutionReset = () => {
     setEvolutionPaused(false);
-    setGenerationIndex(1);
+    setGenerationIndex(0);
   };
 
   // Start the evolution.
   useEffect(() => {
-    setGenerationIndex(1);
+    setGenerationIndex(0);
   }, []);
 
   // Once generation index is changed we need to create (or mate) a new generation.
   useEffect(() => {
-    if (generationIndex === 1) {
+    if (generationIndex === null) {
+      return;
+    }
+    if (generationIndex === 0) {
       // Create the very first generation.
       const generation: Generation = createGeneration({
         generationSize,
@@ -75,11 +80,14 @@ function EvolutionBoard() {
     }
     const cars = generationToCars(generation);
     setCars(cars);
-    setCarsBatchIndex(1);
+    setCarsBatchIndex(0);
   }, [generation]);
 
   // Once the cars batch index is updated we need to generate a cars batch.
   useEffect(() => {
+    if (carsBatchIndex === null || generationIndex === null) {
+      return;
+    }
     if (!cars || !Object.keys(cars).length) {
       return;
     }
@@ -88,6 +96,7 @@ function EvolutionBoard() {
       const batchEnd = batchStart + carsBatchSize;
       const carsBatch: CarType[] = Object.values(cars).slice(batchStart, batchEnd);
       setCarsBatch(carsBatch);
+      console.log(carsBatch);
     } else {
       // All batches are passed. We need to move to another generation.
       setGenerationIndex(generationIndex + 1);
@@ -96,12 +105,15 @@ function EvolutionBoard() {
 
   // Once the new cars batch is created we need to start generation timer.
   useEffect(() => {
+    if (carsBatchIndex === null) {
+      return;
+    }
     if (!carsBatch || !carsBatch.length) {
       return;
     }
-    // setTimeout(() => {
-    //   setCarsBatchIndex(carsBatchIndex + 1);
-    // }, generationLifetime);
+    setTimeout(() => {
+      setCarsBatchIndex(carsBatchIndex + 1);
+    }, generationLifetime);
   }, [carsBatch]);
 
   const worlds = (
@@ -125,20 +137,20 @@ function EvolutionBoard() {
     </Block>
   );
 
-  const timingDetails = (
+  const timingDetails = generationIndex !== null && carsBatchIndex !== null ? (
     <Block marginBottom="20px" display="flex" flexDirection="row">
       <Block marginRight="20px">
         <Label3>
-          Generation: <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">{generationIndex}</Tag>
+          Generation: <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">{generationIndex + 1}</Tag>
         </Label3>
       </Block>
       <Block>
         <Label3>
-          Batch: <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">{carsBatchIndex}</Tag>
+          Batch: <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">{carsBatchIndex + 1}</Tag>
         </Label3>
       </Block>
     </Block>
-  );
+  ) : null;
 
   const populationTable = (
     <Block marginTop="16px">
