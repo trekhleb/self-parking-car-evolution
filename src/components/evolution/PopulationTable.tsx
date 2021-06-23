@@ -2,15 +2,19 @@ import React from 'react';
 import { Block } from 'baseui/block';
 import { Table, DIVIDER, SIZE as TABLE_SIZE } from 'baseui/table-semantic';
 import { Tag, VARIANT as TAG_VARIANT, KIND as TAG_KIND } from 'baseui/tag';
+import { Spinner } from 'baseui/spinner';
 
-import { CarsType, CarType } from '../world/types/car';
+import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
+
+export type CarsInProgressType = Record<CarLicencePlateType, boolean>;
 
 type PopulationTableProps = {
   cars: CarsType,
+  carsInProgress: CarsInProgressType,
 };
 
 function PopulationTable(props: PopulationTableProps) {
-  const {cars} = props;
+  const {cars, carsInProgress} = props;
   const carsArray: CarType[] = Object.values<CarType>(cars);
 
   const columns = [
@@ -29,14 +33,18 @@ function PopulationTable(props: PopulationTableProps) {
       </Tag>
     );
 
-    const fitness = (
-      <code>
-        todo
-      </code>
+
+    const fitness = null;
+
+    const fitnessCell = carsInProgress[car.licencePlate] ? (
+      <Spinner size={24} color="black" />
+    ) : (
+      <code>{fitness}</code>
     );
+
     return [
       licencePlateCell,
-      fitness,
+      fitnessCell,
     ];
   });
 

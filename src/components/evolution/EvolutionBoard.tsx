@@ -6,7 +6,7 @@ import { Block } from 'baseui/block';
 import { createGeneration, Generation } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
 import EvolutionPlaybackButtons from './EvolutionPlaybackButtons';
-import PopulationTable from './PopulationTable';
+import PopulationTable, { CarsInProgressType } from './PopulationTable';
 import { CarsType, CarType } from '../world/types/car';
 import { generationToCars } from './utils/evolution';
 
@@ -30,7 +30,11 @@ function EvolutionBoard() {
   const [evolutionPaused, setEvolutionPaused] = useState<boolean>(true);
   const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(EVOLUTION_WORLD_KEY);
 
-  const carsBatchesTotal = Math.ceil(Object.keys(cars).length / carsBatchSize);
+  const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
+  const carsInProgress: CarsInProgressType = carsBatch.reduce((cars: CarsInProgressType, car: CarType) => {
+    cars[car.licencePlate] = true;
+    return cars;
+  }, {});
 
   const onWorldSwitch = (worldKey: React.Key): void => {
     setActiveWorldKey(worldKey);
@@ -158,7 +162,10 @@ function EvolutionBoard() {
 
   const populationTable = (
     <Block marginTop="16px">
-      <PopulationTable cars={cars} />
+      <PopulationTable
+        cars={cars}
+        carsInProgress={carsInProgress}
+      />
     </Block>
   );
 
