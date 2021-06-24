@@ -10,6 +10,7 @@ import Sensors from './Sensors';
 import CarLabel from './CarLabel';
 
 type ChassisProps = {
+  sensorsNum: number,
   weight?: number,
   wireframe?: boolean,
   castShadow?: boolean,
@@ -30,6 +31,7 @@ type ChassisProps = {
 
 const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref) => {
   const {
+    sensorsNum,
     wireframe = false,
     styled = true,
     castShadow = true,
@@ -70,7 +72,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
   };
 
   const sensors = withSensors ? (
-    <Sensors visibleSensors={visibleSensors} />
+    <Sensors visibleSensors={visibleSensors} sensorsNum={sensorsNum} />
   ) : null;
 
   const carLabel = label ? (
