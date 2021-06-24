@@ -8,9 +8,8 @@ import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
 import EvolutionPlaybackButtons from './EvolutionPlaybackButtons';
 import PopulationTable, { CarsFitnessType, CarsInProgressType } from './PopulationTable';
 import { CarsType, CarType } from '../world/types/car';
-import { generateWorldVersion, generationToCars } from './utils/evolution';
+import { generateWorldVersion, generationToCars, GENOME_LENGTH } from './utils/evolution';
 
-const genomeLength = 10;
 const generationSizes = [10, 20, 50, 100];
 const carsBatchSizes = [1, 5, 10];
 
@@ -88,7 +87,7 @@ function EvolutionBoard() {
       // Create the very first generation.
       const generation: Generation = createGeneration({
         generationSize,
-        genomeLength,
+        genomeLength: GENOME_LENGTH,
       });
       setGeneration(generation);
     } else {

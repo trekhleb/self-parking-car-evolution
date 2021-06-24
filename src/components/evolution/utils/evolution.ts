@@ -8,6 +8,8 @@ import {
 } from '../../world/types/car';
 
 export const SENSORS_TOTAL = 16;
+export const GENES_PER_PARAMETER = 8;
+export const GENOME_LENGTH = SENSORS_TOTAL * GENES_PER_PARAMETER;
 
 export const generateWorldVersion = (generationIndex: number | null, batchIndex: number | null): string => {
   const generation = generationIndex === null ? -1 : generationIndex;
