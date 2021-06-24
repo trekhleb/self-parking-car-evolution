@@ -5,4 +5,4 @@ export const INTERSECT_THROTTLE_TIMEOUT = 100;
 export const ON_RAY_THROTTLE_TIMEOUT = 100;
 
 // Throttle the onSensors sensor events.
-export const ON_SENSORS_THROTTLE_TIMEOUT = 1000;
+export const ON_SENSORS_THROTTLE_TIMEOUT = 200;
