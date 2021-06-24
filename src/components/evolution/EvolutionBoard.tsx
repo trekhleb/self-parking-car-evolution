@@ -8,7 +8,7 @@ import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
 import EvolutionPlaybackButtons from './EvolutionPlaybackButtons';
 import PopulationTable, { CarsInProgressType } from './PopulationTable';
 import { CarsType, CarType } from '../world/types/car';
-import { generationToCars } from './utils/evolution';
+import { generateWorldVersion, generationToCars } from './utils/evolution';
 
 const genomeLength = 10;
 const generationSizes = [10, 20, 50, 100];
@@ -24,7 +24,7 @@ function EvolutionBoard() {
 
   const [cars, setCars] = useState<CarsType>({});
   const [carsBatch, setCarsBatch] = useState<CarType[]>([]);
-  const [carsBatchSize, setCarsBatchSize] = useState<number>(carsBatchSizes[1]);
+  const [carsBatchSize, setCarsBatchSize] = useState<number>(carsBatchSizes[0]);
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
 
   const [evolutionPaused, setEvolutionPaused] = useState<boolean>(true);
@@ -130,6 +130,7 @@ function EvolutionBoard() {
         cars={carsBatch}
         activeWorldKey={activeWorldKey}
         onWorldSwitch={onWorldSwitch}
+        version={generateWorldVersion(generationIndex, carsBatchIndex)}
       />
     </Block>
   );
