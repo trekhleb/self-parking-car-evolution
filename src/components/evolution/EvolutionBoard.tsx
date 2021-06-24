@@ -175,12 +175,18 @@ function EvolutionBoard() {
     <Block marginBottom="20px" display="flex" flexDirection="row">
       <Block marginRight="20px">
         <Label3>
-          Generation: <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">{generationIndex + 1}</Tag>
+          Generation:
+          <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
+            <small>#</small>{generationIndex + 1}
+          </Tag>
         </Label3>
       </Block>
-      <Block>
+      <Block marginRight="20px">
         <Label3>
-          Batch: <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">{carsBatchIndex + 1}</Tag>
+          Group:
+          <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
+            <small>#</small>{carsBatchIndex + 1}
+          </Tag>
         </Label3>
       </Block>
     </Block>
