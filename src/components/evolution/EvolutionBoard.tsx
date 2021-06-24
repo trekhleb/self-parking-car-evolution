@@ -6,7 +6,7 @@ import { Block } from 'baseui/block';
 import { createGeneration, Generation } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
 import EvolutionPlaybackButtons from './EvolutionPlaybackButtons';
-import PopulationTable, { CarsInProgressType } from './PopulationTable';
+import PopulationTable, { CarsFitnessType, CarsInProgressType } from './PopulationTable';
 import { CarsType, CarType } from '../world/types/car';
 import { generateWorldVersion, generationToCars } from './utils/evolution';
 
@@ -31,6 +31,8 @@ function EvolutionBoard() {
   const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(EVOLUTION_WORLD_KEY);
 
   const batchTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const [carsFitness, setCarsFitness] = useState<CarsFitnessType>({});
 
   const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
   const carsInProgress: CarsInProgressType = carsBatch.reduce((cars: CarsInProgressType, car: CarType) => {
@@ -185,6 +187,7 @@ function EvolutionBoard() {
       <PopulationTable
         cars={cars}
         carsInProgress={carsInProgress}
+        carsFitness={carsFitness}
       />
     </Block>
   );

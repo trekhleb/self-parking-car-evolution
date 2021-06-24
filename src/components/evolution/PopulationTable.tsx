@@ -7,14 +7,16 @@ import { Spinner } from 'baseui/spinner';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 
 export type CarsInProgressType = Record<CarLicencePlateType, boolean>;
+export type CarsFitnessType = Record<CarLicencePlateType, number>;
 
 type PopulationTableProps = {
   cars: CarsType,
   carsInProgress: CarsInProgressType,
+  carsFitness: CarsFitnessType,
 };
 
 function PopulationTable(props: PopulationTableProps) {
-  const {cars, carsInProgress} = props;
+  const { cars, carsInProgress, carsFitness } = props;
   const carsArray: CarType[] = Object.values<CarType>(cars);
 
   const columns = [
@@ -34,13 +36,16 @@ function PopulationTable(props: PopulationTableProps) {
     );
 
 
-    const fitness = null;
+    const fitness = carsFitness.hasOwnProperty(car.licencePlate) && typeof carsFitness[car.licencePlate] === 'number'
+      ? (
+        <code>
+          {carsFitness[car.licencePlate]}
+        </code>)
+      : null;
 
     const fitnessCell = carsInProgress[car.licencePlate] ? (
       <Spinner size={24} color="black" />
-    ) : (
-      <code>{fitness}</code>
-    );
+    ) : fitness;
 
     return [
       licencePlateCell,
