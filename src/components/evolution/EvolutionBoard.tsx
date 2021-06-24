@@ -24,7 +24,7 @@ function EvolutionBoard() {
 
   const [cars, setCars] = useState<CarsType>({});
   const [carsBatch, setCarsBatch] = useState<CarType[]>([]);
-  const [carsBatchSize, setCarsBatchSize] = useState<number>(carsBatchSizes[1]);
+  const [carsBatchSize, setCarsBatchSize] = useState<number>(carsBatchSizes[0]);
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
 
   const [evolutionPaused, setEvolutionPaused] = useState<boolean>(true);
