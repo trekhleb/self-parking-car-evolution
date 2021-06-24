@@ -16,10 +16,11 @@ type WorldsProps = {
   cars: CarType[],
   activeWorldKey: string | number,
   onWorldSwitch?: (worldKey: React.Key) => void,
+  version?: string,
 };
 
 function Worlds(props: WorldsProps) {
-  const { cars, activeWorldKey, onWorldSwitch = (worldKey) => {} } = props;
+  const { cars, activeWorldKey, onWorldSwitch = (worldKey) => {}, version = '0' } = props;
 
   const [withStat, setWithStat] = useState<boolean>(true);
   const [withSensors, setWithSensors] = useState<boolean>(true);
@@ -71,7 +72,7 @@ function Worlds(props: WorldsProps) {
     >
       <Tab title="Automatic Parking">
         <ErrorBoundary>
-          <World withPerfStats={withStat}>
+          <World withPerfStats={withStat} version={version}>
             <ParkingAutomatic
               withVisibleSensors={withSensors}
               withLabels={withLabels}

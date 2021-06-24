@@ -16,6 +16,7 @@ type WorldProps = {
   withJoystickControl?: boolean,
   withKeyboardControl?: boolean,
   withPerfStats?: boolean,
+  version?: string,
 };
 
 const worldBackgroundColor = 'lightblue';
@@ -26,6 +27,7 @@ function World(props: WorldProps) {
     withJoystickControl = false,
     withKeyboardControl = false,
     withPerfStats = false,
+    version = '0',
   } = props;
 
   const stats = withPerfStats ? (
@@ -68,6 +70,7 @@ function World(props: WorldProps) {
         <Canvas
           camera={{ position: [-10, 10, 0], fov: 50 }}
           shadows
+          // key={version}
         >
           <OrbitControls />
           <color attach="background" args={[worldBackgroundColor]} />
