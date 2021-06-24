@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 
 import Car, { OnCarReadyArgs } from '../car/Car';
-import { generateDynamicCarUUID } from '../utils/uuid';
 import { CarType, userCarUUID } from '../types/car';
 import { carEvents, off, on } from '../utils/events';
 import {
@@ -39,8 +38,8 @@ function DynamicCars(props: DynamicCarsProps) {
   const carsUUIDs = useRef<userCarUUID[]>([]);
   const carsAPIs = useRef<Record<userCarUUID, OnCarReadyArgs>>({});
 
-  const activeCars = cars.map((car, index) => {
-    const uuid = generateDynamicCarUUID(index);
+  const activeCars = cars.map((car) => {
+    const uuid = car.licencePlate;
     carsUUIDs.current.push(uuid);
 
     const onForward = () => { onEngineForward(carsAPIs.current[uuid].api) };
@@ -91,7 +90,7 @@ function DynamicCars(props: DynamicCarsProps) {
 
     return (
       <Car
-        key={index}
+        key={uuid}
         uuid={uuid}
         label={label}
         bodyProps={{
