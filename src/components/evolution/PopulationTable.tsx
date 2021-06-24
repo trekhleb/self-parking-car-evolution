@@ -24,34 +24,52 @@ function PopulationTable(props: PopulationTableProps) {
     'Fitness',
   ];
 
-  const rowsData: React.ReactNode[][] = carsArray.map((car: CarType) => {
-    const licencePlateCell = (
-      <Tag
-        closeable={false}
-        kind={TAG_KIND.neutral}
-        variant={TAG_VARIANT.solid}
-      >
-        {car.licencePlate}
-      </Tag>
-    );
+  const rowsData: React.ReactNode[][] = carsArray
+    .sort((carA: CarType, carB: CarType): number => {
+      const fitnessA = getCarFitness(carsFitness, carA);
+      const fitnessB = getCarFitness(carsFitness, carB);
+      if (fitnessA === null && fitnessB !== null) {
+        return -1;
+      }
+      if (fitnessA !== null && fitnessB === null) {
+        return 1;
+      }
+      if (fitnessA === null || fitnessB === null) {
+        return 0;
+      }
+      if (fitnessA === fitnessB) {
+        return 0;
+      }
+      if (fitnessA <= fitnessB) {
+        return -1;
+      }
+      return 1;
+    })
+    .map((car: CarType) => {
+      const licencePlateCell = (
+        <Tag
+          closeable={false}
+          kind={TAG_KIND.neutral}
+          variant={TAG_VARIANT.solid}
+        >
+          {car.licencePlate}
+        </Tag>
+      );
 
-
-    const fitness = carsFitness.hasOwnProperty(car.licencePlate) && typeof carsFitness[car.licencePlate] === 'number'
-      ? (
+      const carFitness = getCarFitness(carsFitness, car);
+      const fitnessCell = carsInProgress[car.licencePlate] ? (
+        <Spinner size={24} color="black" />
+      ) : (
         <code>
-          {carsFitness[car.licencePlate]}
-        </code>)
-      : null;
+          {carFitness}
+        </code>
+      );
 
-    const fitnessCell = carsInProgress[car.licencePlate] ? (
-      <Spinner size={24} color="black" />
-    ) : fitness;
-
-    return [
-      licencePlateCell,
-      fitnessCell,
-    ];
-  });
+      return [
+        licencePlateCell,
+        fitnessCell,
+      ];
+    });
 
   return (
     <Block>
@@ -71,6 +89,12 @@ function PopulationTable(props: PopulationTableProps) {
       />
     </Block>
   );
+}
+
+function getCarFitness(carsFitness: CarsFitnessType, car: CarType): number | null {
+  return carsFitness.hasOwnProperty(car.licencePlate) && typeof carsFitness[car.licencePlate] === 'number'
+    ? carsFitness[car.licencePlate]
+    : null;
 }
 
 export default PopulationTable;
