@@ -49,6 +49,7 @@ type CarProps = {
   baseColor?: string,
   onCollide?: (carMetaData: CarMetaData, event: any) => void,
   onSensors?: (sensors: SensorValuesType) => void,
+  onMove?: () => void,
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   onCarReady?: (args: OnCarReadyArgs) => void,
@@ -74,6 +75,7 @@ function Car(props: CarProps) {
     onCarReady = () => {},
     onCarDestroy = () => {},
     onSensors = () => {},
+    onMove = () => {},
     label = null,
     car = { licencePlate: '' },
   } = props;
@@ -217,6 +219,7 @@ function Car(props: CarProps) {
         bodyProps={{ ...bodyProps }}
         onCollide={(event) => onCollide(carMetaData, event)}
         onSensors={onSensors}
+        onMove={onMove}
         userData={carMetaData}
         collisionFilterGroup={collisionFilterGroup}
         collisionFilterMask={collisionFilterMask}

@@ -109,6 +109,12 @@ function DynamicCars(props: DynamicCarsProps) {
       }
     };
 
+    const onMove = () => {
+      if (car.onMove) {
+        car.onMove();
+      }
+    };
+
     const position = [0, 2, 4 * Math.random() - 2];
     const angularVelocity = [-0.2, 0, 0];
 
@@ -136,6 +142,7 @@ function DynamicCars(props: DynamicCarsProps) {
         onCarReady={onCarReady}
         onCarDestroy={onCarDestroy}
         onSensors={onSensors}
+        onMove={onMove}
         movable
         styled={styledCar}
         baseColor={carColor}

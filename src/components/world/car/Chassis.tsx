@@ -1,7 +1,8 @@
 import { BoxProps, useBox } from '@react-three/cannon';
-import React, { CSSProperties, forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import * as THREE from 'three';
-import { GroupProps } from '@react-three/fiber';
+import { GroupProps, useFrame } from '@react-three/fiber';
+import throttle from 'lodash/throttle';
 
 import { CHASSIS_MASS, CHASSIS_OBJECT_NAME, CHASSIS_SIZE } from './constants';
 import { NumVec3 } from '../types/vectors';
@@ -9,6 +10,7 @@ import ChassisModel from './ChassisModel';
 import Sensors from './Sensors';
 import CarLabel from './CarLabel';
 import { SensorValuesType } from '../types/car';
+import { ON_MOVE_THROTTLE_TIMEOUT } from '../constants/performance';
 
 type ChassisProps = {
   sensorsNum: number,
@@ -29,6 +31,7 @@ type ChassisProps = {
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   onSensors?: (sensors: SensorValuesType) => void,
+  onMove?: () => void,
 }
 
 const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref) => {
@@ -51,6 +54,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     collisionFilterMask,
     onCollide = () => {},
     onSensors = () => {},
+    onMove = () => {},
   } = props;
 
   const boxSize = CHASSIS_SIZE;
@@ -73,6 +77,15 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
   const groupProps: GroupProps = {
     position: chassisPosition,
   };
+
+  const onMoveThrottled = throttle(onMove, ON_MOVE_THROTTLE_TIMEOUT, {
+    leading: true,
+    trailing: true,
+  });
+
+  useFrame(() => {
+    onMoveThrottled();
+  });
 
   const sensors = withSensors ? (
     <Sensors

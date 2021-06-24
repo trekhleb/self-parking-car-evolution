@@ -6,3 +6,6 @@ export const ON_RAY_THROTTLE_TIMEOUT = 100;
 
 // Throttle the onSensors sensor events.
 export const ON_SENSORS_THROTTLE_TIMEOUT = 200;
+
+// Throttle the onMove events.
+export const ON_MOVE_THROTTLE_TIMEOUT = 200;
