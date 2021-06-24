@@ -24,7 +24,7 @@ function EvolutionBoard() {
 
   const [cars, setCars] = useState<CarsType>({});
   const [carsBatch, setCarsBatch] = useState<CarType[]>([]);
-  const [carsBatchSize, setCarsBatchSize] = useState<number>(carsBatchSizes[0]);
+  const [carsBatchSize, setCarsBatchSize] = useState<number>(carsBatchSizes[1]);
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
 
   const [evolutionPaused, setEvolutionPaused] = useState<boolean>(true);
@@ -93,7 +93,9 @@ function EvolutionBoard() {
       setGeneration(generation);
     } else {
       // Mate and mutate existing population.
-      console.log('MATE + MUTATE');
+      // @TODO: Mate and mutate.
+      const newGeneration = [...generation];
+      setGeneration(newGeneration);
     }
   }, [generationIndex]);
 
@@ -115,15 +117,13 @@ function EvolutionBoard() {
     if (!cars || !Object.keys(cars).length) {
       return;
     }
-    if (carsBatchIndex < carsBatchesTotal) {
-      const batchStart = carsBatchSize * carsBatchIndex;
-      const batchEnd = batchStart + carsBatchSize;
-      const carsBatch: CarType[] = Object.values(cars).slice(batchStart, batchEnd);
-      setCarsBatch(carsBatch);
-    } else {
-      // All batches are passed. We need to move to another generation.
-      setGenerationIndex(generationIndex + 1);
+    if (carsBatchIndex >= carsBatchesTotal) {
+      return;
     }
+    const batchStart = carsBatchSize * carsBatchIndex;
+    const batchEnd = batchStart + carsBatchSize;
+    const carsBatch: CarType[] = Object.values(cars).slice(batchStart, batchEnd);
+    setCarsBatch(carsBatch);
   }, [carsBatchIndex]);
 
   // Once the new cars batch is created we need to start generation timer.
@@ -139,6 +139,10 @@ function EvolutionBoard() {
       const nextBatchIndex = carsBatchIndex + 1;
       if (nextBatchIndex >= carsBatchesTotal) {
         setCarsBatch([]);
+        if (generationIndex !== null) {
+          setCarsBatchIndex(null);
+          setGenerationIndex(generationIndex + 1);
+        }
         return;
       }
       setCarsBatchIndex(nextBatchIndex);
