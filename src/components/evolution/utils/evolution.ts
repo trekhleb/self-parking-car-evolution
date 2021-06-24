@@ -37,7 +37,7 @@ export const generationToCars = (population: Generation): CarsType => {
       return 'neutral';
     };
 
-    const onWheel =  (sensors: SensorValuesType): WheelOptionsType => {
+    const onWheel = (sensors: SensorValuesType): WheelOptionsType => {
       const random = Math.random();
       if (random < 0.3) {
         return 'left';
@@ -48,13 +48,16 @@ export const generationToCars = (population: Generation): CarsType => {
       return 'right';
     };
 
+    const onMove = () => {
+    };
+
     cars[licencePlate] = {
       licencePlate,
       sensorsNum: SENSORS_TOTAL,
       onEngine,
       onWheel,
       onHit: () => {},
-      onMove: () => {},
+      onMove,
     };
   });
   return cars;
