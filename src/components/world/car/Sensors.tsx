@@ -7,13 +7,19 @@ import { useThree } from '@react-three/fiber';
 import { CarMetaData } from '../types/car';
 
 type SensorsProps = {
+  sensorsNum: number,
   visibleSensors?: boolean,
 };
 
 const Sensors = (props: SensorsProps) => {
-  const { visibleSensors = false } = props;
+  const { visibleSensors = false, sensorsNum } = props;
   const obstacles = useRef<THREE.Object3D[]>([]);
+  const sensorDistances = useRef<Record<number, number | undefined>>({});
   const { scene } = useThree();
+
+  const onRay = (index: number, distance: number | undefined): void => {
+    sensorDistances.current[index] = distance;
+  };
 
   // @ts-ignore
   obstacles.current = scene.children
@@ -28,17 +34,18 @@ const Sensors = (props: SensorsProps) => {
       return userData?.isSensorObstacle;
     });
 
-  const sensorsNum = 16;
   const angleStep = 2 * Math.PI / sensorsNum;
   const sensorRays = new Array(sensorsNum).fill(null).map((_, index) => {
     return (
       <SensorRay
         key={index}
+        index={index}
         from={[0, SENSOR_HEIGHT, 0]}
         to={[0, SENSOR_HEIGHT, SENSOR_DISTANCE]}
         angleX={angleStep * index}
         visible={visibleSensors}
         obstacles={obstacles.current}
+        onRay={onRay}
       />
     );
   });
