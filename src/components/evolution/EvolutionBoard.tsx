@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { H6, Label3 } from 'baseui/typography';
 import {Tag, VARIANT as TAG_VARIANT} from 'baseui/tag';
 import { Block } from 'baseui/block';
@@ -30,6 +30,8 @@ function EvolutionBoard() {
   const [evolutionPaused, setEvolutionPaused] = useState<boolean>(true);
   const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(EVOLUTION_WORLD_KEY);
 
+  const batchTimer = useRef<NodeJS.Timeout | null>(null);
+
   const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
   const carsInProgress: CarsInProgressType = carsBatch.reduce((cars: CarsInProgressType, car: CarType) => {
     cars[car.licencePlate] = true;
@@ -38,7 +40,11 @@ function EvolutionBoard() {
 
   const onWorldSwitch = (worldKey: React.Key): void => {
     setActiveWorldKey(worldKey);
-    onEvolutionReset();
+    if (worldKey === EVOLUTION_WORLD_KEY) {
+      setGenerationIndex(0);
+    } else {
+      onEvolutionReset();
+    }
   };
 
   const onEvolutionStart = () => {
@@ -50,8 +56,20 @@ function EvolutionBoard() {
   };
 
   const onEvolutionReset = () => {
-    setEvolutionPaused(false);
-    setGenerationIndex(0);
+    cancelBatchTimer();
+    setGenerationIndex(null);
+    setCarsBatchIndex(null);
+    setGeneration([]);
+    setCarsBatch([]);
+    setCars({});
+  };
+
+  const cancelBatchTimer = () => {
+    if (batchTimer.current === null) {
+      return;
+    }
+    clearTimeout(batchTimer.current);
+    batchTimer.current = null;
   };
 
   // Start the evolution.
@@ -114,7 +132,8 @@ function EvolutionBoard() {
     if (!carsBatch || !carsBatch.length) {
       return;
     }
-    setTimeout(() => {
+    cancelBatchTimer();
+    batchTimer.current = setTimeout(() => {
       const nextBatchIndex = carsBatchIndex + 1;
       if (nextBatchIndex >= carsBatchesTotal) {
         setCarsBatch([]);
@@ -170,15 +189,21 @@ function EvolutionBoard() {
     </Block>
   );
 
-  return (
-    <Block>
-      {worlds}
+  const evolutionAnalytics = activeWorldKey === EVOLUTION_WORLD_KEY ? (
+    <>
       <H6 $style={{marginTop: '20px', marginBottom: '20px'}}>
         Evolution Board
       </H6>
       {evolutionButtons}
       {timingDetails}
       {populationTable}
+    </>
+  ) : null;
+
+  return (
+    <Block>
+      {worlds}
+      {evolutionAnalytics}
     </Block>
   );
 }

@@ -70,7 +70,7 @@ function World(props: WorldProps) {
         <Canvas
           camera={{ position: [-10, 10, 0], fov: 50 }}
           shadows
-          // key={version}
+          key={version}
         >
           <OrbitControls />
           <color attach="background" args={[worldBackgroundColor]} />
