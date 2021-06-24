@@ -11,6 +11,7 @@ import {
   CHASSIS_GROUND_CLEARANCE,
   CHASSIS_RELATIVE_POSITION,
   CHASSIS_WHEEL_WIDTH,
+  SENSORS_NUM,
   WHEEL_CUSTOM_SLIDING_ROTATION_SPEED,
   WHEEL_DAMPING_COMPRESSION,
   WHEEL_DAMPING_RELAXATION,
@@ -201,6 +202,7 @@ function Car(props: CarProps) {
     <group ref={vehicle}>
       <Chassis
         ref={chassis}
+        sensorsNum={car.sensorsNum || SENSORS_NUM}
         chassisPosition={CHASSIS_RELATIVE_POSITION}
         styled={styled}
         wireframe={wireframe}
