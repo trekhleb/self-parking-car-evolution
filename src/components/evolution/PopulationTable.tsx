@@ -7,7 +7,7 @@ import { Spinner } from 'baseui/spinner';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 
 export type CarsInProgressType = Record<CarLicencePlateType, boolean>;
-export type CarsFitnessType = Record<CarLicencePlateType, number>;
+export type CarsFitnessType = Record<CarLicencePlateType, number | null>;
 
 type PopulationTableProps = {
   cars: CarsType,
@@ -29,10 +29,10 @@ function PopulationTable(props: PopulationTableProps) {
       const fitnessA = getCarFitness(carsFitness, carA);
       const fitnessB = getCarFitness(carsFitness, carB);
       if (fitnessA === null && fitnessB !== null) {
-        return -1;
+        return 1;
       }
       if (fitnessA !== null && fitnessB === null) {
-        return 1;
+        return -1;
       }
       if (fitnessA === null || fitnessB === null) {
         return 0;
@@ -41,9 +41,9 @@ function PopulationTable(props: PopulationTableProps) {
         return 0;
       }
       if (fitnessA <= fitnessB) {
-        return -1;
+        return 1;
       }
-      return 1;
+      return -1;
     })
     .map((car: CarType) => {
       const licencePlateCell = (
@@ -59,11 +59,7 @@ function PopulationTable(props: PopulationTableProps) {
       const carFitness = getCarFitness(carsFitness, car);
       const fitnessCell = carsInProgress[car.licencePlate] ? (
         <Spinner size={24} color="black" />
-      ) : (
-        <code>
-          {carFitness}
-        </code>
-      );
+      ) : carFitness;
 
       return [
         licencePlateCell,
