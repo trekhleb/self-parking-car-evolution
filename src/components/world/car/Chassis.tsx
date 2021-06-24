@@ -8,6 +8,7 @@ import { NumVec3 } from '../types/vectors';
 import ChassisModel from './ChassisModel';
 import Sensors from './Sensors';
 import CarLabel from './CarLabel';
+import { SensorValuesType } from '../types/car';
 
 type ChassisProps = {
   sensorsNum: number,
@@ -27,6 +28,7 @@ type ChassisProps = {
   userData?: Record<string, any>,
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
+  onSensors?: (sensors: SensorValuesType) => void,
 }
 
 const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref) => {
@@ -48,6 +50,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     collisionFilterGroup,
     collisionFilterMask,
     onCollide = () => {},
+    onSensors = () => {},
   } = props;
 
   const boxSize = CHASSIS_SIZE;
@@ -72,7 +75,11 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
   };
 
   const sensors = withSensors ? (
-    <Sensors visibleSensors={visibleSensors} sensorsNum={sensorsNum} />
+    <Sensors
+      visibleSensors={visibleSensors}
+      sensorsNum={sensorsNum}
+      onSensors={onSensors}
+    />
   ) : null;
 
   const carLabel = label ? (

@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Line2 } from 'three/examples/jsm/lines/Line2';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
@@ -9,14 +9,12 @@ import { acceleratedRaycast } from 'three-mesh-bvh';
 
 import { NumVec3 } from '../types/vectors';
 import { SENSOR_DISTANCE } from './constants';
+import { INTERSECT_THROTTLE_TIMEOUT, ON_RAY_THROTTLE_TIMEOUT } from '../constants/performance';
 
 const beamColor = new THREE.Color(0x009900);
 const beamWarningColor = new THREE.Color(0xFFFF00);
 const beamDangerColor = new THREE.Color(0xFF0000);
 const lineWidth = 0.5;
-
-const intersectThrottleTimeout = 100;
-const onRayThrottleTimeout = 100;
 
 THREE.Mesh.prototype.raycast = acceleratedRaycast;
 
@@ -58,7 +56,7 @@ const SensorRay = (props: SensorRayProps) => {
     intersectionRef.current = raycasterRef.current.intersectObjects(obstacles, true);
   };
 
-  const intersectObjectsThrottled = throttle(intersectObjects, intersectThrottleTimeout, {
+  const intersectObjectsThrottled = throttle(intersectObjects, INTERSECT_THROTTLE_TIMEOUT, {
     leading: true,
     trailing: true,
   });
@@ -67,7 +65,7 @@ const SensorRay = (props: SensorRayProps) => {
     onRay(index, distance);
   };
 
-  const onRayCallbackThrottled = throttle(onRayCallback, onRayThrottleTimeout, {
+  const onRayCallbackThrottled = throttle(onRayCallback, ON_RAY_THROTTLE_TIMEOUT, {
     leading: true,
     trailing: true,
   });

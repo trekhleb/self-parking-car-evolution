@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 
 import Car, { OnCarReadyArgs } from '../car/Car';
-import { CarType, userCarUUID } from '../types/car';
+import { CarType, EngineOptionsType, SensorValuesType, userCarUUID, WheelOptionsType } from '../types/car';
 import { carEvents, off, on } from '../utils/events';
 import {
   onEngineBackward,
@@ -78,6 +78,37 @@ function DynamicCars(props: DynamicCarsProps) {
       }
     };
 
+    const onSensors = (sensors: SensorValuesType): void => {
+      if (car.onEngine) {
+        const engineOption: EngineOptionsType = car.onEngine(sensors);
+        switch (engineOption) {
+          case 'backwards':
+            onBackward();
+            break;
+          case 'neutral':
+            onNeutral();
+            break;
+          case 'forward':
+            onForward();
+            break;
+        }
+      }
+      if (car.onWheel) {
+        const wheelOption: WheelOptionsType = car.onWheel(sensors);
+        switch (wheelOption) {
+          case 'left':
+            onLeft();
+            break;
+          case 'straight':
+            onStraight();
+            break;
+          case 'right':
+            onRight();
+            break;
+        }
+      }
+    };
+
     const position = [0, 2, 4 * Math.random() - 2];
     const angularVelocity = [-0.2, 0, 0];
 
@@ -104,6 +135,7 @@ function DynamicCars(props: DynamicCarsProps) {
         visibleSensors={visibleSensors}
         onCarReady={onCarReady}
         onCarDestroy={onCarDestroy}
+        onSensors={onSensors}
         movable
         styled={styledCar}
         baseColor={carColor}

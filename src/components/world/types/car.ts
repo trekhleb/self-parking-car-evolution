@@ -1,6 +1,6 @@
 export type CarLicencePlateType = string;
 
-export type SensorValueType = number;
+export type SensorValueType = number | undefined | null;
 export type SensorValuesType = SensorValueType[];
 
 export type EngineOptionsType = 'backwards' | 'neutral' | 'forward';

@@ -26,6 +26,7 @@ import {
 import {
   CarMetaData, CarType,
   RaycastVehiclePublicApi,
+  SensorValuesType,
   userCarUUID,
   WheelInfoOptions,
 } from '../types/car';
@@ -47,6 +48,7 @@ type CarProps = {
   visibleSensors?: boolean,
   baseColor?: string,
   onCollide?: (carMetaData: CarMetaData, event: any) => void,
+  onSensors?: (sensors: SensorValuesType) => void,
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   onCarReady?: (args: OnCarReadyArgs) => void,
@@ -71,6 +73,7 @@ function Car(props: CarProps) {
     onCollide = () => {},
     onCarReady = () => {},
     onCarDestroy = () => {},
+    onSensors = () => {},
     label = null,
     car = { licencePlate: '' },
   } = props;
@@ -213,6 +216,7 @@ function Car(props: CarProps) {
         baseColor={baseColor}
         bodyProps={{ ...bodyProps }}
         onCollide={(event) => onCollide(carMetaData, event)}
+        onSensors={onSensors}
         userData={carMetaData}
         collisionFilterGroup={collisionFilterGroup}
         collisionFilterMask={collisionFilterMask}
