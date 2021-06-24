@@ -34,6 +34,7 @@ export const CHASSIS_MODEL_PATH = getModelPath('beetle.glb');
 export const CHASSIS_RELATIVE_POSITION: NumVec3 = [0, -0.6, 0];
 
 // Sensors.
+export const SENSORS_NUM = 16;
 export const SENSOR_HEIGHT = -0.15;
 export const SENSOR_DISTANCE = 4;
 
