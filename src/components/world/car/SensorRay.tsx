@@ -16,24 +16,29 @@ const beamDangerColor = new THREE.Color(0xFF0000);
 const lineWidth = 0.5;
 
 const intersectThrottleTimeout = 100;
+const onRayThrottleTimeout = 100;
 
 THREE.Mesh.prototype.raycast = acceleratedRaycast;
 
 type SensorRayProps = {
+  index: number,
   from: NumVec3,
   to: NumVec3,
   angleX: number,
   obstacles?: THREE.Object3D[],
   visible?: boolean,
+  onRay?: (index: number, distance: number | undefined) => void,
 };
 
 const SensorRay = (props: SensorRayProps) => {
   const {
+    index,
     from,
     to,
     angleX,
     obstacles = [],
     visible = false,
+    onRay = (index, distance) => {},
   } = props;
 
   const lineRef = useRef<Line2>();
@@ -58,6 +63,15 @@ const SensorRay = (props: SensorRayProps) => {
     trailing: true,
   });
 
+  const onRayCallback = (index: number, distance: number | undefined): void => {
+    onRay(index, distance);
+  };
+
+  const onRayCallbackThrottled = throttle(onRayCallback, onRayThrottleTimeout, {
+    leading: true,
+    trailing: true,
+  });
+
   useFrame((state: RootState, delta: number) => {
     if (!lineRef?.current) {
       return;
@@ -73,6 +87,8 @@ const SensorRay = (props: SensorRayProps) => {
     const distance = intersectionRef.current.length
       ? intersectionRef.current[0].distance
       : undefined;
+
+    onRayCallbackThrottled(index, distance);
 
     if (distance === undefined) {
       lineRef.current.material.color = beamColor;
