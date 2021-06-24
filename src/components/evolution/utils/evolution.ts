@@ -6,7 +6,8 @@ import {
   SensorValuesType,
   WheelOptionsType
 } from '../../world/types/car';
-import { SENSORS_NUM } from '../../world/car/constants';
+
+export const SENSORS_TOTAL = 16;
 
 export const generateWorldVersion = (generationIndex: number | null, batchIndex: number | null): string => {
   const generation = generationIndex === null ? -1 : generationIndex;
@@ -47,7 +48,7 @@ export const generationToCars = (population: Generation): CarsType => {
 
     cars[licencePlate] = {
       licencePlate,
-      sensorsNum: SENSORS_NUM,
+      sensorsNum: SENSORS_TOTAL,
       onEngine,
       onWheel,
       onHit: () => {},
