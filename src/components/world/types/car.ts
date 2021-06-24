@@ -1,10 +1,17 @@
 export type CarLicencePlateType = string;
 
+export type SensorValueType = number;
+export type SensorValuesType = SensorValueType[];
+
+export type EngineOptionsType = 'backwards' | 'neutral' | 'forward';
+export type WheelOptionsType = 'left' | 'straight' | 'right';
+
 export type CarType = {
   licencePlate: CarLicencePlateType,
+  sensorsNum?: number,
   onHit?: () => void,
-  onEngine?: () => void,
-  onWheel?: () => void,
+  onEngine?: (sensors: SensorValuesType) => EngineOptionsType,
+  onWheel?: (sensors: SensorValuesType) => WheelOptionsType,
   onMove?: () => void,
   meta?: Record<string, any>,
 };
