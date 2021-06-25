@@ -7,7 +7,7 @@ import { createGeneration, Generation } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
 import EvolutionPlaybackButtons from './EvolutionPlaybackButtons';
 import PopulationTable, { CarsFitnessType, CarsInProgressType } from './PopulationTable';
-import { CarsType, CarType } from '../world/types/car';
+import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import { generateWorldVersion, generationToCars, GENOME_LENGTH } from './utils/evolution';
 
 const generationSizes = [10, 20, 50, 100];
@@ -31,6 +31,7 @@ function EvolutionBoard() {
 
   const batchTimer = useRef<NodeJS.Timeout | null>(null);
 
+  const carsFitnessRef = useRef<CarsFitnessType>({});
   const [carsFitness, setCarsFitness] = useState<CarsFitnessType>({});
 
   const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
@@ -63,6 +64,13 @@ function EvolutionBoard() {
     setGeneration([]);
     setCarsBatch([]);
     setCars({});
+  };
+
+  const onCarFitnessUpdate = (licensePlate: CarLicencePlateType, fitness: number) => {
+    const fitnessValues = {...carsFitnessRef.current};
+    fitnessValues[licensePlate] = fitness;
+    carsFitnessRef.current = fitnessValues;
+    setCarsFitness(fitnessValues);
   };
 
   const cancelBatchTimer = () => {
@@ -103,7 +111,7 @@ function EvolutionBoard() {
     if (!generation || !generation.length) {
       return;
     }
-    const cars = generationToCars(generation);
+    const cars = generationToCars(generation, onCarFitnessUpdate);
     setCars(cars);
     setCarsBatchIndex(0);
   }, [generation]);

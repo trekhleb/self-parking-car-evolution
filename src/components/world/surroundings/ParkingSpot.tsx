@@ -3,7 +3,6 @@ import { Line } from '@react-three/drei';
 
 import { CHASSIS_LENGTH, CHASSIS_WIDTH } from '../car/constants';
 import { NumVec3 } from '../types/vectors';
-import { Vector3 } from 'three';
 
 type ParkingSpotProps = {
   color?: string,
@@ -17,11 +16,11 @@ const margin = 0.3;
 const w = CHASSIS_WIDTH + margin;
 const l = CHASSIS_LENGTH + margin;
 
-export const PARKING_SPOT_CORNERS: Array<Vector3 | [number, number, number]> = [
-  [x, y, z],
-  [x + w, y, z],
-  [x + w, y, z + l],
-  [x, y, z + l],
+export const PARKING_SPOT_CORNERS: [number, number, number][] = [
+  [x, y, z], // front-Left
+  [x + w, y, z], // front-right
+  [x + w, y, z + l], // back-right
+  [x, y, z + l], // back-left
 ];
 
 function ParkingSpot(props: ParkingSpotProps) {

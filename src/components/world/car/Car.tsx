@@ -30,6 +30,10 @@ import {
   userCarUUID,
   WheelInfoOptions,
 } from '../types/car';
+import { useFrame } from '@react-three/fiber';
+import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
+import throttle from 'lodash/throttle';
+import { ON_MOVE_THROTTLE_TIMEOUT } from '../constants/performance';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
@@ -49,7 +53,8 @@ type CarProps = {
   baseColor?: string,
   onCollide?: (carMetaData: CarMetaData, event: any) => void,
   onSensors?: (sensors: SensorValuesType) => void,
-  onMove?: () => void,
+  // [front-Left, front-right, back-right, back-left]
+  onMove?: (wheelsPositions: [number, number, number][]) => void,
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   onCarReady?: (args: OnCarReadyArgs) => void,
@@ -75,7 +80,7 @@ function Car(props: CarProps) {
     onCarReady = () => {},
     onCarDestroy = () => {},
     onSensors = () => {},
-    onMove = () => {},
+    onMove = (wheelsPositions) => {},
     label = null,
     car = { licencePlate: '' },
   } = props;
@@ -83,7 +88,14 @@ function Car(props: CarProps) {
   const chassis = useRef<THREE.Object3D | undefined>();
   const apiRef = useRef<RaycastVehiclePublicApi | undefined>();
   const wheelsRef = useRef<MutableRefObject<THREE.Object3D | undefined>[]>([]);
+  const wheelsPositionRef = useRef<Array<THREE.Vector3>>([
+    new THREE.Vector3(), // front-Left
+    new THREE.Vector3(), // front-right
+    new THREE.Vector3(), // back-left
+    new THREE.Vector3(), // back-right
+  ]);
 
+  // [front-Left, front-right, back-left, back-right]
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
   const wheelInfos: WheelInfoOptions[] = [];
 
@@ -203,6 +215,33 @@ function Car(props: CarProps) {
     };
   }, []);
 
+  const onMoveThrottled = throttle(onMove, ON_MOVE_THROTTLE_TIMEOUT, {
+    leading: true,
+    trailing: true,
+  });
+
+  useFrame((state: RootState, delta: number) => {
+    if (!wheels || wheels.length !== 4) {
+      return;
+    }
+    if (!wheels[0].current || !wheels[1].current || !wheels[2].current || !wheels[3].current) {
+      return;
+    }
+
+    wheels[0].current.getWorldPosition(wheelsPositionRef.current[0]);
+    wheels[1].current.getWorldPosition(wheelsPositionRef.current[1]);
+    wheels[2].current.getWorldPosition(wheelsPositionRef.current[2]);
+    wheels[3].current.getWorldPosition(wheelsPositionRef.current[3]);
+
+    const [fl, fr, bl, br] = wheelsPositionRef.current;
+    onMoveThrottled([
+      [fl.x, fl.y, fl.z],
+      [fr.x, fr.y, fr.z],
+      [br.x, br.y, br.z],
+      [bl.x, bl.y, bl.z],
+    ]);
+  });
+
   return (
     <group ref={vehicle}>
       <Chassis
@@ -219,7 +258,6 @@ function Car(props: CarProps) {
         bodyProps={{ ...bodyProps }}
         onCollide={(event) => onCollide(carMetaData, event)}
         onSensors={onSensors}
-        onMove={onMove}
         userData={carMetaData}
         collisionFilterGroup={collisionFilterGroup}
         collisionFilterMask={collisionFilterMask}

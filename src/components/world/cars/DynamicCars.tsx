@@ -109,9 +109,9 @@ function DynamicCars(props: DynamicCarsProps) {
       }
     };
 
-    const onMove = () => {
+    const onMove = (wheelsPositions: [number, number, number][]) => {
       if (car.onMove) {
-        car.onMove();
+        car.onMove(wheelsPositions);
       }
     };
 

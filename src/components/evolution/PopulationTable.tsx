@@ -5,6 +5,7 @@ import { Tag, VARIANT as TAG_VARIANT, KIND as TAG_KIND } from 'baseui/tag';
 import { Spinner } from 'baseui/spinner';
 
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
+import { roundFitnessValue } from './utils/evolution';
 
 export type CarsInProgressType = Record<CarLicencePlateType, boolean>;
 export type CarsFitnessType = Record<CarLicencePlateType, number | null>;
@@ -21,6 +22,7 @@ function PopulationTable(props: PopulationTableProps) {
 
   const columns = [
     'Licence Plate',
+    'Simulating',
     'Fitness',
   ];
 
@@ -41,9 +43,9 @@ function PopulationTable(props: PopulationTableProps) {
         return 0;
       }
       if (fitnessA <= fitnessB) {
-        return 1;
+        return -1;
       }
-      return -1;
+      return 1;
     })
     .map((car: CarType) => {
       const licencePlateCell = (
@@ -56,13 +58,15 @@ function PopulationTable(props: PopulationTableProps) {
         </Tag>
       );
 
-      const carFitness = getCarFitness(carsFitness, car);
-      const fitnessCell = carsInProgress[car.licencePlate] ? (
+      const simulationCell = carsInProgress[car.licencePlate] ? (
         <Spinner size={24} color="black" />
-      ) : carFitness;
+      ) : null;
+
+      const fitnessCell = getCarFitness(carsFitness, car);
 
       return [
         licencePlateCell,
+        simulationCell,
         fitnessCell,
       ];
     });
@@ -89,7 +93,7 @@ function PopulationTable(props: PopulationTableProps) {
 
 function getCarFitness(carsFitness: CarsFitnessType, car: CarType): number | null {
   return carsFitness.hasOwnProperty(car.licencePlate) && typeof carsFitness[car.licencePlate] === 'number'
-    ? carsFitness[car.licencePlate]
+    ? roundFitnessValue(carsFitness[car.licencePlate])
     : null;
 }
 

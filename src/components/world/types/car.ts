@@ -12,7 +12,8 @@ export type CarType = {
   onHit?: () => void,
   onEngine?: (sensors: SensorValuesType) => EngineOptionsType,
   onWheel?: (sensors: SensorValuesType) => WheelOptionsType,
-  onMove?: () => void,
+  // [front-Left, front-right, back-right, back-left]
+  onMove?: (wheelsPositions: [number, number, number][]) => void,
   meta?: Record<string, any>,
 };
 
