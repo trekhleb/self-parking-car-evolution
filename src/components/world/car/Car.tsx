@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useRef } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { BoxProps, CylinderProps, useRaycastVehicle } from '@react-three/cannon';
 import * as THREE from 'three';
 
@@ -34,6 +34,8 @@ import { useFrame } from '@react-three/fiber';
 import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 import throttle from 'lodash/throttle';
 import { ON_MOVE_THROTTLE_TIMEOUT } from '../constants/performance';
+import { PARKING_SPOT_CORNERS } from '../surroundings/ParkingSpot';
+import { fitness, roundFitnessValue } from '../../evolution/utils/evolution';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
@@ -49,6 +51,7 @@ type CarProps = {
   styled?: boolean,
   movable?: boolean,
   withSensors?: boolean,
+  withLabel?: boolean,
   visibleSensors?: boolean,
   baseColor?: string,
   onCollide?: (carMetaData: CarMetaData, event: any) => void,
@@ -59,7 +62,6 @@ type CarProps = {
   collisionFilterMask?: number,
   onCarReady?: (args: OnCarReadyArgs) => void,
   onCarDestroy?: () => void,
-  label?: React.ReactNode,
   car?: CarType,
 }
 
@@ -68,6 +70,7 @@ function Car(props: CarProps) {
     uuid,
     wheelRadius = WHEEL_RADIUS,
     wireframe = false,
+    withLabel = false,
     styled = true,
     withSensors = false,
     visibleSensors = false,
@@ -81,7 +84,6 @@ function Car(props: CarProps) {
     onCarDestroy = () => {},
     onSensors = () => {},
     onMove = (wheelsPositions) => {},
-    label = null,
     car = { licencePlate: '' },
   } = props;
 
@@ -94,6 +96,7 @@ function Car(props: CarProps) {
     new THREE.Vector3(), // back-left
     new THREE.Vector3(), // back-right
   ]);
+  const [carFitness, setCarFitness] = useState<number | null>(null);
 
   // [front-Left, front-right, back-left, back-right]
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
@@ -220,6 +223,31 @@ function Car(props: CarProps) {
     trailing: true,
   });
 
+  const onUpdateLabel = (wheelsPositions: [number, number, number][]) => {
+    const [flWheel, frWheel, brWheel, blWheel] = wheelsPositions;
+    const [flLot, frLot, brLot, blLot] = PARKING_SPOT_CORNERS;
+    const carFitness = fitness({
+      wheelsCoordinates: {
+        fl: flWheel,
+        fr: frWheel,
+        br: brWheel,
+        bl: blWheel,
+      },
+      parkingLotCoordinates: {
+        fl: flLot,
+        fr: frLot,
+        br: brLot,
+        bl: blLot,
+      },
+    });
+    setCarFitness(roundFitnessValue(carFitness));
+  };
+
+  const onUpdateLabelThrottled = throttle(onUpdateLabel, 500, {
+    leading: true,
+    trailing: true,
+  });
+
   useFrame((state: RootState, delta: number) => {
     if (!wheels || wheels.length !== 4) {
       return;
@@ -234,13 +262,27 @@ function Car(props: CarProps) {
     wheels[3].current.getWorldPosition(wheelsPositionRef.current[3]);
 
     const [fl, fr, bl, br] = wheelsPositionRef.current;
-    onMoveThrottled([
+    const wheelPositions: [number, number, number][] = [
       [fl.x, fl.y, fl.z],
       [fr.x, fr.y, fr.z],
       [br.x, br.y, br.z],
       [bl.x, bl.y, bl.z],
-    ]);
+    ];
+    onMoveThrottled(wheelPositions);
+
+    if (withLabel) {
+      onUpdateLabelThrottled(wheelPositions);
+    }
   });
+
+  const distanceColor = 'red';
+  const label = withLabel ? (
+    <span>Distance:
+      <span style={{color: distanceColor}}>
+        {carFitness}
+      </span>
+    </span>
+  ) : null;
 
   return (
     <group ref={vehicle}>

@@ -118,10 +118,6 @@ function DynamicCars(props: DynamicCarsProps) {
     const position = [0, 2, 4 * Math.random() - 2];
     const angularVelocity = [-0.2, 0, 0];
 
-    const label = withLabels ? (
-      <span>score: <span style={{color: 'red'}}>??</span></span>
-    ) : null;
-
     const styledCar = !withRandomColors;
     const carColor = withRandomColors ? getRandomColor() : undefined;
 
@@ -129,7 +125,6 @@ function DynamicCars(props: DynamicCarsProps) {
       <Car
         key={uuid}
         uuid={uuid}
-        label={label}
         bodyProps={{
           position,
           angularVelocity,
@@ -147,6 +142,7 @@ function DynamicCars(props: DynamicCarsProps) {
         styled={styledCar}
         baseColor={carColor}
         car={car}
+        withLabel={withLabels}
       />
     );
   });
