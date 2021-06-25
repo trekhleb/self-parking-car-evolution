@@ -1,5 +1,5 @@
 import { BoxProps, useBox } from '@react-three/cannon';
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useRef } from 'react';
 import * as THREE from 'three';
 import { GroupProps, useFrame } from '@react-three/fiber';
 import throttle from 'lodash/throttle';
@@ -11,6 +11,7 @@ import Sensors from './Sensors';
 import CarLabel from './CarLabel';
 import { SensorValuesType } from '../types/car';
 import { ON_MOVE_THROTTLE_TIMEOUT } from '../constants/performance';
+import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 
 type ChassisProps = {
   sensorsNum: number,
@@ -57,6 +58,10 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     onMove = () => {},
   } = props;
 
+  const meshRef = useRef<THREE.Mesh>();
+  const positionRef = useRef<THREE.Vector3>(new THREE.Vector3());
+  const directionRef = useRef<THREE.Vector3>(new THREE.Vector3());
+
   const boxSize = CHASSIS_SIZE;
   useBox(
     () => ({
@@ -83,8 +88,14 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     trailing: true,
   });
 
-  useFrame(() => {
+  useFrame((state: RootState, delta: number) => {
+    if (!meshRef.current) {
+      return;
+    }
+    meshRef.current.getWorldPosition(positionRef.current);
+    meshRef.current.getWorldDirection(directionRef.current);
     onMoveThrottled();
+    debugger
   });
 
   const sensors = withSensors ? (
@@ -101,7 +112,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
 
   return (
     <group ref={ref} name={CHASSIS_OBJECT_NAME}>
-      <mesh>
+      <mesh ref={meshRef}>
         <ChassisModel
           bodyProps={groupProps}
           castShadow={castShadow}
