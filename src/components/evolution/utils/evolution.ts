@@ -6,6 +6,7 @@ import {
   SensorValuesType,
   WheelOptionsType
 } from '../../world/types/car';
+import { PARKING_SPOT_CORNERS } from '../../world/surroundings/ParkingSpot';
 
 export const SENSORS_TOTAL = 16;
 export const GENES_PER_PARAMETER = 8;
@@ -49,6 +50,8 @@ export const generationToCars = (population: Generation): CarsType => {
     };
 
     const onMove = () => {
+      // TODO: Calculate fitness.
+      // console.log(PARKING_SPOT_CORNERS);
     };
 
     cars[licencePlate] = {
