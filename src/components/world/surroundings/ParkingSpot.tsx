@@ -27,24 +27,24 @@ const innerY = y;
 const innerZ = z + (outerL - innerL) / 2;
 
 const outerCorners: [number, number, number][] = [
-  [x + outerW, y, z],
-  [x + outerW, y, z + outerL],
-  [x, y, z + outerL],
-  [x, y, z],
+  [x + outerW, y, z + outerL], // Front-left
+  [x, y, z + outerL], // Front-right
+  [x, y, z], // Back-right
+  [x + outerW, y, z], // Back-left
 ];
 
 const innerCorners: [number, number, number][] = [
-  [innerX + innerW, innerY, innerZ],
-  [innerX + innerW, innerY, innerZ + innerL],
-  [innerX, innerY, innerZ + innerL],
-  [innerX, innerY, innerZ],
+  [innerX + innerW, innerY, innerZ + innerL], // Front-left
+  [innerX, innerY, innerZ + innerL], // Front-right
+  [innerX, innerY, innerZ], // Back-right
+  [innerX + innerW, innerY, innerZ], // Back-left
 ];
 
 export const PARKING_SPOT_POINTS: RectanglePoints = {
-  fl: [innerX + innerW, innerY, innerZ],
-  fr: [innerX + innerW, innerY, innerZ + innerL],
-  bl: [innerX, innerY, innerZ + innerL],
+  fl: [innerX + innerW, innerY, innerZ + innerL],
+  fr: [innerX, innerY, innerZ + innerL],
   br: [innerX, innerY, innerZ],
+  bl: [innerX + innerW, innerY, innerZ],
 };
 
 const innerLineVisible = true;
