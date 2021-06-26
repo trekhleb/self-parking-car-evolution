@@ -24,7 +24,7 @@ function Worlds(props: WorldsProps) {
 
   const [withStat, setWithStat] = useState<boolean>(false);
   const [withSensors, setWithSensors] = useState<boolean>(true);
-  const [withLabels, setWithLabels] = useState<boolean>(false);
+  const [withLabels, setWithLabels] = useState<boolean>(true);
 
   const tabBarStyle: StyleObject = {
     paddingLeft: 0,
