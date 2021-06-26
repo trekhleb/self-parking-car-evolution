@@ -230,7 +230,7 @@ function Car(props: CarProps) {
       wheelsPoints: wheelsPositions,
       parkingLotPoints: PARKING_SPOT_POINTS,
     });
-    setCarFitness(formatFitnessValue(carFitness));
+    setCarFitness(carFitness);
   };
 
   const onUpdateLabelThrottled = throttle(onUpdateLabel, ON_UPDATE_LABEL_THROTTLE_TIMEOUT, {
@@ -267,13 +267,22 @@ function Car(props: CarProps) {
     }
   });
 
-  const distanceColor = 'red';
+  let distanceColor = 'black';
+  if (carFitness !== null) {
+    if (carFitness <= 1.5) {
+      distanceColor = 'limegreen';
+    } else if (carFitness <= 3) {
+      distanceColor = 'orange';
+    } else {
+      distanceColor = 'red';
+    }
+  }
   const label = withLabel ? (
     <span>
       Distance:
       {' '}
       <span style={{color: distanceColor}}>
-        {carFitness}
+        {formatFitnessValue(carFitness)}
       </span>
     </span>
   ) : null;

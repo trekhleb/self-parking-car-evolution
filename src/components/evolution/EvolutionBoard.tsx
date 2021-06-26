@@ -17,7 +17,7 @@ const generationSizes = [10, 20, 50, 100];
 const carsBatchSizes = [1, 5, 10];
 
 const second = 1000;
-const generationLifetime = 10 * second;
+const generationLifetime = 15 * second;
 
 function EvolutionBoard() {
   const [generationSize, setGenerationSize] = useState<number>(generationSizes[0]);
