@@ -16,6 +16,8 @@ const margin = 0.3;
 const w = CHASSIS_WIDTH + margin;
 const l = CHASSIS_LENGTH + margin;
 
+// @TODO: Parking lot size should be a configurable from the outside.
+// Move this data to the component parameters.
 export const PARKING_SPOT_CORNERS: [number, number, number][] = [
   [x, y, z], // front-Left
   [x + w, y, z], // front-right

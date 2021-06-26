@@ -223,6 +223,8 @@ function Car(props: CarProps) {
     trailing: true,
   });
 
+  // @TODO: Move the logic of label content population to the evolution components.
+  // Car shouldn't know about the evolution fitness function.
   const onUpdateLabel = (wheelsPositions: [number, number, number][]) => {
     const [flWheel, frWheel, brWheel, blWheel] = wheelsPositions;
     const [flLot, frLot, brLot, blLot] = PARKING_SPOT_CORNERS;
@@ -270,6 +272,8 @@ function Car(props: CarProps) {
     ];
     onMoveThrottled(wheelPositions);
 
+    // @TODO: Move the logic of label content population to the evolution components.
+    // Car shouldn't know about the evolution fitness function.
     if (withLabel) {
       onUpdateLabelThrottled(wheelPositions);
     }
