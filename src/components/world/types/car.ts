@@ -1,3 +1,5 @@
+import { RectanglePoints } from './vectors';
+
 export type CarLicencePlateType = string;
 
 export type SensorValueType = number | undefined | null;
@@ -12,8 +14,7 @@ export type CarType = {
   onHit?: () => void,
   onEngine?: (sensors: SensorValuesType) => EngineOptionsType,
   onWheel?: (sensors: SensorValuesType) => WheelOptionsType,
-  // [front-Left, front-right, back-right, back-left]
-  onMove?: (wheelsPositions: [number, number, number][]) => void,
+  onMove?: (wheelsPoints: RectanglePoints) => void,
   meta?: Record<string, any>,
 };
 

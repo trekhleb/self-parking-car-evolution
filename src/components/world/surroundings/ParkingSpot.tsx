@@ -2,7 +2,7 @@ import React from 'react';
 import { Line } from '@react-three/drei';
 
 import { CHASSIS_LENGTH, CHASSIS_WIDTH } from '../car/constants';
-import { NumVec3 } from '../types/vectors';
+import { NumVec3, RectanglePoints } from '../types/vectors';
 
 type ParkingSpotProps = {
   color?: string,
@@ -18,12 +18,19 @@ const l = CHASSIS_LENGTH + margin;
 
 // @TODO: Parking lot size should be a configurable from the outside.
 // Move this data to the component parameters.
-export const PARKING_SPOT_CORNERS: [number, number, number][] = [
-  [x, y, z], // front-Left
-  [x + w, y, z], // front-right
-  [x + w, y, z + l], // back-right
-  [x, y, z + l], // back-left
+const PARKING_SPOT_CORNERS: [number, number, number][] = [
+  [x + w, y, z],
+  [x + w, y, z + l],
+  [x, y, z + l],
+  [x, y, z],
 ];
+
+export const PARKING_SPOT_POINTS: RectanglePoints = {
+  fl: [x + w, y, z],
+  fr: [x + w, y, z + l],
+  bl: [x, y, z],
+  br: [x, y, z + l],
+};
 
 function ParkingSpot(props: ParkingSpotProps) {
   const { color = 'yellow' } = props;

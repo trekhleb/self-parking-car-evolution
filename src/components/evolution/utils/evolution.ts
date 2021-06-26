@@ -6,8 +6,8 @@ import {
   SensorValuesType,
   WheelOptionsType
 } from '../../world/types/car';
-import { PARKING_SPOT_CORNERS } from '../../world/surroundings/ParkingSpot';
-import { NumVec3 } from '../../world/types/vectors';
+import { PARKING_SPOT_POINTS } from '../../world/surroundings/ParkingSpot';
+import { NumVec3, RectanglePoints } from '../../world/types/vectors';
 
 export const SENSORS_TOTAL = 16;
 export const GENES_PER_PARAMETER = 8;
@@ -53,22 +53,10 @@ export const generationToCars = (
       return 'right';
     };
 
-    const onMove = (wheelsPositions: [number, number, number][]) => {
-      const [flWheel, frWheel, brWheel, blWheel] = wheelsPositions;
-      const [flLot, frLot, brLot, blLot] = PARKING_SPOT_CORNERS;
+    const onMove = (wheelsPoints: RectanglePoints) => {
       const carFitness = fitness({
-        wheelsCoordinates: {
-          fl: flWheel,
-          fr: frWheel,
-          br: brWheel,
-          bl: blWheel,
-        },
-        parkingLotCoordinates: {
-          fl: flLot,
-          fr: frLot,
-          br: brLot,
-          bl: blLot,
-        },
+        wheelsPoints: wheelsPoints,
+        parkingLotPoints: PARKING_SPOT_POINTS,
       });
       onFitnessUpdate(licencePlate, carFitness);
     };
@@ -85,36 +73,28 @@ export const generationToCars = (
   return cars;
 };
 
-
-export type FitnessObjectCoordinates = {
-  fl: NumVec3,
-  fr: NumVec3,
-  br: NumVec3,
-  bl: NumVec3,
-};
-
 export type FitnessParams = {
-  wheelsCoordinates: FitnessObjectCoordinates,
-  parkingLotCoordinates: FitnessObjectCoordinates,
+  wheelsPoints: RectanglePoints,
+  parkingLotPoints: RectanglePoints,
 };
 
 export const fitness = (params: FitnessParams): number => {
-  const { wheelsCoordinates, parkingLotCoordinates } = params;
-  const { fl: flWheel, fr: frWheel, br: brWheel, bl: blWheel } = wheelsCoordinates;
-  const { fl: flLot, fr: frLot, br: brLot, bl: blLot } = parkingLotCoordinates;
+  const { wheelsPoints, parkingLotPoints } = params;
+  const { fl: flWheel, fr: frWheel, br: brWheel, bl: blWheel } = wheelsPoints;
+  const { fl: flLot, fr: frLot, br: brLot, bl: blLot } = parkingLotPoints;
+
   const flDistance = distance(flWheel, flLot);
   const frDistance = distance(frWheel, frLot);
   const brDistance = distance(brWheel, brLot);
   const blDistance = distance(blWheel, blLot);
+
   return (flDistance + frDistance + brDistance + blDistance) / 4;
 };
 
 const distance = (from: NumVec3, to: NumVec3) => {
-  return Math.sqrt(
-    (from[0] - to[0]) ** 2 +
-    (from[1] - to[1]) ** 2 +
-    (from[2] - to[2]) ** 2
-  );
+  const [fromX, fromY, fromZ] = from;
+  const [toX, toY, toZ] = to;
+  return Math.sqrt((fromX - toX) ** 2 + (fromZ - toZ) ** 2);
 };
 
 export const formatFitnessValue = (fitnessValue: number | null | undefined): number | null => {

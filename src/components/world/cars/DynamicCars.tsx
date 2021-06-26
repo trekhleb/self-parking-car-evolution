@@ -12,6 +12,7 @@ import {
   onWheelsStraight
 } from '../utils/controllers';
 import { getRandomColor } from '../../../utils/colors';
+import { RectanglePoints } from '../types/vectors';
 
 type DynamicCarsProps = {
   cars: CarType[],
@@ -109,7 +110,7 @@ function DynamicCars(props: DynamicCarsProps) {
       }
     };
 
-    const onMove = (wheelsPositions: [number, number, number][]) => {
+    const onMove = (wheelsPositions: RectanglePoints) => {
       if (car.onMove) {
         car.onMove(wheelsPositions);
       }

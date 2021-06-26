@@ -33,9 +33,10 @@ import {
 import { useFrame } from '@react-three/fiber';
 import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 import throttle from 'lodash/throttle';
-import { ON_MOVE_THROTTLE_TIMEOUT } from '../constants/performance';
-import { PARKING_SPOT_CORNERS } from '../surroundings/ParkingSpot';
+import { ON_MOVE_THROTTLE_TIMEOUT, ON_UPDATE_LABEL_THROTTLE_TIMEOUT } from '../constants/performance';
+import { PARKING_SPOT_POINTS } from '../surroundings/ParkingSpot';
 import { fitness, formatFitnessValue } from '../../evolution/utils/evolution';
+import { RectanglePoints } from '../types/vectors';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
@@ -56,8 +57,7 @@ type CarProps = {
   baseColor?: string,
   onCollide?: (carMetaData: CarMetaData, event: any) => void,
   onSensors?: (sensors: SensorValuesType) => void,
-  // [front-Left, front-right, back-right, back-left]
-  onMove?: (wheelsPositions: [number, number, number][]) => void,
+  onMove?: (wheelsPositions: RectanglePoints) => void,
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   onCarReady?: (args: OnCarReadyArgs) => void,
@@ -225,28 +225,16 @@ function Car(props: CarProps) {
 
   // @TODO: Move the logic of label content population to the evolution components.
   // Car shouldn't know about the evolution fitness function.
-  const onUpdateLabel = (wheelsPositions: [number, number, number][]) => {
-    const [flWheel, frWheel, brWheel, blWheel] = wheelsPositions;
-    const [flLot, frLot, brLot, blLot] = PARKING_SPOT_CORNERS;
+  const onUpdateLabel = (wheelsPositions: RectanglePoints) => {
     const carFitness = fitness({
-      wheelsCoordinates: {
-        fl: flWheel,
-        fr: frWheel,
-        br: brWheel,
-        bl: blWheel,
-      },
-      parkingLotCoordinates: {
-        fl: flLot,
-        fr: frLot,
-        br: brLot,
-        bl: blLot,
-      },
+      wheelsPoints: wheelsPositions,
+      parkingLotPoints: PARKING_SPOT_POINTS,
     });
     setCarFitness(formatFitnessValue(carFitness));
   };
 
-  const onUpdateLabelThrottled = throttle(onUpdateLabel, 500, {
-    leading: true,
+  const onUpdateLabelThrottled = throttle(onUpdateLabel, ON_UPDATE_LABEL_THROTTLE_TIMEOUT, {
+    leading: false,
     trailing: true,
   });
 
@@ -264,12 +252,12 @@ function Car(props: CarProps) {
     wheels[3].current.getWorldPosition(wheelsPositionRef.current[3]);
 
     const [fl, fr, bl, br] = wheelsPositionRef.current;
-    const wheelPositions: [number, number, number][] = [
-      [fl.x, fl.y, fl.z],
-      [fr.x, fr.y, fr.z],
-      [br.x, br.y, br.z],
-      [bl.x, bl.y, bl.z],
-    ];
+    const wheelPositions: RectanglePoints = {
+      fl: [fl.x, fl.y, fl.z],
+      fr: [fr.x, fr.y, fr.z],
+      bl: [bl.x, bl.y, bl.z],
+      br: [br.x, br.y, br.z],
+    };
     onMoveThrottled(wheelPositions);
 
     // @TODO: Move the logic of label content population to the evolution components.
@@ -281,7 +269,9 @@ function Car(props: CarProps) {
 
   const distanceColor = 'red';
   const label = withLabel ? (
-    <span>Distance:
+    <span>
+      Distance:
+      {' '}
       <span style={{color: distanceColor}}>
         {carFitness}
       </span>
