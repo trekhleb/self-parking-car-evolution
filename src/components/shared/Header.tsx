@@ -1,16 +1,11 @@
 import React from 'react';
 import { H5, Paragraph3 } from 'baseui/typography';
-import { routes } from '../../constants/routes';
-import { useHistory } from 'react-router-dom';
 import { StyledLink } from 'baseui/link';
 import { GiDna2 } from 'react-icons/all';
 import { APP_BASE_PATH } from '../../constants/app';
 
 function Header() {
-  const history = useHistory();
-
   const onClick = () => {
-    // history.push(routes.home.path);
     document.location.href = APP_BASE_PATH;
   };
 
