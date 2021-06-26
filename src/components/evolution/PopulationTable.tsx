@@ -5,7 +5,7 @@ import { Tag, VARIANT as TAG_VARIANT, KIND as TAG_KIND } from 'baseui/tag';
 import { Spinner } from 'baseui/spinner';
 
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
-import { roundFitnessValue } from './utils/evolution';
+import { formatFitnessValue } from './utils/evolution';
 
 export type CarsInProgressType = Record<CarLicencePlateType, boolean>;
 export type CarsFitnessType = Record<CarLicencePlateType, number | null>;
@@ -93,7 +93,7 @@ function PopulationTable(props: PopulationTableProps) {
 
 function getCarFitness(carsFitness: CarsFitnessType, car: CarType): number | null {
   return carsFitness.hasOwnProperty(car.licencePlate) && typeof carsFitness[car.licencePlate] === 'number'
-    ? roundFitnessValue(carsFitness[car.licencePlate])
+    ? formatFitnessValue(carsFitness[car.licencePlate])
     : null;
 }
 

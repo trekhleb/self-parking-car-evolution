@@ -35,7 +35,7 @@ import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 import throttle from 'lodash/throttle';
 import { ON_MOVE_THROTTLE_TIMEOUT } from '../constants/performance';
 import { PARKING_SPOT_CORNERS } from '../surroundings/ParkingSpot';
-import { fitness, roundFitnessValue } from '../../evolution/utils/evolution';
+import { fitness, formatFitnessValue } from '../../evolution/utils/evolution';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
@@ -240,7 +240,7 @@ function Car(props: CarProps) {
         bl: blLot,
       },
     });
-    setCarFitness(roundFitnessValue(carFitness));
+    setCarFitness(formatFitnessValue(carFitness));
   };
 
   const onUpdateLabelThrottled = throttle(onUpdateLabel, 500, {

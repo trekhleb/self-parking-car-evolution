@@ -117,7 +117,7 @@ const distance = (from: NumVec3, to: NumVec3) => {
   );
 };
 
-export const roundFitnessValue = (fitnessValue: number | null | undefined): number | null => {
+export const formatFitnessValue = (fitnessValue: number | null | undefined): number | null => {
   if (typeof fitnessValue !== 'number') {
     return null;
   }
