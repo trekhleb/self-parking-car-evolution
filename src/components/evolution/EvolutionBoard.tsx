@@ -9,6 +9,9 @@ import EvolutionPlaybackButtons from './EvolutionPlaybackButtons';
 import PopulationTable, { CarsFitnessType, CarsInProgressType } from './PopulationTable';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import { generateWorldVersion, generationToCars, GENOME_LENGTH } from './utils/evolution';
+import { setSearchParam } from '../../utils/url';
+import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
+import { getWorldKeyFromUrl } from './utils/url';
 
 const generationSizes = [10, 20, 50, 100];
 const carsBatchSizes = [1, 5, 10];
@@ -27,7 +30,7 @@ function EvolutionBoard() {
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
 
   const [evolutionPaused, setEvolutionPaused] = useState<boolean>(true);
-  const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(EVOLUTION_WORLD_KEY);
+  const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(getWorldKeyFromUrl(EVOLUTION_WORLD_KEY));
 
   const batchTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -42,6 +45,7 @@ function EvolutionBoard() {
 
   const onWorldSwitch = (worldKey: React.Key): void => {
     setActiveWorldKey(worldKey);
+    setSearchParam(WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP[worldKey]);
     if (worldKey === EVOLUTION_WORLD_KEY) {
       setGenerationIndex(0);
     } else {

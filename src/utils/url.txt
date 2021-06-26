@@ -1,5 +1,0 @@
-export const getSearchParam = (name: string): string | null => {
-  const searchQuery = document.location.search.substring(1);
-  const searchParams = new URLSearchParams(searchQuery);
-  return searchParams.get(name);
-};
