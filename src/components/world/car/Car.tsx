@@ -36,7 +36,7 @@ import throttle from 'lodash/throttle';
 import { ON_MOVE_THROTTLE_TIMEOUT, ON_UPDATE_LABEL_THROTTLE_TIMEOUT } from '../constants/performance';
 import { PARKING_SPOT_POINTS } from '../surroundings/ParkingSpot';
 import { fitness, formatFitnessValue } from '../../evolution/utils/evolution';
-import { RectanglePoints } from '../types/vectors';
+import { RectanglePoints, ThreeRectanglePoints } from '../types/vectors';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
@@ -65,6 +65,11 @@ type CarProps = {
   car?: CarType,
 }
 
+const flWheelIndex = 0;
+const frWheelIndex = 1;
+const blWheelIndex = 2;
+const brWheelIndex = 3;
+
 function Car(props: CarProps) {
   const {
     uuid,
@@ -83,22 +88,21 @@ function Car(props: CarProps) {
     onCarReady = () => {},
     onCarDestroy = () => {},
     onSensors = () => {},
-    onMove = (wheelsPositions) => {},
+    onMove = () => {},
     car = { licencePlate: '' },
   } = props;
 
   const chassis = useRef<THREE.Object3D | undefined>();
   const apiRef = useRef<RaycastVehiclePublicApi | undefined>();
   const wheelsRef = useRef<MutableRefObject<THREE.Object3D | undefined>[]>([]);
-  const wheelsPositionRef = useRef<Array<THREE.Vector3>>([
-    new THREE.Vector3(), // front-Left
-    new THREE.Vector3(), // front-right
-    new THREE.Vector3(), // back-left
-    new THREE.Vector3(), // back-right
-  ]);
+  const wheelsPositionRef = useRef<ThreeRectanglePoints>({
+    fl: new THREE.Vector3(),
+    fr: new THREE.Vector3(),
+    bl: new THREE.Vector3(),
+    br: new THREE.Vector3(),
+  });
   const [carFitness, setCarFitness] = useState<number | null>(null);
 
-  // [front-Left, front-right, back-left, back-right]
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
   const wheelInfos: WheelInfoOptions[] = [];
 
@@ -121,8 +125,8 @@ function Car(props: CarProps) {
   };
 
   // FrontLeft [-X, Y, Z].
-  const wheel_fl = useRef<THREE.Object3D | undefined>();
-  const wheelInfo_fl = {
+  const flWheel = useRef<THREE.Object3D | undefined>();
+  const flWheelInfo = {
     ...wheelInfo,
     isFrontWheel: true,
     chassisConnectionPointLocal: [
@@ -133,8 +137,8 @@ function Car(props: CarProps) {
   };
 
   // FrontRight [X, Y, Z].
-  const wheel_fr = useRef<THREE.Object3D | undefined>();
-  const wheelInfo_fr = {
+  const frWheel = useRef<THREE.Object3D | undefined>();
+  const frWheelInfo = {
     ...wheelInfo,
     isFrontWheel: true,
     chassisConnectionPointLocal: [
@@ -145,8 +149,8 @@ function Car(props: CarProps) {
   };
 
   // BackLeft [-X, Y, -Z].
-  const wheel_bl = useRef<THREE.Object3D | undefined>();
-  const wheelInfo_bl = {
+  const blWheel = useRef<THREE.Object3D | undefined>();
+  const blWheelInfo = {
     ...wheelInfo,
     isFrontWheel: false,
     chassisConnectionPointLocal: [
@@ -157,8 +161,8 @@ function Car(props: CarProps) {
   };
 
   // BackRight [X, Y, -Z].
-  const wheel_br = useRef<THREE.Object3D | undefined>();
-  const wheelInfo_br = {
+  const brWheel = useRef<THREE.Object3D | undefined>();
+  const brWheelInfo = {
     ...wheelInfo,
     isFrontWheel: false,
     chassisConnectionPointLocal: [
@@ -168,8 +172,15 @@ function Car(props: CarProps) {
     ],
   };
 
-  wheels.push(wheel_fl, wheel_fr, wheel_bl, wheel_br);
-  wheelInfos.push(wheelInfo_fl, wheelInfo_fr, wheelInfo_bl, wheelInfo_br);
+  wheels[flWheelIndex] = flWheel;
+  wheels[frWheelIndex] = frWheel;
+  wheels[blWheelIndex] = blWheel;
+  wheels[brWheelIndex] = brWheel;
+
+  wheelInfos[flWheelIndex] = flWheelInfo;
+  wheelInfos[frWheelIndex] = frWheelInfo;
+  wheelInfos[blWheelIndex] = blWheelInfo;
+  wheelInfos[brWheelIndex] = brWheelInfo;
 
   const isSensorObstacle = !movable;
 
@@ -242,21 +253,30 @@ function Car(props: CarProps) {
     if (!wheels || wheels.length !== 4) {
       return;
     }
-    if (!wheels[0].current || !wheels[1].current || !wheels[2].current || !wheels[3].current) {
+    if (
+      !wheels[flWheelIndex].current ||
+      !wheels[frWheelIndex].current ||
+      !wheels[blWheelIndex].current ||
+      !wheels[brWheelIndex].current
+    ) {
       return;
     }
 
-    wheels[0].current.getWorldPosition(wheelsPositionRef.current[0]);
-    wheels[1].current.getWorldPosition(wheelsPositionRef.current[1]);
-    wheels[2].current.getWorldPosition(wheelsPositionRef.current[2]);
-    wheels[3].current.getWorldPosition(wheelsPositionRef.current[3]);
+    // @ts-ignore
+    wheels[flWheelIndex].current.getWorldPosition(wheelsPositionRef.current.fr);
+    // @ts-ignore
+    wheels[frWheelIndex].current.getWorldPosition(wheelsPositionRef.current.fl);
+    // @ts-ignore
+    wheels[blWheelIndex].current.getWorldPosition(wheelsPositionRef.current.br);
+    // @ts-ignore
+    wheels[brWheelIndex].current.getWorldPosition(wheelsPositionRef.current.bl);
 
-    const [fl, fr, bl, br] = wheelsPositionRef.current;
+    const {fl, fr, bl, br} = wheelsPositionRef.current;
     const wheelPositions: RectanglePoints = {
-      fl: [fl.x, fl.y, fl.z],
-      fr: [fr.x, fr.y, fr.z],
-      bl: [bl.x, bl.y, bl.z],
-      br: [br.x, br.y, br.z],
+      fl: fl.toArray(),
+      fr: fr.toArray(),
+      bl: bl.toArray(),
+      br: br.toArray(),
     };
     onMoveThrottled(wheelPositions);
 
@@ -269,7 +289,7 @@ function Car(props: CarProps) {
 
   let distanceColor = 'black';
   if (carFitness !== null) {
-    if (carFitness <= 1.5) {
+    if (carFitness <= 1) {
       distanceColor = 'limegreen';
     } else if (carFitness <= 3) {
       distanceColor = 'orange';
@@ -308,7 +328,7 @@ function Car(props: CarProps) {
         collisionFilterMask={collisionFilterMask}
       />
       <Wheel
-        ref={wheel_fl}
+        ref={flWheel}
         radius={wheelRadius}
         bodyProps={wheelBodyProps}
         styled={styled}
@@ -317,7 +337,7 @@ function Car(props: CarProps) {
         isLeft
       />
       <Wheel
-        ref={wheel_fr}
+        ref={frWheel}
         radius={wheelRadius}
         bodyProps={wheelBodyProps}
         styled={styled}
@@ -325,7 +345,7 @@ function Car(props: CarProps) {
         baseColor={baseColor}
       />
       <Wheel
-        ref={wheel_bl}
+        ref={blWheel}
         radius={wheelRadius}
         bodyProps={wheelBodyProps}
         styled={styled}
@@ -334,7 +354,7 @@ function Car(props: CarProps) {
         isLeft
       />
       <Wheel
-        ref={wheel_br}
+        ref={brWheel}
         radius={wheelRadius}
         bodyProps={wheelBodyProps}
         styled={styled}

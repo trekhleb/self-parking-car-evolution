@@ -19,8 +19,8 @@ const [x, y, z] = PARKING_SPOT_POSITION;
 const outerW = CHASSIS_WIDTH + 0.3;
 const outerL = CHASSIS_LENGTH + 0.3;
 
-const innerW = 0.85 * CHASSIS_WIDTH;
-const innerL = 0.65 * CHASSIS_LENGTH;
+const innerW = 1.2;
+const innerL = 2.44;
 
 const innerX = x + (outerW - innerW) / 2;
 const innerY = y;

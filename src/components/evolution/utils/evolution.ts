@@ -88,6 +88,19 @@ export const fitness = (params: FitnessParams): number => {
   const brDistance = distance(brWheel, brLot);
   const blDistance = distance(blWheel, blLot);
 
+  const debug = {
+    blX: blLot[0] - blWheel[0],
+    blY: blLot[2] - blWheel[2],
+    brX: brLot[0] - brWheel[0],
+    brY: brLot[2] - brWheel[2],
+    flX: flLot[0] - flWheel[0],
+    flY: flLot[2] - flWheel[2],
+    frX: frLot[0] - frWheel[0],
+    frY: frLot[2] - frWheel[2],
+  }
+
+  debugger
+
   return (flDistance + frDistance + brDistance + blDistance) / 4;
 };
 
