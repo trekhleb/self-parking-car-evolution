@@ -301,7 +301,7 @@ function Car(props: CarProps) {
     <span>
       Distance:
       {' '}
-      <span style={{color: distanceColor}}>
+      <span style={{color: distanceColor, fontWeight: 'bold'}}>
         {formatFitnessValue(carFitness)}
       </span>
     </span>
