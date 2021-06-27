@@ -16,18 +16,22 @@ type PopulationTableProps = {
   carsFitness: CarsFitnessType,
 };
 
+const sortTable = false;
+
 function PopulationTable(props: PopulationTableProps) {
   const { cars, carsInProgress, carsFitness } = props;
   const carsArray: CarType[] = Object.values<CarType>(cars);
 
   const columns = [
     'Licence Plate',
-    'Simulating',
-    'Fitness',
+    'Distance',
   ];
 
   const rowsData: React.ReactNode[][] = carsArray
     .sort((carA: CarType, carB: CarType): number => {
+      if (!sortTable) {
+        return 0;
+      }
       const fitnessA = getCarFitness(carsFitness, carA);
       const fitnessB = getCarFitness(carsFitness, carB);
       if (fitnessA === null && fitnessB !== null) {
@@ -58,15 +62,25 @@ function PopulationTable(props: PopulationTableProps) {
         </Tag>
       );
 
-      const simulationCell = carsInProgress[car.licencePlate] ? (
+      const spinner = carsInProgress[car.licencePlate] ? (
         <Spinner size={24} color="black" />
       ) : null;
 
-      const fitnessCell = getCarFitness(carsFitness, car);
+      const fitnessCell = (
+        <Block display="flex" flexDirection="row" alignItems="center">
+          <Block marginRight="10px" flex="1">
+            <code>
+              {getCarFitness(carsFitness, car)}
+            </code>
+          </Block>
+          <Block flex="1" display="flex" justifyContent="flex-end">
+            {spinner}
+          </Block>
+        </Block>
+      );
 
       return [
         licencePlateCell,
-        simulationCell,
         fitnessCell,
       ];
     });
