@@ -12,6 +12,7 @@ import { generateWorldVersion, generationToCars, GENOME_LENGTH } from './utils/e
 import { setSearchParam } from '../../utils/url';
 import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 import { getWorldKeyFromUrl } from './utils/url';
+import Timer from './Timer';
 
 const generationSizes = [10, 20, 50, 100];
 const carsBatchSizes = [1, 5, 10];
@@ -160,13 +161,15 @@ function EvolutionBoard() {
     }, generationLifetime);
   }, [carsBatch]);
 
+  const batchVersion = generateWorldVersion(generationIndex, carsBatchIndex);
+
   const worlds = (
     <Block>
       <Worlds
         cars={carsBatch}
         activeWorldKey={activeWorldKey}
         onWorldSwitch={onWorldSwitch}
-        version={generateWorldVersion(generationIndex, carsBatchIndex)}
+        version={batchVersion}
       />
     </Block>
   );
@@ -183,7 +186,7 @@ function EvolutionBoard() {
   );
 
   const timingDetails = generationIndex !== null && carsBatchIndex !== null ? (
-    <Block marginBottom="20px" display="flex" flexDirection="row">
+    <Block marginBottom="20px" display="flex" flexDirection="row" alignItems="center">
       <Block marginRight="20px">
         <Label3>
           Generation:
@@ -198,6 +201,11 @@ function EvolutionBoard() {
           <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
             <small>#</small>{carsBatchIndex + 1}
           </Tag>
+        </Label3>
+      </Block>
+      <Block marginRight="20px">
+        <Label3>
+          <Timer timout={generationLifetime} version={batchVersion} />
         </Label3>
       </Block>
     </Block>

@@ -69,9 +69,7 @@ function PopulationTable(props: PopulationTableProps) {
       const fitnessCell = (
         <Block display="flex" flexDirection="row" alignItems="center">
           <Block marginRight="10px" flex="1">
-            <code>
-              {getCarFitness(carsFitness, car)}
-            </code>
+            {getCarFitness(carsFitness, car)}
           </Block>
           <Block flex="1" display="flex" justifyContent="flex-end">
             {spinner}
