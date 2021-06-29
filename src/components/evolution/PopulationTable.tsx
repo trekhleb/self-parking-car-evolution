@@ -16,7 +16,7 @@ type PopulationTableProps = {
   carsFitness: CarsFitnessType,
 };
 
-const sortTable = false;
+const sortTable = true;
 
 function PopulationTable(props: PopulationTableProps) {
   const { cars, carsInProgress, carsFitness } = props;
@@ -62,18 +62,11 @@ function PopulationTable(props: PopulationTableProps) {
         </Tag>
       );
 
-      const spinner = carsInProgress[car.licencePlate] ? (
+      const fitnessCell = carsInProgress[car.licencePlate] ? (
         <Spinner size={24} color="black" />
-      ) : null;
-
-      const fitnessCell = (
-        <Block display="flex" flexDirection="row" alignItems="center">
-          <Block marginRight="10px" flex="1">
-            {getCarFitness(carsFitness, car)}
-          </Block>
-          <Block flex="1" display="flex" justifyContent="flex-end">
-            {spinner}
-          </Block>
+      ) : (
+        <Block>
+          {getCarFitness(carsFitness, car)}
         </Block>
       );
 

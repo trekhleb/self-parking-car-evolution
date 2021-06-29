@@ -14,20 +14,20 @@ import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url
 import { getWorldKeyFromUrl } from './utils/url';
 import Timer from './Timer';
 
-const generationSizes = [10, 20, 50, 100];
-const carsBatchSizes = [1, 5, 10];
+const generationSizes = [20, 30, 50, 100];
+const carsBatchSizes = [1, 5, 10, 20];
 
 const second = 1000;
 const generationLifetime = 30 * second;
 
 function EvolutionBoard() {
-  const [generationSize, setGenerationSize] = useState<number>(generationSizes[0]);
+  const [generationSize, setGenerationSize] = useState<number>(generationSizes[2]);
   const [generationIndex, setGenerationIndex] = useState<number | null>(null);
   const [generation, setGeneration] = useState<Generation>([]);
 
   const [cars, setCars] = useState<CarsType>({});
   const [carsBatch, setCarsBatch] = useState<CarType[]>([]);
-  const [carsBatchSize, setCarsBatchSize] = useState<number>(carsBatchSizes[0]);
+  const [carsBatchSize, setCarsBatchSize] = useState<number>(carsBatchSizes[2]);
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
 
   const [evolutionPaused, setEvolutionPaused] = useState<boolean>(true);
@@ -75,7 +75,6 @@ function EvolutionBoard() {
     const fitnessValues = {...carsFitnessRef.current};
     fitnessValues[licensePlate] = fitness;
     carsFitnessRef.current = fitnessValues;
-    setCarsFitness(fitnessValues);
   };
 
   const cancelBatchTimer = () => {
@@ -157,6 +156,7 @@ function EvolutionBoard() {
         }
         return;
       }
+      setCarsFitness({...carsFitnessRef.current});
       setCarsBatchIndex(nextBatchIndex);
     }, generationLifetime);
   }, [carsBatch]);
