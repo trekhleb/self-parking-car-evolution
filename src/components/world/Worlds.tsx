@@ -22,9 +22,9 @@ type WorldsProps = {
 function Worlds(props: WorldsProps) {
   const { cars, activeWorldKey, onWorldSwitch = (worldKey) => {}, version = '0' } = props;
 
-  const [withStat, setWithStat] = useState<boolean>(false);
   const [withSensors, setWithSensors] = useState<boolean>(true);
   const [withLabels, setWithLabels] = useState<boolean>(true);
+  const [withStat, setWithStat] = useState<boolean>(true);
 
   const tabBarStyle: StyleObject = {
     paddingLeft: 0,
