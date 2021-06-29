@@ -47,7 +47,7 @@ export const PARKING_SPOT_POINTS: RectanglePoints = {
   bl: [innerX + innerW, innerY, innerZ],
 };
 
-const innerLineVisible = true;
+const innerLineVisible = false;
 
 function ParkingSpot(props: ParkingSpotProps) {
   const { color = 'yellow' } = props;
