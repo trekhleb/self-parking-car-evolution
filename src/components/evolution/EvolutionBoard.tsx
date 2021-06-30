@@ -13,15 +13,18 @@ import { setSearchParam } from '../../utils/url';
 import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 import { getWorldKeyFromUrl } from './utils/url';
 import Timer from './Timer';
-import EvolutionBoardParams, { DEFAULT_BATCH_SIZE, DEFAULT_GENERATION_SIZE } from './EvolutionBoardParams';
-
-const second = 1000;
-const generationLifetime = 30 * second;
+import EvolutionBoardParams, {
+  DEFAULT_BATCH_SIZE,
+  DEFAULT_GENERATION_LIFETIME,
+  DEFAULT_GENERATION_SIZE,
+  SECOND
+} from './EvolutionBoardParams';
 
 function EvolutionBoard() {
   const [generationSize, setGenerationSize] = useState<number>(DEFAULT_GENERATION_SIZE);
   const [generationIndex, setGenerationIndex] = useState<number | null>(null);
   const [generation, setGeneration] = useState<Generation>([]);
+  const [generationLifetime, setGenerationLifetime] = useState<number>(DEFAULT_GENERATION_LIFETIME);
 
   const [cars, setCars] = useState<CarsType>({});
   const [carsBatch, setCarsBatch] = useState<CarType[]>([]);
@@ -40,6 +43,8 @@ function EvolutionBoard() {
     cars[car.licencePlate] = true;
     return cars;
   }, {});
+
+  const generationLifetimeMs = generationLifetime * SECOND;
 
   const onWorldSwitch = (worldKey: React.Key): void => {
     setActiveWorldKey(worldKey);
@@ -72,6 +77,10 @@ function EvolutionBoard() {
 
   const onBatchSizeChange = (size: number) => {
     setCarsBatchSize(size);
+  };
+
+  const onGenerationLifetimeChange = (time: number) => {
+    setGenerationLifetime(time);
   };
 
   const cancelBatchTimer = () => {
@@ -155,7 +164,7 @@ function EvolutionBoard() {
       }
       setCarsFitness({...carsFitnessRef.current});
       setCarsBatchIndex(nextBatchIndex);
-    }, generationLifetime);
+    }, generationLifetimeMs);
   }, [carsBatch]);
 
   const batchVersion = generateWorldVersion(generationIndex, carsBatchIndex);
@@ -205,7 +214,7 @@ function EvolutionBoard() {
             marginLeft="10px"
           >
             <Label3>
-              <Timer timout={generationLifetime} version={batchVersion} />
+              <Timer timout={generationLifetimeMs} version={batchVersion} />
             </Label3>
           </Block>
         </Block>
@@ -217,8 +226,10 @@ function EvolutionBoard() {
     <EvolutionBoardParams
       generationSize={generationSize}
       batchSize={carsBatchSize}
+      generationLifetime={generationLifetime}
       onGenerationSizeChange={onGenerationSizeChange}
       onBatchSizeChange={onBatchSizeChange}
+      onGenerationLifetimeChange={onGenerationLifetimeChange}
     />
   );
 
