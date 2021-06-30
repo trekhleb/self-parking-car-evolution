@@ -8,9 +8,12 @@ import { StyleObject } from 'styletron-standard';
 import ErrorBoundary from '../shared/ErrorBoundary';
 import WorldParamsController from './controllers/WorldParamsController';
 import { CarType } from './types/car';
+import { getSearchParam } from '../../utils/url';
 
 export const EVOLUTION_WORLD_KEY = '0';
 export const MANUAL_PARKING_WORLD_KEY = '1';
+
+const STAT_SEARCH_PARAM_NAME = 'stats';
 
 type WorldsProps = {
   cars: CarType[],
@@ -31,7 +34,7 @@ function Worlds(props: WorldsProps) {
 
   const [withSensors, setWithSensors] = useState<boolean>(true);
   const [withLabels, setWithLabels] = useState<boolean>(true);
-  const [withStat, setWithStat] = useState<boolean>(true);
+  const [withStat, setWithStat] = useState<boolean>(!!getSearchParam(STAT_SEARCH_PARAM_NAME));
 
   const tabBarStyle: StyleObject = {
     paddingLeft: 0,
