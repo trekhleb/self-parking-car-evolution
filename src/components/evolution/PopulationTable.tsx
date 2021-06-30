@@ -58,9 +58,7 @@ function PopulationTable(props: PopulationTableProps) {
           kind={TAG_KIND.neutral}
           variant={TAG_VARIANT.light}
         >
-          <small>
-            {car.licencePlate}
-          </small>
+          {car.licencePlate}
         </Tag>
       );
 
