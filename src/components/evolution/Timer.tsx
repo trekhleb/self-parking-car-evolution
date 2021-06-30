@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Label1, Label3 } from 'baseui/typography';
+import { Block } from 'baseui/block';
 
 type TimeMs = number;
 
@@ -42,9 +44,11 @@ function Timer(props: TimerProps) {
     : formatTime(timePassed);
 
   return (
-    <>
-      {formattedTime}
-    </>
+    <Block display="flex" flexDirection="row" alignItems="flex-end">
+      <Label1>
+        {formattedTime}
+      </Label1>
+    </Block>
   );
 }
 
