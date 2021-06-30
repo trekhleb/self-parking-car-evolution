@@ -1,4 +1,5 @@
-.timer-loader {
+.timer-loader,
+.timer-loader-reverse {
   --clock-color: black;
   --clock-width: 1.3rem;
   --clock-radius: calc(var(--clock-width) / 2);
@@ -25,22 +26,42 @@
   background: var(--clock-color);
   border-radius: 10px;
   transform-origin: center calc(100% - calc(var(--clock-thickness) / 2));
-  animation: spin infinite linear;
+  animation: timer-spin infinite linear;
 }
 
-.timer-loader::before {
+.timer-loader-reverse::before,
+.timer-loader-reverse::after {
+  position: absolute;
+  content: "";
+  top: calc(var(--clock-radius) * 0.25);
+  width: var(--clock-thickness);
+  background: var(--clock-color);
+  border-radius: 10px;
+  transform-origin: center calc(100% - calc(var(--clock-thickness) / 2));
+  animation: timer-spin-reverse infinite linear;
+}
+
+.timer-loader::before,
+.timer-loader-reverse::before {
   height: var(--clock-minute-length);
   animation-duration: 2s;
 }
 
-.timer-loader::after {
+.timer-loader::after,
+.timer-loader-reverse::after {
   top: calc(var(--clock-radius) * -0.25 + var(--clock-hour-length));
   height: var(--clock-hour-length);
   animation-duration: 15s;
 }
 
-@keyframes spin {
+@keyframes timer-spin-reverse {
   to {
     transform: rotate(-1turn);
+  }
+}
+
+@keyframes timer-spin {
+  to {
+    transform: rotate(1turn);
   }
 }

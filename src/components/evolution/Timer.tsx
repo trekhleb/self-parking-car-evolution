@@ -20,6 +20,8 @@ function Timer(props: TimerProps) {
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  const reversedTime = timout !== null;
+
   const onInterval = () => {
     timePassedRef.current += interval;
     setTimePassed(timePassedRef.current);
@@ -48,10 +50,10 @@ function Timer(props: TimerProps) {
   return (
     <Block display="flex" flexDirection="row" alignItems="flex-end">
       <Block marginRight="5px">
-        <div className="timer-loader" />
+        <div className={reversedTime ? 'timer-loader-reverse' : 'timer-loader'} />
       </Block>
       <Label1>
-        <b>{formattedTime}</b>s
+        <b><code>{formattedTime}</code></b>
       </Label1>
     </Block>
   );
@@ -59,7 +61,7 @@ function Timer(props: TimerProps) {
 
 function formatTime(timeMs: TimeMs): string {
   const timeS = Math.max(Math.floor(timeMs / 1000), 0);
-  return `${timeS}`;
+  return `${timeS}s`;
 }
 
 export default Timer;
