@@ -62,11 +62,22 @@ function PopulationTable(props: PopulationTableProps) {
         </Tag>
       );
 
+      const carFitnessFormatted: number | null = getCarFitness(carsFitness, car);
+      let carFitnessColor = '';
+      if (carFitnessFormatted !== null) {
+        if (carFitnessFormatted < 1) {
+          carFitnessColor = 'limegreen';
+        } else if (carFitnessFormatted < 2) {
+          carFitnessColor = 'orange';
+        } else {
+          carFitnessColor = 'red';
+        }
+      }
       const fitnessCell = carsInProgress[car.licencePlate] ? (
         <Spinner size={24} color="black" />
       ) : (
-        <Block>
-          {getCarFitness(carsFitness, car)}
+        <Block color={carFitnessColor}>
+          {carFitnessFormatted}
         </Block>
       );
 

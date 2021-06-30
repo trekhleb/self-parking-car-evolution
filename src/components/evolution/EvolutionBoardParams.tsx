@@ -93,19 +93,19 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
   return (
     <Block display="flex" flexDirection="row">
       <Block flex={1} marginRight="10px">
-        <FormControl label={() => 'Generation Size'}>
+        <FormControl label={() => 'Generation size'}>
           {generationSizeSelector}
         </FormControl>
       </Block>
 
       <Block flex={1} marginLeft="10px" marginRight="10px">
-        <FormControl label={() => 'Batch Size'}>
+        <FormControl label={() => 'Batch size'}>
           {batchSizeSelector}
         </FormControl>
       </Block>
 
       <Block flex={1} marginLeft="10px">
-        <FormControl label={() => 'Generation Lifetime'}>
+        <FormControl label={() => 'Generation lifetime'}>
           {generationLifetimeChanger}
         </FormControl>
       </Block>
