@@ -191,7 +191,7 @@ function EvolutionBoard() {
           </Block>
           <Block marginRight="20px">
             <Label3>
-              Group:
+              Batch:
               <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
                 <small>#</small>{carsBatchIndex + 1}
               </Tag>
@@ -228,9 +228,9 @@ function EvolutionBoard() {
 
   const evolutionAnalytics = activeWorldKey === EVOLUTION_WORLD_KEY ? (
     <>
-      <H6 $style={{marginTop: '20px', marginBottom: '20px'}}>
-        Evolution Board
-      </H6>
+      {/*<H6 $style={{marginTop: '20px', marginBottom: '20px'}}>*/}
+      {/*  Evolution Board*/}
+      {/*</H6>*/}
       {timingDetails}
       {evolutionParams}
       {populationTable}

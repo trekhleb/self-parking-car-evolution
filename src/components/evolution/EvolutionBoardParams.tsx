@@ -41,7 +41,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
       onChange={(params: OnChangeParams) => onGenerationSizeChange(params.value[0].size)}
       labelKey="id"
       valueKey="size"
-      size={SELECT_SIZE.default}
+      size={SELECT_SIZE.compact}
       clearable={false}
       searchable={false}
     />
@@ -64,7 +64,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
       onChange={(params: OnChangeParams) => onBatchSizeChange(params.value[0].size)}
       labelKey="id"
       valueKey="size"
-      size={SELECT_SIZE.default}
+      size={SELECT_SIZE.compact}
       clearable={false}
       searchable={false}
     />
@@ -81,7 +81,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
       </Block>
       <Block flex={1} marginLeft="10px">
         <FormControl
-          label={() => 'Group Size'}
+          label={() => 'Batch Size'}
         >
           {batchSizeSelector}
         </FormControl>
