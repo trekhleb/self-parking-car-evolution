@@ -202,6 +202,7 @@ function EvolutionBoard() {
             display="flex"
             flexDirection="row"
             justifyContent="flex-start"
+            marginLeft="10px"
           >
             <Label3>
               <Timer timout={generationLifetime} version={batchVersion} />

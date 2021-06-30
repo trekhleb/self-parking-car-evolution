@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Label1, Label3 } from 'baseui/typography';
+import { Label1 } from 'baseui/typography';
 import { Block } from 'baseui/block';
+
+import './Timer.css';
 
 type TimeMs = number;
 
@@ -45,6 +47,9 @@ function Timer(props: TimerProps) {
 
   return (
     <Block display="flex" flexDirection="row" alignItems="flex-end">
+      <Block marginRight="5px">
+        <div className="timer-loader" />
+      </Block>
       <Label1>
         <b>{formattedTime}</b>s
       </Label1>
