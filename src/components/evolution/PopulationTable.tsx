@@ -85,6 +85,11 @@ function PopulationTable(props: PopulationTableProps) {
         divider={DIVIDER.grid}
         size={TABLE_SIZE.compact}
         overrides={{
+          Root: {
+            style: {
+              maxHeight: '300px',
+            },
+          },
           TableBodyCell: {
             style: {
               verticalAlign: 'center',
