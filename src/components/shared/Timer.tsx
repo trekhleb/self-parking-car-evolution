@@ -60,8 +60,16 @@ function Timer(props: TimerProps) {
 }
 
 function formatTime(timeMs: TimeMs): string {
-  const timeS = Math.max(Math.floor(timeMs / 1000), 0);
-  return `${timeS}s`;
+  let timeSec = Math.max(Math.floor(timeMs / 1000), 0);
+  let secPrefix = '';
+  if (timeSec < 60) {
+    secPrefix = timeSec < 10 ? '0' : '';
+    return `${secPrefix}${timeSec}s`;
+  }
+  const timeMin = Math.floor(timeSec / 60);
+  timeSec = timeSec % 60;
+  secPrefix = timeSec < 10 ? '0' : '';
+  return `${timeMin}m${secPrefix}${timeSec}s`;
 }
 
 export default Timer;

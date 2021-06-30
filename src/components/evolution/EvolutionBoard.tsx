@@ -1,8 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Label3 } from 'baseui/typography';
-import {Tag, VARIANT as TAG_VARIANT} from 'baseui/tag';
 import { Block } from 'baseui/block';
-import {Notification, KIND as NOTIFICATION_KIND} from 'baseui/notification';
 
 import { createGeneration, Generation } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
@@ -12,13 +9,13 @@ import { generateWorldVersion, generationToCars, GENOME_LENGTH } from './utils/e
 import { setSearchParam } from '../../utils/url';
 import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 import { getWorldKeyFromUrl } from './utils/url';
-import Timer from './Timer';
 import EvolutionBoardParams, {
   DEFAULT_BATCH_SIZE,
   DEFAULT_GENERATION_LIFETIME,
   DEFAULT_GENERATION_SIZE,
   SECOND
 } from './EvolutionBoardParams';
+import EvolutionTiming from './EvolutionTiming';
 
 function EvolutionBoard() {
   const [generationSize, setGenerationSize] = useState<number>(DEFAULT_GENERATION_SIZE);
@@ -180,47 +177,14 @@ function EvolutionBoard() {
     </Block>
   );
 
-  const timingDetails = generationIndex !== null && carsBatchIndex !== null ? (
-    <Block marginBottom="20px" marginTop="15px">
-      <Notification
-        closeable={false}
-        kind={NOTIFICATION_KIND.warning}
-        overrides={{
-          Body: {style: {width: 'auto'}},
-        }}
-      >
-        <Block display="flex" flexDirection="row" alignItems="center" width="auto">
-          <Block marginRight="20px">
-            <Label3>
-              Generation:
-              <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
-                <small>#</small>{generationIndex + 1}
-              </Tag>
-            </Label3>
-          </Block>
-          <Block marginRight="20px">
-            <Label3>
-              Batch:
-              <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
-                <small>#</small>{carsBatchIndex + 1}
-              </Tag>
-            </Label3>
-          </Block>
-          <Block
-            flex={1}
-            display="flex"
-            flexDirection="row"
-            justifyContent="flex-start"
-            marginLeft="10px"
-          >
-            <Label3>
-              <Timer timout={generationLifetimeMs} version={batchVersion} />
-            </Label3>
-          </Block>
-        </Block>
-      </Notification>
-    </Block>
-  ) : null;
+  const timingDetails = (
+    <EvolutionTiming
+      generationIndex={generationIndex}
+      batchIndex={carsBatchIndex}
+      batchVersion={batchVersion}
+      generationLifetimeMs={generationLifetimeMs}
+    />
+  );
 
   const evolutionParams = (
     <EvolutionBoardParams
@@ -245,9 +209,6 @@ function EvolutionBoard() {
 
   const evolutionAnalytics = activeWorldKey === EVOLUTION_WORLD_KEY ? (
     <>
-      {/*<H6 $style={{marginTop: '20px', marginBottom: '20px'}}>*/}
-      {/*  Evolution Board*/}
-      {/*</H6>*/}
       {timingDetails}
       {evolutionParams}
       {populationTable}

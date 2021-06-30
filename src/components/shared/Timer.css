@@ -41,13 +41,22 @@
   animation: timer-spin-reverse infinite linear;
 }
 
-.timer-loader::before,
+.timer-loader::before {
+  height: var(--clock-minute-length);
+  animation-duration: 6s;
+}
+
+.timer-loader::after {
+  top: calc(var(--clock-radius) * -0.25 + var(--clock-hour-length));
+  height: var(--clock-hour-length);
+  animation-duration: 45s;
+}
+
 .timer-loader-reverse::before {
   height: var(--clock-minute-length);
   animation-duration: 2s;
 }
 
-.timer-loader::after,
 .timer-loader-reverse::after {
   top: calc(var(--clock-radius) * -0.25 + var(--clock-hour-length));
   height: var(--clock-hour-length);
