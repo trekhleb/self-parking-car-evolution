@@ -180,7 +180,7 @@ function EvolutionBoard() {
           Body: {style: {width: 'auto'}},
         }}
       >
-        <Block display="flex" flexDirection="row" alignItems="center">
+        <Block display="flex" flexDirection="row" alignItems="center" width="auto">
           <Block marginRight="20px">
             <Label3>
               Generation:
@@ -197,7 +197,12 @@ function EvolutionBoard() {
               </Tag>
             </Label3>
           </Block>
-          <Block>
+          <Block
+            flex={1}
+            display="flex"
+            flexDirection="row"
+            justifyContent="flex-start"
+          >
             <Label3>
               <Timer timout={generationLifetime} version={batchVersion} />
             </Label3>

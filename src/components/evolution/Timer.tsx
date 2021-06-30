@@ -46,7 +46,7 @@ function Timer(props: TimerProps) {
   return (
     <Block display="flex" flexDirection="row" alignItems="flex-end">
       <Label1>
-        {formattedTime}
+        <b>{formattedTime}</b>s
       </Label1>
     </Block>
   );
@@ -54,7 +54,7 @@ function Timer(props: TimerProps) {
 
 function formatTime(timeMs: TimeMs): string {
   const timeS = Math.max(Math.floor(timeMs / 1000), 0);
-  return `${timeS}s`;
+  return `${timeS}`;
 }
 
 export default Timer;
