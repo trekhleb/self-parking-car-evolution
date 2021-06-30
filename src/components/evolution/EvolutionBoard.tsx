@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { H6, Label3 } from 'baseui/typography';
 import {Tag, VARIANT as TAG_VARIANT} from 'baseui/tag';
 import { Block } from 'baseui/block';
+import {Notification, KIND as NOTIFICATION_KIND} from 'baseui/notification';
 
 import { createGeneration, Generation } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
-import EvolutionPlaybackButtons from './EvolutionPlaybackButtons';
 import PopulationTable, { CarsFitnessType, CarsInProgressType } from './PopulationTable';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import { generateWorldVersion, generationToCars, GENOME_LENGTH } from './utils/evolution';
@@ -13,24 +13,21 @@ import { setSearchParam } from '../../utils/url';
 import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 import { getWorldKeyFromUrl } from './utils/url';
 import Timer from './Timer';
-
-const generationSizes = [20, 30, 50, 100];
-const carsBatchSizes = [1, 5, 10, 20];
+import EvolutionBoardParams, { DEFAULT_BATCH_SIZE, DEFAULT_GENERATION_SIZE } from './EvolutionBoardParams';
 
 const second = 1000;
 const generationLifetime = 30 * second;
 
 function EvolutionBoard() {
-  const [generationSize, setGenerationSize] = useState<number>(generationSizes[2]);
+  const [generationSize, setGenerationSize] = useState<number>(DEFAULT_GENERATION_SIZE);
   const [generationIndex, setGenerationIndex] = useState<number | null>(null);
   const [generation, setGeneration] = useState<Generation>([]);
 
   const [cars, setCars] = useState<CarsType>({});
   const [carsBatch, setCarsBatch] = useState<CarType[]>([]);
-  const [carsBatchSize, setCarsBatchSize] = useState<number>(carsBatchSizes[2]);
+  const [carsBatchSize, setCarsBatchSize] = useState<number>(DEFAULT_BATCH_SIZE);
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
 
-  const [evolutionPaused, setEvolutionPaused] = useState<boolean>(true);
   const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(getWorldKeyFromUrl(EVOLUTION_WORLD_KEY));
 
   const batchTimer = useRef<NodeJS.Timeout | null>(null);
@@ -54,14 +51,6 @@ function EvolutionBoard() {
     }
   };
 
-  const onEvolutionStart = () => {
-    setEvolutionPaused(false);
-  };
-
-  const onEvolutionPause = () => {
-    setEvolutionPaused(true);
-  };
-
   const onEvolutionReset = () => {
     cancelBatchTimer();
     setGenerationIndex(null);
@@ -75,6 +64,14 @@ function EvolutionBoard() {
     const fitnessValues = {...carsFitnessRef.current};
     fitnessValues[licensePlate] = fitness;
     carsFitnessRef.current = fitnessValues;
+  };
+
+  const onGenerationSizeChange = (size: number) => {
+    setGenerationSize(size);
+  };
+
+  const onBatchSizeChange = (size: number) => {
+    setCarsBatchSize(size);
   };
 
   const cancelBatchTimer = () => {
@@ -174,42 +171,50 @@ function EvolutionBoard() {
     </Block>
   );
 
-  const evolutionButtons = (
-    <Block marginBottom="20px">
-      <EvolutionPlaybackButtons
-        isPlaying={evolutionPaused}
-        onStart={onEvolutionStart}
-        onPause={onEvolutionPause}
-        onReset={onEvolutionReset}
-      />
-    </Block>
-  );
-
   const timingDetails = generationIndex !== null && carsBatchIndex !== null ? (
-    <Block marginBottom="20px" display="flex" flexDirection="row" alignItems="center">
-      <Block marginRight="20px">
-        <Label3>
-          Generation:
-          <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
-            <small>#</small>{generationIndex + 1}
-          </Tag>
-        </Label3>
-      </Block>
-      <Block marginRight="20px">
-        <Label3>
-          Group:
-          <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
-            <small>#</small>{carsBatchIndex + 1}
-          </Tag>
-        </Label3>
-      </Block>
-      <Block marginRight="20px">
-        <Label3>
-          <Timer timout={generationLifetime} version={batchVersion} />
-        </Label3>
-      </Block>
+    <Block marginBottom="20px">
+      <Notification
+        closeable={false}
+        kind={NOTIFICATION_KIND.warning}
+        overrides={{
+          Body: {style: {width: 'auto'}},
+        }}
+      >
+        <Block display="flex" flexDirection="row" alignItems="center">
+          <Block marginRight="20px">
+            <Label3>
+              Generation:
+              <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
+                <small>#</small>{generationIndex + 1}
+              </Tag>
+            </Label3>
+          </Block>
+          <Block marginRight="20px">
+            <Label3>
+              Group:
+              <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
+                <small>#</small>{carsBatchIndex + 1}
+              </Tag>
+            </Label3>
+          </Block>
+          <Block>
+            <Label3>
+              <Timer timout={generationLifetime} version={batchVersion} />
+            </Label3>
+          </Block>
+        </Block>
+      </Notification>
     </Block>
   ) : null;
+
+  const evolutionParams = (
+    <EvolutionBoardParams
+      generationSize={generationSize}
+      batchSize={carsBatchSize}
+      onGenerationSizeChange={onGenerationSizeChange}
+      onBatchSizeChange={onBatchSizeChange}
+    />
+  );
 
   const populationTable = (
     <Block marginTop="16px">
@@ -226,8 +231,8 @@ function EvolutionBoard() {
       <H6 $style={{marginTop: '20px', marginBottom: '20px'}}>
         Evolution Board
       </H6>
-      {evolutionButtons}
       {timingDetails}
+      {evolutionParams}
       {populationTable}
     </>
   ) : null;
