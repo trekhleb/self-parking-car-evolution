@@ -56,9 +56,11 @@ function PopulationTable(props: PopulationTableProps) {
         <Tag
           closeable={false}
           kind={TAG_KIND.neutral}
-          variant={TAG_VARIANT.solid}
+          variant={TAG_VARIANT.light}
         >
-          {car.licencePlate}
+          <small>
+            {car.licencePlate}
+          </small>
         </Tag>
       );
 
