@@ -3,11 +3,11 @@ import { Block } from 'baseui/block';
 import { OnChangeParams, Select, SIZE as SELECT_SIZE } from 'baseui/select';
 import { FormControl } from 'baseui/form-control';
 
-const GENERATION_SIZES = [20, 30, 50, 100];
+const GENERATION_SIZES = [10, 50, 100];
 const BATCH_SIZES = [1, 5, 10, 20];
 
-export const DEFAULT_GENERATION_SIZE = GENERATION_SIZES[2];
-export const DEFAULT_BATCH_SIZE = BATCH_SIZES[2];
+export const DEFAULT_GENERATION_SIZE = GENERATION_SIZES[0];
+export const DEFAULT_BATCH_SIZE = BATCH_SIZES[0];
 
 type EvolutionBoardParamsProps = {
   generationSize: number,

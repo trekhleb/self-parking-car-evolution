@@ -17,10 +17,17 @@ type WorldsProps = {
   activeWorldKey: string | number,
   onWorldSwitch?: (worldKey: React.Key) => void,
   version?: string,
+  withWorldParams?: boolean,
 };
 
 function Worlds(props: WorldsProps) {
-  const { cars, activeWorldKey, onWorldSwitch = (worldKey) => {}, version = '0' } = props;
+  const {
+    cars,
+    activeWorldKey,
+    onWorldSwitch = (worldKey) => {},
+    version = '0',
+    withWorldParams = false,
+  } = props;
 
   const [withSensors, setWithSensors] = useState<boolean>(true);
   const [withLabels, setWithLabels] = useState<boolean>(true);
@@ -49,7 +56,7 @@ function Worlds(props: WorldsProps) {
     onWorldSwitch(activeKey);
   }
 
-  const worldParamsController = (
+  const worldParamsController = withWorldParams ? (
     <WorldParamsController
       withSensors={withSensors}
       withLabels={withLabels}
@@ -58,7 +65,7 @@ function Worlds(props: WorldsProps) {
       onWithStatChange={setWithStat}
       onWithSensorsChange={setWithSensors}
     />
-  );
+  ) : null;
 
   return (
     <Tabs

@@ -172,7 +172,7 @@ function EvolutionBoard() {
   );
 
   const timingDetails = generationIndex !== null && carsBatchIndex !== null ? (
-    <Block marginBottom="20px">
+    <Block marginBottom="20px" marginTop="15px">
       <Notification
         closeable={false}
         kind={NOTIFICATION_KIND.warning}
