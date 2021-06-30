@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { H6, Label3 } from 'baseui/typography';
+import { Label3 } from 'baseui/typography';
 import {Tag, VARIANT as TAG_VARIANT} from 'baseui/tag';
 import { Block } from 'baseui/block';
 import {Notification, KIND as NOTIFICATION_KIND} from 'baseui/notification';
