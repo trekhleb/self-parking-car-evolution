@@ -23,10 +23,6 @@ function EvolutionTiming(props: EvolutionTimingProps) {
     worldVersion,
   } = props;
 
-  if (generationIndex === null || batchIndex === null) {
-    return null;
-  }
-
   return (
     <Block marginBottom="20px" marginTop="20px">
       <Notification
@@ -47,13 +43,13 @@ function EvolutionTiming(props: EvolutionTimingProps) {
         >
           <TimingColumn caption="Generation">
             <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
-              <small>#</small>{generationIndex + 1}
+              <small>#</small>{(generationIndex || 0) + 1}
             </Tag>
           </TimingColumn>
 
           <TimingColumn caption="Group">
             <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
-              <small>#</small>{batchIndex + 1}
+              <small>#</small>{(batchIndex || 0) + 1}
             </Tag>
           </TimingColumn>
 
