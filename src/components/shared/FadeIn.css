@@ -1,0 +1,12 @@
+.component-fade-in {
+  animation: componentFadeIn ease-out 400ms;
+}
+
+@keyframes componentFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

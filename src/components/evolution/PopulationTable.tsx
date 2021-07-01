@@ -7,6 +7,7 @@ import { withStyle } from 'baseui';
 
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import { formatFitnessValue } from './utils/evolution';
+import FadeIn from '../shared/FadeIn';
 
 export type CarsInProgressType = Record<CarLicencePlateType, boolean>;
 export type CarsFitnessType = Record<CarLicencePlateType, number | null>;
@@ -85,7 +86,9 @@ function PopulationTable(props: PopulationTableProps) {
         }
       }
       const fitnessCell = carsInProgress[car.licencePlate] ? (
-        <CellSpinner />
+        <FadeIn>
+          <CellSpinner />
+        </FadeIn>
       ) : (
         <Block color={carFitnessColor}>
           {carFitnessFormatted}

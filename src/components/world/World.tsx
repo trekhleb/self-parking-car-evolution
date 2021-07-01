@@ -10,6 +10,7 @@ import { Block } from 'baseui/block';
 import CarJoystickController from './controllers/CarJoystickController';
 import CarKeyboardController from './controllers/CarKeyboardController';
 import { WORLD_CONTAINER_HEIGHT } from './constants/world';
+import FadeIn from '../shared/FadeIn';
 
 type WorldProps = {
   children: React.ReactNode,
@@ -61,7 +62,9 @@ function World(props: WorldProps) {
       borderTopWidth: 0,
       backgroundColor: worldBackgroundColor,
     }}>
-      <WorldSpinner />
+      <FadeIn>
+        <WorldSpinner />
+      </FadeIn>
     </div>
   );
 
