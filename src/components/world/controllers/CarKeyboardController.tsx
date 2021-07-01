@@ -1,7 +1,7 @@
 import { Paragraph4 } from 'baseui/typography';
 import React, { useEffect } from 'react';
 
-import { useKeyPress } from '../../hooks/useKeyPress';
+import { useKeyPress } from '../../../hooks/useKeyPress';
 import { trigger, carEvents } from '../utils/events';
 import { Block } from 'baseui/block';
 import { WORLD_CONTAINER_HEIGHT } from '../constants/world';
