@@ -13,12 +13,6 @@ export const SENSORS_TOTAL = 16;
 export const GENES_PER_PARAMETER = 8;
 export const GENOME_LENGTH = SENSORS_TOTAL * GENES_PER_PARAMETER;
 
-export const generateWorldVersion = (generationIndex: number | null, batchIndex: number | null): string => {
-  const generation = generationIndex === null ? -1 : generationIndex;
-  const batch = batchIndex === null ? -1: batchIndex;
-  return `world-${generation}-${batch}`;
-};
-
 const generateLicencePlate = (genomeIndex: number): CarLicencePlateType => {
   return `CAR-${genomeIndex + 1}`;
 };

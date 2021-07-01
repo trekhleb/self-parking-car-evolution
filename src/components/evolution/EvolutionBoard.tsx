@@ -5,7 +5,7 @@ import { createGeneration, Generation } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
 import PopulationTable, { CarsFitnessType, CarsInProgressType } from './PopulationTable';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
-import { generateWorldVersion, generationToCars, GENOME_LENGTH } from './utils/evolution';
+import { generationToCars, GENOME_LENGTH } from './utils/evolution';
 import { setSearchParam } from '../../utils/url';
 import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 import { getWorldKeyFromUrl } from './utils/url';
@@ -237,5 +237,11 @@ function EvolutionBoard() {
     </Block>
   );
 }
+
+const generateWorldVersion = (generationIndex: number | null, batchIndex: number | null): string => {
+  const generation = generationIndex === null ? -1 : generationIndex;
+  const batch = batchIndex === null ? -1: batchIndex;
+  return `world-${generation}-${batch}`;
+};
 
 export default EvolutionBoard;
