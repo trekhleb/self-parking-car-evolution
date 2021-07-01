@@ -87,6 +87,7 @@ function EvolutionBoard() {
 
   const onBatchSizeChange = (size: number) => {
     setCarsBatchSize(size);
+    onEvolutionRestart();
   };
 
   const onGenerationLifetimeChange = (time: number) => {
