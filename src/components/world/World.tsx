@@ -3,8 +3,8 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stats, Environment} from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
 import * as THREE from 'three';
-import { styled } from 'baseui';
-import { Spinner } from 'baseui/spinner';
+import { styled, withStyle } from 'baseui';
+import { StyledSpinnerNext } from 'baseui/spinner';
 import { Block } from 'baseui/block';
 
 import CarJoystickController from './controllers/CarJoystickController';
@@ -20,6 +20,16 @@ type WorldProps = {
 };
 
 const worldBackgroundColor = 'lightblue';
+
+const WorldSpinner = withStyle(StyledSpinnerNext, {
+  width: '30px',
+  height: '30px',
+  borderLeftWidth: '6px',
+  borderRightWidth: '6px',
+  borderTopWidth: '6px',
+  borderBottomWidth: '6px',
+  borderTopColor: 'black',
+});
 
 function World(props: WorldProps) {
   const {
@@ -51,7 +61,7 @@ function World(props: WorldProps) {
       borderTopWidth: 0,
       backgroundColor: worldBackgroundColor,
     }}>
-      <Spinner color="black" />
+      <WorldSpinner />
     </div>
   );
 

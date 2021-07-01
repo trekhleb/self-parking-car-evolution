@@ -2,7 +2,8 @@ import React from 'react';
 import { Block } from 'baseui/block';
 import { Table, DIVIDER, SIZE as TABLE_SIZE } from 'baseui/table-semantic';
 import { Tag, VARIANT as TAG_VARIANT, KIND as TAG_KIND } from 'baseui/tag';
-import { Spinner } from 'baseui/spinner';
+import { StyledSpinnerNext } from 'baseui/spinner';
+import { withStyle } from 'baseui';
 
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import { formatFitnessValue } from './utils/evolution';
@@ -17,6 +18,16 @@ type PopulationTableProps = {
 };
 
 const sortTable = true;
+
+const CellSpinner = withStyle(StyledSpinnerNext, {
+  width: '18px',
+  height: '18px',
+  borderLeftWidth: '3px',
+  borderRightWidth: '3px',
+  borderTopWidth: '3px',
+  borderBottomWidth: '3px',
+  borderTopColor: 'black',
+});
 
 function PopulationTable(props: PopulationTableProps) {
   const { cars, carsInProgress, carsFitness } = props;
@@ -74,7 +85,7 @@ function PopulationTable(props: PopulationTableProps) {
         }
       }
       const fitnessCell = carsInProgress[car.licencePlate] ? (
-        <Spinner size={24} color="black" />
+        <CellSpinner />
       ) : (
         <Block color={carFitnessColor}>
           {carFitnessFormatted}
