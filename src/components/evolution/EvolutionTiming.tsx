@@ -11,10 +11,17 @@ type EvolutionTimingProps = {
   batchIndex: number | null,
   generationLifetimeMs: number,
   batchVersion: string,
+  worldVersion: string,
 };
 
 function EvolutionTiming(props: EvolutionTimingProps) {
-  const {generationIndex, batchIndex, generationLifetimeMs, batchVersion} = props;
+  const {
+    generationIndex,
+    batchIndex,
+    generationLifetimeMs,
+    batchVersion,
+    worldVersion,
+  } = props;
 
   if (generationIndex === null || batchIndex === null) {
     return null;
@@ -58,7 +65,7 @@ function EvolutionTiming(props: EvolutionTimingProps) {
 
           <TimingColumn caption="World age">
             <Block padding="3px">
-              <Timer version={`${generationIndex}`} />
+              <Timer version={worldVersion} />
             </Block>
           </TimingColumn>
 

@@ -18,6 +18,8 @@ import EvolutionBoardParams, {
 import EvolutionTiming from './EvolutionTiming';
 
 function EvolutionBoard() {
+  const [worldIndex, setWorldIndex] = useState<number>(0);
+
   const [generationSize, setGenerationSize] = useState<number>(DEFAULT_GENERATION_SIZE);
   const [generationIndex, setGenerationIndex] = useState<number | null>(null);
   const [generation, setGeneration] = useState<Generation>([]);
@@ -62,6 +64,16 @@ function EvolutionBoard() {
     setCars({});
   };
 
+  const onEvolutionRestart = () => {
+    cancelBatchTimer();
+    setGeneration([]);
+    setCarsBatch([]);
+    setCars({});
+    setCarsBatchIndex(null);
+    setWorldIndex(worldIndex + 1);
+    setGenerationIndex(0);
+  };
+
   const onCarFitnessUpdate = (licensePlate: CarLicencePlateType, fitness: number) => {
     const fitnessValues = {...carsFitnessRef.current};
     fitnessValues[licensePlate] = fitness;
@@ -70,6 +82,7 @@ function EvolutionBoard() {
 
   const onGenerationSizeChange = (size: number) => {
     setGenerationSize(size);
+    onEvolutionRestart();
   };
 
   const onBatchSizeChange = (size: number) => {
@@ -111,7 +124,7 @@ function EvolutionBoard() {
       const newGeneration = [...generation];
       setGeneration(newGeneration);
     }
-  }, [generationIndex]);
+  }, [generationIndex, worldIndex]);
 
   // Once generation is changed we need to create cars.
   useEffect(() => {
@@ -182,6 +195,7 @@ function EvolutionBoard() {
       generationIndex={generationIndex}
       batchIndex={carsBatchIndex}
       batchVersion={batchVersion}
+      worldVersion={`${worldIndex}`}
       generationLifetimeMs={generationLifetimeMs}
     />
   );

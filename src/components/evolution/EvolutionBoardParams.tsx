@@ -99,7 +99,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
       </Block>
 
       <Block flex={1} marginLeft="10px" marginRight="10px">
-        <FormControl label={() => 'Batch size'}>
+        <FormControl label={() => 'Group size'}>
           {batchSizeSelector}
         </FormControl>
       </Block>
