@@ -13,17 +13,30 @@ export const SENSORS_TOTAL = 16;
 export const GENES_PER_PARAMETER = 8;
 export const GENOME_LENGTH = SENSORS_TOTAL * GENES_PER_PARAMETER;
 
-const generateLicencePlate = (genomeIndex: number): CarLicencePlateType => {
-  return `CAR-${genomeIndex + 1}`;
+const generateLicencePlate = (
+  generationIndex: number | null,
+  genomeIndex: number
+): CarLicencePlateType => {
+  const generationIdx = generationIndex !== null ? (generationIndex + 1) : '';
+  const genomeIdx = genomeIndex + 1;
+  return `CAR-${generationIdx}-${genomeIdx}`;
 };
 
-export const generationToCars = (
-  population: Generation,
-  onFitnessUpdate: (licencePlate: CarLicencePlateType, fitness: number) => void = () => {},
-): CarsType => {
+type GenerationToCarsProps = {
+  generationIndex: number | null,
+  generation: Generation,
+  onFitnessUpdate?: (licencePlate: CarLicencePlateType, fitness: number) => void,
+};
+
+export const generationToCars = (props: GenerationToCarsProps): CarsType => {
+  const {
+    generationIndex,
+    generation,
+    onFitnessUpdate = () => {},
+  } = props;
   const cars: CarsType = {};
-  population.forEach((genome: Genome, genomeIndex) => {
-    const licencePlate = generateLicencePlate(genomeIndex);
+  generation.forEach((genome: Genome, genomeIndex) => {
+    const licencePlate = generateLicencePlate(generationIndex, genomeIndex);
 
     const onEngine = (sensors: SensorValuesType): EngineOptionsType => {
       const random = Math.random();

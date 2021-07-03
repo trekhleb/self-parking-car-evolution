@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Block } from 'baseui/block';
+import _ from 'lodash';
 
 import { createGeneration, Generation } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
@@ -16,6 +17,7 @@ import EvolutionBoardParams, {
   SECOND
 } from './EvolutionBoardParams';
 import EvolutionTiming from './EvolutionTiming';
+import FitnessHistory from './FitnessHistory';
 
 function EvolutionBoard() {
   const [worldIndex, setWorldIndex] = useState<number>(0);
@@ -34,8 +36,9 @@ function EvolutionBoard() {
 
   const batchTimer = useRef<NodeJS.Timeout | null>(null);
 
-  const carsFitnessRef = useRef<CarsFitnessType>({});
-  const [carsFitness, setCarsFitness] = useState<CarsFitnessType>({});
+  const carsFitnessRef = useRef<CarsFitnessType[]>([{}]);
+  const [carsFitness, setCarsFitness] = useState<CarsFitnessType[]>([{}]);
+  const [fitnessHistory, setFitnessHistory] = useState<number[]>([]);
 
   const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
   const carsInProgress: CarsInProgressType = carsBatch.reduce((cars: CarsInProgressType, car: CarType) => {
@@ -57,11 +60,15 @@ function EvolutionBoard() {
 
   const onEvolutionReset = () => {
     cancelBatchTimer();
-    setGenerationIndex(null);
-    setCarsBatchIndex(null);
     setGeneration([]);
     setCarsBatch([]);
     setCars({});
+    setCarsFitness([{}]);
+    carsFitnessRef.current = [{}];
+    setFitnessHistory([]);
+    setWorldIndex(0);
+    setGenerationIndex(null);
+    setCarsBatchIndex(null);
   };
 
   const onEvolutionRestart = () => {
@@ -69,15 +76,22 @@ function EvolutionBoard() {
     setGeneration([]);
     setCarsBatch([]);
     setCars({});
-    setCarsBatchIndex(null);
+    setCarsFitness([{}]);
+    carsFitnessRef.current = [{}];
+    setFitnessHistory([]);
     setWorldIndex(worldIndex + 1);
     setGenerationIndex(0);
+    setCarsBatchIndex(null);
   };
 
   const onCarFitnessUpdate = (licensePlate: CarLicencePlateType, fitness: number) => {
-    const fitnessValues = {...carsFitnessRef.current};
-    fitnessValues[licensePlate] = fitness;
-    carsFitnessRef.current = fitnessValues;
+    if (generationIndex === null) {
+      return;
+    }
+    if (!carsFitnessRef.current[generationIndex]) {
+      carsFitnessRef.current[generationIndex] = {};
+    }
+    carsFitnessRef.current[generationIndex][licensePlate] = fitness;
   };
 
   const onGenerationSizeChange = (size: number) => {
@@ -100,6 +114,24 @@ function EvolutionBoard() {
     }
     clearTimeout(batchTimer.current);
     batchTimer.current = null;
+  };
+
+  const syncFitnessHistory = () => {
+    if (generationIndex === null) {
+      return;
+    }
+    const generationFitness: CarsFitnessType = carsFitnessRef.current[generationIndex];
+    const newFitnessHistory = [...fitnessHistory];
+    newFitnessHistory[generationIndex] = Object.values(generationFitness).reduce(
+      (minVal: number, currVal: number | null) => {
+        if (currVal === null) {
+          return minVal;
+        }
+        return Math.min(minVal, currVal);
+      },
+      Infinity
+    );
+    setFitnessHistory(newFitnessHistory);
   };
 
   // Start the evolution.
@@ -132,7 +164,11 @@ function EvolutionBoard() {
     if (!generation || !generation.length) {
       return;
     }
-    const cars = generationToCars(generation, onCarFitnessUpdate);
+    const cars = generationToCars({
+      generation,
+      generationIndex,
+      onFitnessUpdate: onCarFitnessUpdate,
+    });
     setCars(cars);
     setCarsBatchIndex(0);
   }, [generation]);
@@ -173,8 +209,9 @@ function EvolutionBoard() {
         }
         return;
       }
-      setCarsFitness({...carsFitnessRef.current});
+      setCarsFitness(_.cloneDeep<CarsFitnessType[]>(carsFitnessRef.current));
       setCarsBatchIndex(nextBatchIndex);
+      syncFitnessHistory();
     }, generationLifetimeMs);
   }, [carsBatch]);
 
@@ -201,6 +238,12 @@ function EvolutionBoard() {
     />
   );
 
+  const fitnessHistoryChart = (
+    <Block>
+      <FitnessHistory history={fitnessHistory} />
+    </Block>
+  );
+
   const evolutionParams = (
     <EvolutionBoardParams
       generationSize={generationSize}
@@ -217,7 +260,11 @@ function EvolutionBoard() {
       <PopulationTable
         cars={cars}
         carsInProgress={carsInProgress}
-        carsFitness={carsFitness}
+        carsFitness={
+          generationIndex !== null && carsFitness[generationIndex]
+            ? carsFitness[generationIndex]
+            : {}
+        }
       />
     </Block>
   );
@@ -225,6 +272,7 @@ function EvolutionBoard() {
   const evolutionAnalytics = activeWorldKey === EVOLUTION_WORLD_KEY ? (
     <>
       {timingDetails}
+      {fitnessHistoryChart}
       {evolutionParams}
       {populationTable}
     </>
@@ -238,7 +286,10 @@ function EvolutionBoard() {
   );
 }
 
-const generateWorldVersion = (generationIndex: number | null, batchIndex: number | null): string => {
+const generateWorldVersion = (
+  generationIndex: number | null,
+  batchIndex: number | null
+): string => {
   const generation = generationIndex === null ? -1 : generationIndex;
   const batch = batchIndex === null ? -1: batchIndex;
   return `world-${generation}-${batch}`;
