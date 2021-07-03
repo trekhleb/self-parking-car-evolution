@@ -14,3 +14,11 @@ const getSearchParams = (): URLSearchParams => {
   const searchQuery = document.location.search.substring(1);
   return new URLSearchParams(searchQuery);
 };
+
+export const getIntSearchParam = (name: string, defaultValue: number): number => {
+  const searchParam: string | null = getSearchParam(name);
+  if (searchParam === null) {
+    return defaultValue;
+  }
+  return parseInt(searchParam);
+};

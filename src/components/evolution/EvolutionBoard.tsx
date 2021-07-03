@@ -7,7 +7,7 @@ import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
 import PopulationTable, { CarsFitnessType, CarsInProgressType } from './PopulationTable';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import { generationToCars, GENOME_LENGTH } from './utils/evolution';
-import { setSearchParam } from '../../utils/url';
+import { getIntSearchParam, getSearchParam, setSearchParam } from '../../utils/url';
 import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 import { getWorldKeyFromUrl } from './utils/url';
 import EvolutionBoardParams, {
@@ -19,17 +19,27 @@ import EvolutionBoardParams, {
 import EvolutionTiming from './EvolutionTiming';
 import FitnessHistory from './FitnessHistory';
 
+const GENERATION_SIZE_URL_PARAM = 'generation-size';
+const GROUP_SIZE_URL_PARAM = 'group-size';
+const GENERATION_LIFETIME_URL_PARAM = 'generation-lifetime';
+
 function EvolutionBoard() {
   const [worldIndex, setWorldIndex] = useState<number>(0);
 
-  const [generationSize, setGenerationSize] = useState<number>(DEFAULT_GENERATION_SIZE);
+  const [generationSize, setGenerationSize] = useState<number>(
+    getIntSearchParam(GENERATION_SIZE_URL_PARAM, DEFAULT_GENERATION_SIZE)
+  );
   const [generationIndex, setGenerationIndex] = useState<number | null>(null);
   const [generation, setGeneration] = useState<Generation>([]);
-  const [generationLifetime, setGenerationLifetime] = useState<number>(DEFAULT_GENERATION_LIFETIME);
+  const [generationLifetime, setGenerationLifetime] = useState<number>(
+    getIntSearchParam(GENERATION_LIFETIME_URL_PARAM, DEFAULT_GENERATION_LIFETIME)
+  );
 
   const [cars, setCars] = useState<CarsType>({});
   const [carsBatch, setCarsBatch] = useState<CarType[]>([]);
-  const [carsBatchSize, setCarsBatchSize] = useState<number>(DEFAULT_BATCH_SIZE);
+  const [carsBatchSize, setCarsBatchSize] = useState<number>(
+    getIntSearchParam(GROUP_SIZE_URL_PARAM, DEFAULT_BATCH_SIZE)
+  );
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
 
   const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(getWorldKeyFromUrl(EVOLUTION_WORLD_KEY));
@@ -96,16 +106,19 @@ function EvolutionBoard() {
 
   const onGenerationSizeChange = (size: number) => {
     setGenerationSize(size);
+    setSearchParam(GENERATION_SIZE_URL_PARAM, `${size}`);
     onEvolutionRestart();
   };
 
   const onBatchSizeChange = (size: number) => {
     setCarsBatchSize(size);
+    setSearchParam(GROUP_SIZE_URL_PARAM, `${size}`);
     onEvolutionRestart();
   };
 
   const onGenerationLifetimeChange = (time: number) => {
     setGenerationLifetime(time);
+    setSearchParam(GENERATION_LIFETIME_URL_PARAM, `${time}`);
   };
 
   const cancelBatchTimer = () => {
