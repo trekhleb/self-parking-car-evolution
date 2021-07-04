@@ -291,8 +291,8 @@ function EvolutionBoard() {
   const evolutionAnalytics = activeWorldKey === EVOLUTION_WORLD_KEY ? (
     <>
       {timingDetails}
-      {fitnessHistoryChart}
       {evolutionParams}
+      {fitnessHistoryChart}
       {populationTable}
     </>
   ) : null;
