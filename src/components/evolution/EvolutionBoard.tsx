@@ -246,17 +246,19 @@ function EvolutionBoard() {
   );
 
   const timingDetails = (
-    <EvolutionTiming
-      generationIndex={generationIndex}
-      batchIndex={carsBatchIndex}
-      batchVersion={batchVersion}
-      worldVersion={`${worldIndex}`}
-      generationLifetimeMs={generationLifetimeMs}
-    />
+    <Block marginBottom="20px" marginTop="20px">
+      <EvolutionTiming
+        generationIndex={generationIndex}
+        batchIndex={carsBatchIndex}
+        batchVersion={batchVersion}
+        worldVersion={`${worldIndex}`}
+        generationLifetimeMs={generationLifetimeMs}
+      />
+    </Block>
   );
 
   const fitnessHistoryChart = (
-    <Block>
+    <Block marginBottom="20px">
       <FitnessHistory history={fitnessHistory} />
     </Block>
   );
