@@ -135,15 +135,19 @@ function EvolutionBoard() {
     }
     const generationFitness: CarsFitnessType = carsFitnessRef.current[generationIndex];
     const newFitnessHistory = [...fitnessHistory];
-    newFitnessHistory[generationIndex] = Object.values(generationFitness).reduce(
-      (minVal: number, currVal: number | null) => {
-        if (currVal === null) {
-          return minVal;
-        }
-        return Math.min(minVal, currVal);
-      },
-      Infinity
-    );
+    if (generationFitness) {
+      newFitnessHistory[generationIndex] = Object.values(generationFitness).reduce(
+        (minVal: number, currVal: number | null) => {
+          if (currVal === null) {
+            return minVal;
+          }
+          return Math.min(minVal, currVal);
+        },
+        Infinity
+      );
+    } else {
+      newFitnessHistory[generationIndex] = Infinity;
+    }
     setFitnessHistory(newFitnessHistory);
   };
 
