@@ -264,14 +264,16 @@ function EvolutionBoard() {
   );
 
   const evolutionParams = (
-    <EvolutionBoardParams
-      generationSize={generationSize}
-      batchSize={carsBatchSize}
-      generationLifetime={generationLifetime}
-      onGenerationSizeChange={onGenerationSizeChange}
-      onBatchSizeChange={onBatchSizeChange}
-      onGenerationLifetimeChange={onGenerationLifetimeChange}
-    />
+    <Block marginBottom="20px">
+      <EvolutionBoardParams
+        generationSize={generationSize}
+        batchSize={carsBatchSize}
+        generationLifetime={generationLifetime}
+        onGenerationSizeChange={onGenerationSizeChange}
+        onBatchSizeChange={onBatchSizeChange}
+        onGenerationLifetimeChange={onGenerationLifetimeChange}
+      />
+    </Block>
   );
 
   const populationTable = (
