@@ -24,50 +24,48 @@ function EvolutionTiming(props: EvolutionTimingProps) {
   } = props;
 
   return (
-    <Block marginBottom="20px" marginTop="20px">
-      <Notification
-        closeable={false}
-        kind={NOTIFICATION_KIND.warning}
-        overrides={{
-          Body: {style: {width: 'auto'}},
-          InnerContainer: {style: {flex: 1}},
-        }}
+    <Notification
+      closeable={false}
+      kind={NOTIFICATION_KIND.warning}
+      overrides={{
+        Body: {style: {width: 'auto'}},
+        InnerContainer: {style: {flex: 1}},
+      }}
+    >
+      <Block
+        display="flex"
+        flexDirection={['column', 'row', 'row']}
+        alignItems={['flex-start', 'center', 'center']}
+        justifyContent="space-between"
+        width="auto"
+        flex="1"
       >
-        <Block
-          display="flex"
-          flexDirection={['column', 'row', 'row']}
-          alignItems={['flex-start', 'center', 'center']}
-          justifyContent="space-between"
-          width="auto"
-          flex="1"
-        >
-          <TimingColumn caption="Generation">
-            <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
-              <small>#</small>{(generationIndex || 0) + 1}
-            </Tag>
-          </TimingColumn>
+        <TimingColumn caption="Generation">
+          <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
+            <small>#</small>{(generationIndex || 0) + 1}
+          </Tag>
+        </TimingColumn>
 
-          <TimingColumn caption="Group">
-            <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
-              <small>#</small>{(batchIndex || 0) + 1}
-            </Tag>
-          </TimingColumn>
+        <TimingColumn caption="Group">
+          <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
+            <small>#</small>{(batchIndex || 0) + 1}
+          </Tag>
+        </TimingColumn>
 
-          <TimingColumn caption="Group lifetime">
-            <Block padding="3px">
-              <Timer timout={generationLifetimeMs} version={batchVersion} />
-            </Block>
-          </TimingColumn>
+        <TimingColumn caption="Group lifetime">
+          <Block padding="3px">
+            <Timer timout={generationLifetimeMs} version={batchVersion} />
+          </Block>
+        </TimingColumn>
 
-          <TimingColumn caption="World age">
-            <Block padding="3px">
-              <Timer version={worldVersion} />
-            </Block>
-          </TimingColumn>
+        <TimingColumn caption="World age">
+          <Block padding="3px">
+            <Timer version={worldVersion} />
+          </Block>
+        </TimingColumn>
 
-        </Block>
-      </Notification>
-    </Block>
+      </Block>
+    </Notification>
   );
 }
 
