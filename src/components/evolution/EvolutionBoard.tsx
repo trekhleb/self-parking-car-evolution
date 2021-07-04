@@ -258,7 +258,7 @@ function EvolutionBoard() {
   );
 
   const fitnessHistoryChart = (
-    <Block marginBottom="20px">
+    <Block height="300px" marginBottom="20px">
       <FitnessHistory history={fitnessHistory} />
     </Block>
   );
