@@ -1,52 +1,56 @@
 import * as React from 'react';
 import { Block } from 'baseui/block';
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Label } from 'recharts';
+import { Datum, ResponsiveLine } from '@nivo/line';
+
 import { formatFitnessValue } from './utils/evolution';
 
 type FitnessHistoryProps = {
   history: number[],
 };
 
-// @see: Re-chart docs: https://recharts.org/en-US
+// @see: Nivo docs: https://nivo.rocks/line
 function FitnessHistory(props: FitnessHistoryProps) {
-  // const {history} = props;
-  const history = [2.5, 12, 5.8, 8.9, Infinity, 15, 2, 8]
+  const {history} = props;
+  // const history: number[] = new Array(100).fill(null).map(() => Math.random() * 10);
+  // const history: number[] = [];
+  // const history: number[] = [1, 1.5];
+  // const history: number[] = [1, 10, 0, 10, 20, 0, 5, 10, 0, 20, 0];
 
-  const rechartsData = history.map((fitness: number, generationIndex: number) => {
+  const chartData: Datum[] = (history.length ? history : [0]).map((fitness: number, generationIndex: number): Datum => {
+    const miss = fitness === Infinity ? null : formatFitnessValue(fitness);
     return {
-      generationIndex,
-      miss: fitness === Infinity ? null : formatFitnessValue(fitness),
+      x: generationIndex,
+      y: miss,
     };
   });
-  const recharts = (
-    <ResponsiveContainer width="100%" height="100%">
-      <LineChart
-        data={rechartsData}
-        margin={{
-          top: 1,
-          right: 1,
-          left: 1,
-          bottom: 10,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="generationIndex" type="number">
-          <Label value="Generation #" position="bottom" offset={-3} />
-        </XAxis>
-        <YAxis type="number">
-          <Label value="Target Miss" position="insideLeft" angle={-90} offset={20} />
-        </YAxis>
-        <Tooltip />
-        <Line
-          type="monotone"
-          dataKey="miss"
-          strokeWidth={1}
-          stroke="#000000"
-          activeDot={{ r: 5 }}
-          dot={true}
-        />
-      </LineChart>
-    </ResponsiveContainer>
+
+  const chart = (
+    <ResponsiveLine
+      data={[{id: 'miss', data: chartData}]}
+      margin={{ top: 3, right: 10, bottom: 42, left: 50 }}
+      xScale={history.length <= 20 ? { type: 'point' } : { type: 'linear', min: 0, max: 'auto' }}
+      yScale={{ type: 'linear', min: 0, max: 'auto' }}
+      yFormat=" >-.2f"
+      curve={'monotoneX'}
+      axisBottom={{
+        legend: 'Generation #',
+        legendOffset: 36,
+        legendPosition: 'middle',
+      }}
+      axisLeft={{
+        legend: 'Target Miss',
+        legendOffset: -40,
+        legendPosition: 'middle',
+      }}
+      pointSize={6}
+      pointColor={'black'}
+      pointBorderWidth={1}
+      pointBorderColor={'white'}
+      useMesh={true}
+      enableCrosshair={true}
+      enableSlices={false}
+      colors={'black'}
+    />
   );
 
   return (
@@ -57,7 +61,7 @@ function FitnessHistory(props: FitnessHistoryProps) {
         fontSize: '14px',
       }}
     >
-      {recharts}
+      {chart}
     </Block>
   );
 }

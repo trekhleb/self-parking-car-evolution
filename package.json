@@ -9,6 +9,8 @@
     "url": "git+https://github.com/trekhleb/self-parking-car-evolution.git"
   },
   "dependencies": {
+    "@nivo/core": "^0.72.0",
+    "@nivo/line": "^0.72.0",
     "@react-three/cannon": "^1.1.1",
     "@react-three/drei": "^4.3.3",
     "@react-three/fiber": "^6.0.19",
