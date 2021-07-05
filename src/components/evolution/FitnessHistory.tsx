@@ -12,11 +12,9 @@ type FitnessHistoryProps = {
 function FitnessHistory(props: FitnessHistoryProps) {
   const {history} = props;
   // const history: number[] = new Array(100).fill(null).map(() => Math.random() * 10);
-  // const history: number[] = [];
-  // const history: number[] = [1, 1.5];
-  // const history: number[] = [1, 10, 0, 10, 20, 0, 5, 10, 0, 20, 0];
 
-  const chartData: Datum[] = (history.length ? history : [0]).map((fitness: number, generationIndex: number): Datum => {
+  const emptyStateData: [number] = [0];
+  const chartData: Datum[] = (history.length ? history : emptyStateData).map((fitness: number, generationIndex: number): Datum => {
     const miss = fitness === Infinity ? null : formatFitnessValue(fitness);
     return {
       x: generationIndex,
