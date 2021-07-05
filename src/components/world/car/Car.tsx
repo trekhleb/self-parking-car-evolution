@@ -299,7 +299,7 @@ function Car(props: CarProps) {
   }
   const label = withLabel ? (
     <span>
-      Distance:
+      Miss:
       {' '}
       <span style={{color: distanceColor, fontWeight: 'bold'}}>
         {formatFitnessValue(carFitness)}

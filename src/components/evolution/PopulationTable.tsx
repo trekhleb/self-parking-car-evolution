@@ -36,7 +36,7 @@ function PopulationTable(props: PopulationTableProps) {
 
   const columns = [
     'Licence Plate',
-    'Distance',
+    'Target Miss',
   ];
 
   const rowsData: React.ReactNode[][] = carsArray
