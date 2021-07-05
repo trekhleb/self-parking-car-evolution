@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Block } from 'baseui/block';
-import { Datum, ResponsiveLine } from '@nivo/line';
+import { Datum, Point, ResponsiveLine } from '@nivo/line';
 
 import { formatFitnessValue } from './utils/evolution';
 
@@ -10,8 +10,8 @@ type FitnessHistoryProps = {
 
 // @see: Nivo docs: https://nivo.rocks/line
 function FitnessHistory(props: FitnessHistoryProps) {
-  const {history} = props;
-  // const history: number[] = new Array(100).fill(null).map(() => Math.random() * 10);
+  // const {history} = props;
+  const history: number[] = new Array(100).fill(null).map(() => Math.random() * 10);
 
   const emptyStateData: [number] = [0];
   const chartData: Datum[] = (history.length ? history : emptyStateData).map((fitness: number, generationIndex: number): Datum => {
@@ -48,6 +48,28 @@ function FitnessHistory(props: FitnessHistoryProps) {
       enableCrosshair={true}
       enableSlices={false}
       colors={'black'}
+      tooltip={({point}: {point: Point}) => {
+        const {data} = point;
+        return (
+          <Block $style={{
+            backgroundColor: 'white',
+            padding: '8px',
+            borderRadius: '8px',
+            boxShadow: '0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12)'
+          }}>
+            <Block marginBottom="3px">
+              <small>
+                Generation: <b>{data.xFormatted}</b>
+              </small>
+            </Block>
+            <Block>
+              <small>
+                Target Miss: <b>{data.yFormatted}</b>
+              </small>
+            </Block>
+          </Block>
+        );
+      }}
     />
   );
 
