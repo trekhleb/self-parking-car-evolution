@@ -257,12 +257,6 @@ function EvolutionBoard() {
     </Block>
   );
 
-  const fitnessHistoryChart = (
-    <Block marginBottom="20px">
-      <FitnessHistory history={fitnessHistory} />
-    </Block>
-  );
-
   const evolutionParams = (
     <Block marginBottom="20px">
       <EvolutionBoardParams
@@ -276,8 +270,14 @@ function EvolutionBoard() {
     </Block>
   );
 
+  const fitnessHistoryChart = (
+    <Block marginBottom="20px">
+      <FitnessHistory history={fitnessHistory} />
+    </Block>
+  );
+
   const populationTable = (
-    <Block marginTop="16px">
+    <Block>
       <PopulationTable
         cars={cars}
         carsInProgress={carsInProgress}
@@ -294,8 +294,14 @@ function EvolutionBoard() {
     <>
       {timingDetails}
       {evolutionParams}
-      {fitnessHistoryChart}
-      {populationTable}
+      <Block display="flex" flexDirection={['column', 'column', 'row-reverse']}>
+        <Block flex={2} marginBottom="20px" marginLeft={['0px', '0px', '10px']}>
+          {fitnessHistoryChart}
+        </Block>
+        <Block flex={1} marginBottom="20px" marginRight={['0px', '0px', '10px']}>
+          {populationTable}
+        </Block>
+      </Block>
     </>
   ) : null;
 
