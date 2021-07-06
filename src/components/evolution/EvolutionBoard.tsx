@@ -288,7 +288,7 @@ function EvolutionBoard() {
   );
 
   const timingDetails = (
-    <Block marginBottom="20px" marginTop="20px">
+    <Block marginBottom="30px" marginTop="30px">
       <EvolutionTiming
         generationIndex={generationIndex}
         batchIndex={carsBatchIndex}
@@ -300,7 +300,7 @@ function EvolutionBoard() {
   );
 
   const evolutionParams = (
-    <Block marginBottom="20px">
+    <Block marginBottom="30px">
       <EvolutionBoardParams
         generationSize={generationSize}
         batchSize={carsBatchSize}
@@ -313,7 +313,7 @@ function EvolutionBoard() {
   );
 
   const fitnessHistoryChart = (
-    <Block marginBottom="20px">
+    <Block marginBottom="30px">
       <FitnessHistory history={fitnessHistory} />
     </Block>
   );
@@ -333,7 +333,7 @@ function EvolutionBoard() {
   );
 
   const bestGenomePreview = (
-    <Block marginBottom="20px">
+    <Block marginBottom="10px">
       <GenomePreview
         genome={bestGenome}
         licencePlate={bestCarLicencePlate}
@@ -347,10 +347,10 @@ function EvolutionBoard() {
       {timingDetails}
       {evolutionParams}
       <Block display="flex" flexDirection={['column', 'column', 'row-reverse']}>
-        <Block flex={2} marginBottom="20px" marginLeft={['0px', '0px', '10px']}>
+        <Block flex={2} marginBottom="30px" marginLeft={['0px', '0px', '15px']}>
           {fitnessHistoryChart}
         </Block>
-        <Block flex={1} marginBottom="20px" marginRight={['0px', '0px', '10px']}>
+        <Block flex={1} marginBottom="30px" marginRight={['0px', '0px', '15px']}>
           {populationTable}
         </Block>
       </Block>
