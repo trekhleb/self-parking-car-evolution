@@ -102,7 +102,7 @@ function Car(props: CarProps) {
     bl: new THREE.Vector3(),
     br: new THREE.Vector3(),
   });
-  const [carFitness, setCarFitness] = useState<number | null>(null);
+  const [carLoss, setCarLoss] = useState<number | null>(null);
 
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
   const wheelInfos: WheelInfoOptions[] = [];
@@ -236,13 +236,13 @@ function Car(props: CarProps) {
   });
 
   // @TODO: Move the logic of label content population to the evolution components.
-  // Car shouldn't know about the evolution fitness function.
+  // Car shouldn't know about the evolution loss function.
   const onUpdateLabel = (wheelsPositions: RectanglePoints) => {
     const carLoss = loss({
       wheelsPosition: wheelsPositions,
       parkingLotCorners: PARKING_SPOT_POINTS,
     });
-    setCarFitness(carLoss);
+    setCarLoss(carLoss);
   };
 
   const onUpdateLabelThrottled = throttle(onUpdateLabel, ON_UPDATE_LABEL_THROTTLE_TIMEOUT, {
@@ -282,17 +282,17 @@ function Car(props: CarProps) {
     onMoveThrottled(wheelPositions);
 
     // @TODO: Move the logic of label content population to the evolution components.
-    // Car shouldn't know about the evolution fitness function.
+    // Car shouldn't know about the evolution loss function.
     if (withLabel) {
       onUpdateLabelThrottled(wheelPositions);
     }
   });
 
   let distanceColor = 'black';
-  if (carFitness !== null) {
-    if (carFitness <= 1) {
+  if (carLoss !== null) {
+    if (carLoss <= 1) {
       distanceColor = 'limegreen';
-    } else if (carFitness <= 3) {
+    } else if (carLoss <= 3) {
       distanceColor = 'orange';
     } else {
       distanceColor = 'red';
@@ -303,7 +303,7 @@ function Car(props: CarProps) {
       Loss:
       {' '}
       <span style={{color: distanceColor, fontWeight: 'bold'}}>
-        {formatLossValue(carFitness)}
+        {formatLossValue(carLoss)}
       </span>
     </span>
   ) : null;

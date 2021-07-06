@@ -10,12 +10,12 @@ import { formatLossValue } from './utils/evolution';
 import FadeIn from '../shared/FadeIn';
 
 export type CarsInProgressType = Record<CarLicencePlateType, boolean>;
-export type CarsFitnessType = Record<CarLicencePlateType, number | null>;
+export type CarsLossType = Record<CarLicencePlateType, number | null>;
 
 type PopulationTableProps = {
   cars: CarsType,
   carsInProgress: CarsInProgressType,
-  carsFitness: CarsFitnessType,
+  carsLoss: CarsLossType,
 };
 
 const sortTable = true;
@@ -31,7 +31,7 @@ const CellSpinner = withStyle(StyledSpinnerNext, {
 });
 
 function PopulationTable(props: PopulationTableProps) {
-  const { cars, carsInProgress, carsFitness } = props;
+  const { cars, carsInProgress, carsLoss } = props;
   const carsArray: CarType[] = Object.values<CarType>(cars);
 
   const columns = [
@@ -44,21 +44,21 @@ function PopulationTable(props: PopulationTableProps) {
       if (!sortTable) {
         return 0;
       }
-      const fitnessA = getCarFitness(carsFitness, carA);
-      const fitnessB = getCarFitness(carsFitness, carB);
-      if (fitnessA === null && fitnessB !== null) {
+      const lossA = getCarLoss(carsLoss, carA);
+      const lossB = getCarLoss(carsLoss, carB);
+      if (lossA === null && lossB !== null) {
         return 1;
       }
-      if (fitnessA !== null && fitnessB === null) {
+      if (lossA !== null && lossB === null) {
         return -1;
       }
-      if (fitnessA === null || fitnessB === null) {
+      if (lossA === null || lossB === null) {
         return 0;
       }
-      if (fitnessA === fitnessB) {
+      if (lossA === lossB) {
         return 0;
       }
-      if (fitnessA <= fitnessB) {
+      if (lossA <= lossB) {
         return -1;
       }
       return 1;
@@ -74,30 +74,30 @@ function PopulationTable(props: PopulationTableProps) {
         </Tag>
       );
 
-      const carFitnessFormatted: number | null = getCarFitness(carsFitness, car);
-      let carFitnessColor = '';
-      if (carFitnessFormatted !== null) {
-        if (carFitnessFormatted < 1) {
-          carFitnessColor = 'limegreen';
-        } else if (carFitnessFormatted < 2) {
-          carFitnessColor = 'orange';
+      const carLossFormatted: number | null = getCarLoss(carsLoss, car);
+      let carLossColor = '';
+      if (carLossFormatted !== null) {
+        if (carLossFormatted < 1) {
+          carLossColor = 'limegreen';
+        } else if (carLossFormatted < 2) {
+          carLossColor = 'orange';
         } else {
-          carFitnessColor = 'red';
+          carLossColor = 'red';
         }
       }
-      const fitnessCell = carsInProgress[car.licencePlate] ? (
+      const lossCell = carsInProgress[car.licencePlate] ? (
         <FadeIn>
           <CellSpinner />
         </FadeIn>
       ) : (
-        <Block color={carFitnessColor}>
-          {carFitnessFormatted}
+        <Block color={carLossColor}>
+          {carLossFormatted}
         </Block>
       );
 
       return [
         licencePlateCell,
-        fitnessCell,
+        lossCell,
       ];
     });
 
@@ -126,9 +126,9 @@ function PopulationTable(props: PopulationTableProps) {
   );
 }
 
-function getCarFitness(carsFitness: CarsFitnessType, car: CarType): number | null {
-  return carsFitness.hasOwnProperty(car.licencePlate) && typeof carsFitness[car.licencePlate] === 'number'
-    ? formatLossValue(carsFitness[car.licencePlate])
+function getCarLoss(carsLoss: CarsLossType, car: CarType): number | null {
+  return carsLoss.hasOwnProperty(car.licencePlate) && typeof carsLoss[car.licencePlate] === 'number'
+    ? formatLossValue(carsLoss[car.licencePlate])
     : null;
 }
 

@@ -4,18 +4,18 @@ import { Datum, Point, ResponsiveLine } from '@nivo/line';
 
 import { formatLossValue } from './utils/evolution';
 
-type FitnessHistoryProps = {
+type LossHistoryProps = {
   history: number[],
 };
 
 // @see: Nivo docs: https://nivo.rocks/line
-function FitnessHistory(props: FitnessHistoryProps) {
+function LossHistory(props: LossHistoryProps) {
   const {history} = props;
   // const history: number[] = new Array(100).fill(null).map(() => Math.random() * 10);
 
   const emptyStateData: [number] = [0];
-  const chartData: Datum[] = (history.length ? history : emptyStateData).map((fitness: number, generationIndex: number): Datum => {
-    const miss = fitness === Infinity ? null : formatLossValue(fitness);
+  const chartData: Datum[] = (history.length ? history : emptyStateData).map((loss: number, generationIndex: number): Datum => {
+    const miss = loss === Infinity ? null : formatLossValue(loss);
     return {
       x: generationIndex,
       y: miss,
@@ -86,4 +86,4 @@ function FitnessHistory(props: FitnessHistoryProps) {
   );
 }
 
-export default FitnessHistory;
+export default LossHistory;

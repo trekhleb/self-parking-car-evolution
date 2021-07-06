@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import { createGeneration, Generation, Genome } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
-import PopulationTable, { CarsFitnessType, CarsInProgressType } from './PopulationTable';
+import PopulationTable, { CarsLossType, CarsInProgressType } from './PopulationTable';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import { generationToCars } from './utils/evolution';
 import { getIntSearchParam, setSearchParam } from '../../utils/url';
@@ -17,7 +17,7 @@ import EvolutionBoardParams, {
   SECOND
 } from './EvolutionBoardParams';
 import EvolutionTiming from './EvolutionTiming';
-import FitnessHistory from './FitnessHistory';
+import LossHistory from './LossHistory';
 import GenomePreview from './GenomePreview';
 import { GENOME_LENGTH } from '../../lib/carGenetic';
 
@@ -45,16 +45,16 @@ function EvolutionBoard() {
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
 
   const [bestGenome, setBestGenome] = useState<Genome | null>(null);
-  const [bestFitness, setBestFitness] = useState<number | null>(null);
+  const [minLoss, setMinLoss] = useState<number | null>(null);
   const [bestCarLicencePlate, setBestCarLicencePlate] = useState<CarLicencePlateType | null>(null);
 
   const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(getWorldKeyFromUrl(EVOLUTION_WORLD_KEY));
 
   const batchTimer = useRef<NodeJS.Timeout | null>(null);
 
-  const carsFitnessRef = useRef<CarsFitnessType[]>([{}]);
-  const [carsFitness, setCarsFitness] = useState<CarsFitnessType[]>([{}]);
-  const [fitnessHistory, setFitnessHistory] = useState<number[]>([]);
+  const carsLossRef = useRef<CarsLossType[]>([{}]);
+  const [carsLoss, setCarsLoss] = useState<CarsLossType[]>([{}]);
+  const [lossHistory, setLossHistory] = useState<number[]>([]);
 
   const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
   const carsInProgress: CarsInProgressType = carsBatch.reduce((cars: CarsInProgressType, car: CarType) => {
@@ -79,9 +79,9 @@ function EvolutionBoard() {
     setGeneration([]);
     setCarsBatch([]);
     setCars({});
-    setCarsFitness([{}]);
-    carsFitnessRef.current = [{}];
-    setFitnessHistory([]);
+    setCarsLoss([{}]);
+    carsLossRef.current = [{}];
+    setLossHistory([]);
     setWorldIndex(0);
     setGenerationIndex(null);
     setCarsBatchIndex(null);
@@ -92,22 +92,22 @@ function EvolutionBoard() {
     setGeneration([]);
     setCarsBatch([]);
     setCars({});
-    setCarsFitness([{}]);
-    carsFitnessRef.current = [{}];
-    setFitnessHistory([]);
+    setCarsLoss([{}]);
+    carsLossRef.current = [{}];
+    setLossHistory([]);
     setWorldIndex(worldIndex + 1);
     setGenerationIndex(0);
     setCarsBatchIndex(null);
   };
 
-  const onCarFitnessUpdate = (licensePlate: CarLicencePlateType, fitness: number) => {
+  const onCarLossUpdate = (licensePlate: CarLicencePlateType, loss: number) => {
     if (generationIndex === null) {
       return;
     }
-    if (!carsFitnessRef.current[generationIndex]) {
-      carsFitnessRef.current[generationIndex] = {};
+    if (!carsLossRef.current[generationIndex]) {
+      carsLossRef.current[generationIndex] = {};
     }
-    carsFitnessRef.current[generationIndex][licensePlate] = fitness;
+    carsLossRef.current[generationIndex][licensePlate] = loss;
   };
 
   const onGenerationSizeChange = (size: number) => {
@@ -140,22 +140,22 @@ function EvolutionBoard() {
       return;
     }
 
-    const generationFitness: CarsFitnessType = carsFitnessRef.current[generationIndex];
-    if (!generationFitness) {
+    const generationLoss: CarsLossType = carsLossRef.current[generationIndex];
+    if (!generationLoss) {
       return;
     }
 
     let bestCarLicensePlate: CarLicencePlateType | null = null;
-    let minFitness: number = Infinity;
+    let minLoss: number = Infinity;
     let bestGenomeIndex: number = -1;
 
-    Object.keys(generationFitness).forEach((licencePlate: CarLicencePlateType) => {
-      const carFitness: number | null = generationFitness[licencePlate];
-      if (carFitness === null) {
+    Object.keys(generationLoss).forEach((licencePlate: CarLicencePlateType) => {
+      const carLoss: number | null = generationLoss[licencePlate];
+      if (carLoss === null) {
         return;
       }
-      if (carFitness < minFitness) {
-        minFitness = carFitness;
+      if (carLoss < minLoss) {
+        minLoss = carLoss;
         bestCarLicensePlate = licencePlate;
         bestGenomeIndex = cars[licencePlate].generationIndex;
       }
@@ -165,19 +165,19 @@ function EvolutionBoard() {
       return;
     }
 
-    setBestFitness(minFitness);
+    setMinLoss(minLoss);
     setBestGenome(generation[bestGenomeIndex]);
     setBestCarLicencePlate(bestCarLicensePlate);
   };
 
-  const syncFitnessHistory = () => {
+  const syncLossHistory = () => {
     if (generationIndex === null) {
       return;
     }
-    const generationFitness: CarsFitnessType = carsFitnessRef.current[generationIndex];
-    const newFitnessHistory = [...fitnessHistory];
-    if (generationFitness) {
-      newFitnessHistory[generationIndex] = Object.values(generationFitness).reduce(
+    const generationLoss: CarsLossType = carsLossRef.current[generationIndex];
+    const newLossHistory = [...lossHistory];
+    if (generationLoss) {
+      newLossHistory[generationIndex] = Object.values(generationLoss).reduce(
         (minVal: number, currVal: number | null) => {
           if (currVal === null) {
             return minVal;
@@ -187,9 +187,9 @@ function EvolutionBoard() {
         Infinity
       );
     } else {
-      newFitnessHistory[generationIndex] = Infinity;
+      newLossHistory[generationIndex] = Infinity;
     }
-    setFitnessHistory(newFitnessHistory);
+    setLossHistory(newLossHistory);
   };
 
   // Start the evolution.
@@ -226,7 +226,7 @@ function EvolutionBoard() {
     const cars = generationToCars({
       generation,
       generationIndex,
-      onFitnessUpdate: onCarFitnessUpdate,
+      onLossUpdate: onCarLossUpdate,
     });
     setCars(cars);
     setCarsBatchIndex(0);
@@ -268,9 +268,9 @@ function EvolutionBoard() {
         }
         return;
       }
-      setCarsFitness(_.cloneDeep<CarsFitnessType[]>(carsFitnessRef.current));
+      setCarsLoss(_.cloneDeep<CarsLossType[]>(carsLossRef.current));
       setCarsBatchIndex(nextBatchIndex);
-      syncFitnessHistory();
+      syncLossHistory();
       syncBestGenome();
     }, generationLifetimeMs);
   }, [carsBatch]);
@@ -313,9 +313,9 @@ function EvolutionBoard() {
     </Block>
   );
 
-  const fitnessHistoryChart = (
+  const lossHistoryChart = (
     <Block marginBottom="30px">
-      <FitnessHistory history={fitnessHistory} />
+      <LossHistory history={lossHistory} />
     </Block>
   );
 
@@ -324,9 +324,9 @@ function EvolutionBoard() {
       <PopulationTable
         cars={cars}
         carsInProgress={carsInProgress}
-        carsFitness={
-          generationIndex !== null && carsFitness[generationIndex]
-            ? carsFitness[generationIndex]
+        carsLoss={
+          generationIndex !== null && carsLoss[generationIndex]
+            ? carsLoss[generationIndex]
             : {}
         }
       />
@@ -338,7 +338,7 @@ function EvolutionBoard() {
       <GenomePreview
         genome={bestGenome}
         licencePlate={bestCarLicencePlate}
-        fitness={bestFitness}
+        loss={minLoss}
       />
     </Block>
   );
@@ -349,7 +349,7 @@ function EvolutionBoard() {
       {evolutionParams}
       <Block display="flex" flexDirection={['column', 'column', 'row-reverse']}>
         <Block flex={2} marginBottom="30px" marginLeft={['0px', '0px', '15px']}>
-          {fitnessHistoryChart}
+          {lossHistoryChart}
         </Block>
         <Block flex={1} marginBottom="30px" marginRight={['0px', '0px', '15px']}>
           {populationTable}

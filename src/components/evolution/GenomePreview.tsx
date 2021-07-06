@@ -10,11 +10,11 @@ import { formatLossValue } from './utils/evolution';
 type GenomePreviewProps = {
   genome: Genome | null,
   licencePlate?: CarLicencePlateType | null,
-  fitness?: number | null,
+  loss?: number | null,
 };
 
 function GenomePreview(props: GenomePreviewProps) {
-  const {genome, licencePlate, fitness} = props;
+  const {genome, licencePlate, loss} = props;
 
   const genomeCaption = (
     <Block display="flex" flexDirection="row">
@@ -23,9 +23,9 @@ function GenomePreview(props: GenomePreviewProps) {
           Licence plate: <b>{licencePlate}</b>
         </Block>
       )}
-      {fitness && (
+      {loss && (
         <Block>
-          Target miss: <b>{formatLossValue(fitness)}</b>
+          Loss: <b>{formatLossValue(loss)}</b>
         </Block>
       )}
     </Block>

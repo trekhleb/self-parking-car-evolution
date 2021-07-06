@@ -22,14 +22,14 @@ const generateLicencePlate = (
 type GenerationToCarsProps = {
   generationIndex: number | null,
   generation: Generation,
-  onFitnessUpdate?: (licencePlate: CarLicencePlateType, fitness: number) => void,
+  onLossUpdate?: (licencePlate: CarLicencePlateType, loss: number) => void,
 };
 
 export const generationToCars = (props: GenerationToCarsProps): CarsType => {
   const {
     generationIndex,
     generation,
-    onFitnessUpdate = () => {},
+    onLossUpdate = () => {},
   } = props;
   const cars: CarsType = {};
   generation.forEach((genome: Genome, genomeIndex) => {
@@ -62,7 +62,7 @@ export const generationToCars = (props: GenerationToCarsProps): CarsType => {
         wheelsPosition: wheelsPoints,
         parkingLotCorners: PARKING_SPOT_POINTS,
       });
-      onFitnessUpdate(licencePlate, carLoss);
+      onLossUpdate(licencePlate, carLoss);
     };
 
     cars[licencePlate] = {
