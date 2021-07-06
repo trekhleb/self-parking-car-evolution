@@ -35,8 +35,9 @@ import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 import throttle from 'lodash/throttle';
 import { ON_MOVE_THROTTLE_TIMEOUT, ON_UPDATE_LABEL_THROTTLE_TIMEOUT } from '../constants/performance';
 import { PARKING_SPOT_POINTS } from '../surroundings/ParkingSpot';
-import { fitness, formatFitnessValue } from '../../evolution/utils/evolution';
+import { formatLossValue } from '../../evolution/utils/evolution';
 import { RectanglePoints, ThreeRectanglePoints } from '../types/vectors';
+import { loss } from '../../../lib/carGenetic';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
@@ -237,11 +238,11 @@ function Car(props: CarProps) {
   // @TODO: Move the logic of label content population to the evolution components.
   // Car shouldn't know about the evolution fitness function.
   const onUpdateLabel = (wheelsPositions: RectanglePoints) => {
-    const carFitness = fitness({
-      wheelsPoints: wheelsPositions,
-      parkingLotPoints: PARKING_SPOT_POINTS,
+    const carLoss = loss({
+      wheelsPosition: wheelsPositions,
+      parkingLotCorners: PARKING_SPOT_POINTS,
     });
-    setCarFitness(carFitness);
+    setCarFitness(carLoss);
   };
 
   const onUpdateLabelThrottled = throttle(onUpdateLabel, ON_UPDATE_LABEL_THROTTLE_TIMEOUT, {
@@ -299,10 +300,10 @@ function Car(props: CarProps) {
   }
   const label = withLabel ? (
     <span>
-      Miss:
+      Loss:
       {' '}
       <span style={{color: distanceColor, fontWeight: 'bold'}}>
-        {formatFitnessValue(carFitness)}
+        {formatLossValue(carFitness)}
       </span>
     </span>
   ) : null;

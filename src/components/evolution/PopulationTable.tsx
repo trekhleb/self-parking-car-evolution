@@ -6,7 +6,7 @@ import { StyledSpinnerNext } from 'baseui/spinner';
 import { withStyle } from 'baseui';
 
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
-import { formatFitnessValue } from './utils/evolution';
+import { formatLossValue } from './utils/evolution';
 import FadeIn from '../shared/FadeIn';
 
 export type CarsInProgressType = Record<CarLicencePlateType, boolean>;
@@ -36,7 +36,7 @@ function PopulationTable(props: PopulationTableProps) {
 
   const columns = [
     'Licence Plate',
-    'Target Miss',
+    'Loss',
   ];
 
   const rowsData: React.ReactNode[][] = carsArray
@@ -128,7 +128,7 @@ function PopulationTable(props: PopulationTableProps) {
 
 function getCarFitness(carsFitness: CarsFitnessType, car: CarType): number | null {
   return carsFitness.hasOwnProperty(car.licencePlate) && typeof carsFitness[car.licencePlate] === 'number'
-    ? formatFitnessValue(carsFitness[car.licencePlate])
+    ? formatLossValue(carsFitness[car.licencePlate])
     : null;
 }
 

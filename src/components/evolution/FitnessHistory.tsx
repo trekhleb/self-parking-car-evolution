@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Block } from 'baseui/block';
 import { Datum, Point, ResponsiveLine } from '@nivo/line';
 
-import { formatFitnessValue } from './utils/evolution';
+import { formatLossValue } from './utils/evolution';
 
 type FitnessHistoryProps = {
   history: number[],
@@ -15,7 +15,7 @@ function FitnessHistory(props: FitnessHistoryProps) {
 
   const emptyStateData: [number] = [0];
   const chartData: Datum[] = (history.length ? history : emptyStateData).map((fitness: number, generationIndex: number): Datum => {
-    const miss = fitness === Infinity ? null : formatFitnessValue(fitness);
+    const miss = fitness === Infinity ? null : formatLossValue(fitness);
     return {
       x: generationIndex,
       y: miss,
@@ -36,7 +36,7 @@ function FitnessHistory(props: FitnessHistoryProps) {
         legendPosition: 'middle',
       }}
       axisLeft={{
-        legend: 'Target Miss',
+        legend: 'Min Loss',
         legendOffset: -40,
         legendPosition: 'middle',
       }}

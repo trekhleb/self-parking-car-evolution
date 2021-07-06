@@ -7,8 +7,8 @@ import {
   WheelOptionsType
 } from '../../world/types/car';
 import { PARKING_SPOT_POINTS } from '../../world/surroundings/ParkingSpot';
-import { NumVec3, RectanglePoints } from '../../world/types/vectors';
-import { CAR_SENSORS_NUM } from '../../../lib/carGenetic';
+import { RectanglePoints } from '../../world/types/vectors';
+import { CAR_SENSORS_NUM, loss } from '../../../lib/carGenetic';
 
 const generateLicencePlate = (
   generationIndex: number | null,
@@ -58,11 +58,11 @@ export const generationToCars = (props: GenerationToCarsProps): CarsType => {
     };
 
     const onMove = (wheelsPoints: RectanglePoints) => {
-      const carFitness = fitness({
-        wheelsPoints: wheelsPoints,
-        parkingLotPoints: PARKING_SPOT_POINTS,
+      const carLoss = loss({
+        wheelsPosition: wheelsPoints,
+        parkingLotCorners: PARKING_SPOT_POINTS,
       });
-      onFitnessUpdate(licencePlate, carFitness);
+      onFitnessUpdate(licencePlate, carLoss);
     };
 
     cars[licencePlate] = {
@@ -78,33 +78,9 @@ export const generationToCars = (props: GenerationToCarsProps): CarsType => {
   return cars;
 };
 
-export type FitnessParams = {
-  wheelsPoints: RectanglePoints,
-  parkingLotPoints: RectanglePoints,
-};
-
-export const fitness = (params: FitnessParams): number => {
-  const { wheelsPoints, parkingLotPoints } = params;
-  const { fl: flWheel, fr: frWheel, br: brWheel, bl: blWheel } = wheelsPoints;
-  const { fl: flLot, fr: frLot, br: brLot, bl: blLot } = parkingLotPoints;
-
-  const flDistance = distance(flWheel, flLot);
-  const frDistance = distance(frWheel, frLot);
-  const brDistance = distance(brWheel, brLot);
-  const blDistance = distance(blWheel, blLot);
-
-  return (flDistance + frDistance + brDistance + blDistance) / 4;
-};
-
-const distance = (from: NumVec3, to: NumVec3) => {
-  const [fromX, fromY, fromZ] = from;
-  const [toX, toY, toZ] = to;
-  return Math.sqrt((fromX - toX) ** 2 + (fromZ - toZ) ** 2);
-};
-
-export const formatFitnessValue = (fitnessValue: number | null | undefined): number | null => {
-  if (typeof fitnessValue !== 'number') {
+export const formatLossValue = (lossValue: number | null | undefined): number | null => {
+  if (typeof lossValue !== 'number') {
     return null;
   }
-  return Math.ceil(fitnessValue * 100) / 100;
+  return Math.ceil(lossValue * 100) / 100;
 };

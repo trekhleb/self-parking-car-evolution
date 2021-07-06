@@ -5,7 +5,7 @@ import { Genome } from '../../lib/genetic';
 import { CarLicencePlateType } from '../world/types/car';
 import { Textarea, SIZE as TEXTAREA_SIZE} from 'baseui/textarea';
 import { FormControl } from 'baseui/form-control';
-import { formatFitnessValue } from './utils/evolution';
+import { formatLossValue } from './utils/evolution';
 
 type GenomePreviewProps = {
   genome: Genome | null,
@@ -25,7 +25,7 @@ function GenomePreview(props: GenomePreviewProps) {
       )}
       {fitness && (
         <Block>
-          Target miss: <b>{formatFitnessValue(fitness)}</b>
+          Target miss: <b>{formatLossValue(fitness)}</b>
         </Block>
       )}
     </Block>
