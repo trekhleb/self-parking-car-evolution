@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Block } from 'baseui/block';
 import _ from 'lodash';
 
-import { createGeneration, Generation } from '../../lib/genetic';
+import { createGeneration, Generation, Genome } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
 import PopulationTable, { CarsFitnessType, CarsInProgressType } from './PopulationTable';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import { generationToCars, GENOME_LENGTH } from './utils/evolution';
-import { getIntSearchParam, getSearchParam, setSearchParam } from '../../utils/url';
+import { getIntSearchParam, setSearchParam } from '../../utils/url';
 import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 import { getWorldKeyFromUrl } from './utils/url';
 import EvolutionBoardParams, {
@@ -18,6 +18,7 @@ import EvolutionBoardParams, {
 } from './EvolutionBoardParams';
 import EvolutionTiming from './EvolutionTiming';
 import FitnessHistory from './FitnessHistory';
+import GenomePreview from './GenomePreview';
 
 const GENERATION_SIZE_URL_PARAM = 'generation-size';
 const GROUP_SIZE_URL_PARAM = 'group-size';
@@ -41,6 +42,10 @@ function EvolutionBoard() {
     getIntSearchParam(GROUP_SIZE_URL_PARAM, DEFAULT_BATCH_SIZE)
   );
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
+
+  const [bestGenome, setBestGenome] = useState<Genome | null>(null);
+  const [bestFitness, setBestFitness] = useState<number | null>(null);
+  const [bestCarLicencePlate, setBestCarLicencePlate] = useState<CarLicencePlateType | null>(null);
 
   const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(getWorldKeyFromUrl(EVOLUTION_WORLD_KEY));
 
@@ -129,6 +134,41 @@ function EvolutionBoard() {
     batchTimer.current = null;
   };
 
+  const syncBestGenome = () => {
+    if (generationIndex === null) {
+      return;
+    }
+
+    const generationFitness: CarsFitnessType = carsFitnessRef.current[generationIndex];
+    if (!generationFitness) {
+      return;
+    }
+
+    let bestCarLicensePlate: CarLicencePlateType | null = null;
+    let minFitness: number = Infinity;
+    let bestGenomeIndex: number = -1;
+
+    Object.keys(generationFitness).forEach((licencePlate: CarLicencePlateType) => {
+      const carFitness: number | null = generationFitness[licencePlate];
+      if (carFitness === null) {
+        return;
+      }
+      if (carFitness < minFitness) {
+        minFitness = carFitness;
+        bestCarLicensePlate = licencePlate;
+        bestGenomeIndex = cars[licencePlate].generationIndex;
+      }
+    });
+
+    if (bestGenomeIndex === -1) {
+      return;
+    }
+
+    setBestFitness(minFitness);
+    setBestGenome(generation[bestGenomeIndex]);
+    setBestCarLicencePlate(bestCarLicensePlate);
+  };
+
   const syncFitnessHistory = () => {
     if (generationIndex === null) {
       return;
@@ -168,6 +208,7 @@ function EvolutionBoard() {
         genomeLength: GENOME_LENGTH,
       });
       setGeneration(generation);
+      setBestGenome(generation[0]);
     } else {
       // Mate and mutate existing population.
       // @TODO: Mate and mutate.
@@ -229,6 +270,7 @@ function EvolutionBoard() {
       setCarsFitness(_.cloneDeep<CarsFitnessType[]>(carsFitnessRef.current));
       setCarsBatchIndex(nextBatchIndex);
       syncFitnessHistory();
+      syncBestGenome();
     }, generationLifetimeMs);
   }, [carsBatch]);
 
@@ -290,6 +332,16 @@ function EvolutionBoard() {
     </Block>
   );
 
+  const bestGenomePreview = (
+    <Block marginBottom="20px">
+      <GenomePreview
+        genome={bestGenome}
+        licencePlate={bestCarLicencePlate}
+        fitness={bestFitness}
+      />
+    </Block>
+  );
+
   const evolutionAnalytics = activeWorldKey === EVOLUTION_WORLD_KEY ? (
     <>
       {timingDetails}
@@ -302,6 +354,7 @@ function EvolutionBoard() {
           {populationTable}
         </Block>
       </Block>
+      {bestGenomePreview}
     </>
   ) : null;
 
