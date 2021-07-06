@@ -8,10 +8,7 @@ import {
 } from '../../world/types/car';
 import { PARKING_SPOT_POINTS } from '../../world/surroundings/ParkingSpot';
 import { NumVec3, RectanglePoints } from '../../world/types/vectors';
-
-export const SENSORS_TOTAL = 16;
-export const GENES_PER_PARAMETER = 8;
-export const GENOME_LENGTH = SENSORS_TOTAL * GENES_PER_PARAMETER;
+import { CAR_SENSORS_NUM } from '../../../lib/carGenetic';
 
 const generateLicencePlate = (
   generationIndex: number | null,
@@ -71,7 +68,7 @@ export const generationToCars = (props: GenerationToCarsProps): CarsType => {
     cars[licencePlate] = {
       licencePlate,
       generationIndex: generationIndex !== null ? generationIndex : -1,
-      sensorsNum: SENSORS_TOTAL,
+      sensorsNum: CAR_SENSORS_NUM,
       onEngine,
       onWheel,
       onMove,

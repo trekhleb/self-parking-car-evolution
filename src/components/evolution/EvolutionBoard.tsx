@@ -6,7 +6,7 @@ import { createGeneration, Generation, Genome } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
 import PopulationTable, { CarsFitnessType, CarsInProgressType } from './PopulationTable';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
-import { generationToCars, GENOME_LENGTH } from './utils/evolution';
+import { generationToCars } from './utils/evolution';
 import { getIntSearchParam, setSearchParam } from '../../utils/url';
 import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 import { getWorldKeyFromUrl } from './utils/url';
@@ -19,6 +19,7 @@ import EvolutionBoardParams, {
 import EvolutionTiming from './EvolutionTiming';
 import FitnessHistory from './FitnessHistory';
 import GenomePreview from './GenomePreview';
+import { GENOME_LENGTH } from '../../lib/carGenetic';
 
 const GENERATION_SIZE_URL_PARAM = 'generation-size';
 const GROUP_SIZE_URL_PARAM = 'group-size';
