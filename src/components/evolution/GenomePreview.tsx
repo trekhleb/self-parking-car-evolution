@@ -18,6 +18,11 @@ function GenomePreview(props: GenomePreviewProps) {
 
   const genomeCaption = (
     <Block display="flex" flexDirection="row">
+      {genome && (
+        <Block marginRight="15px">
+          Genes: <b>{genome.length}</b>
+        </Block>
+      )}
       {licencePlate && (
         <Block marginRight="15px">
           Licence plate: <b>{licencePlate}</b>
