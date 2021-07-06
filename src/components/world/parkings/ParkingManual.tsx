@@ -29,7 +29,7 @@ function ParkingManual(props: ParkingManualProps) {
       />
       <ParkingSpot />
       <DynamicCars
-        cars={[{licencePlate: 'manual-car'}]}
+        cars={[{licencePlate: 'manual-car', generationIndex: 0}]}
         collisionFilterGroup={COLLISION_GROUP_ACTIVE_CARS}
         collisionFilterMask={COLLISION_MASK_ACTIVE_CARS}
         withSensors={withSensors}

@@ -89,7 +89,7 @@ function Car(props: CarProps) {
     onCarDestroy = () => {},
     onSensors = () => {},
     onMove = () => {},
-    car = { licencePlate: '' },
+    car = { licencePlate: '', generationIndex: 0 },
   } = props;
 
   const chassis = useRef<THREE.Object3D | undefined>();

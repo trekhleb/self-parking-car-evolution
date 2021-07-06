@@ -10,6 +10,7 @@ export type WheelOptionsType = 'left' | 'straight' | 'right';
 
 export type CarType = {
   licencePlate: CarLicencePlateType,
+  generationIndex: number,
   sensorsNum?: number,
   onHit?: () => void,
   onEngine?: (sensors: SensorValuesType) => EngineOptionsType,
