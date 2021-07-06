@@ -8,7 +8,7 @@ export const SECOND = 1000;
 export const DEFAULT_GENERATION_LIFETIME = 30;
 
 const GENERATION_SIZES = [10, 50, 100];
-const BATCH_SIZES = [1, 5, 10, 20];
+const BATCH_SIZES = [1, 2, 5, 10, 20];
 
 export const DEFAULT_GENERATION_SIZE = GENERATION_SIZES[0];
 export const DEFAULT_BATCH_SIZE = BATCH_SIZES[0];
