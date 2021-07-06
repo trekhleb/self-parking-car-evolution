@@ -3,6 +3,8 @@ import { Block } from 'baseui/block';
 import { OnChangeParams, Select, SIZE as SELECT_SIZE } from 'baseui/select';
 import { FormControl } from 'baseui/form-control';
 import { Input, SIZE as INPUT_SIZE } from 'baseui/input';
+import { Button, SIZE as BUTTON_SIZE } from 'baseui/button';
+import { APP_BASE_PATH } from '../../constants/app';
 
 export const SECOND = 1000;
 export const DEFAULT_GENERATION_LIFETIME = 30;
@@ -84,29 +86,47 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
       size={INPUT_SIZE.compact}
       // @ts-ignore
       onChange={(e: FormEvent<HTMLInputElement>) => onGenerationLifetimeChange(e.target.value)}
-      endEnhancer={() => <span>s</span>}
       type="number"
       min={5}
     />
   );
 
+  const onReset = () => {
+    document.location.href = APP_BASE_PATH;
+  };
+
+  const resetButton = (
+    <Button
+      size={BUTTON_SIZE.compact}
+      onClick={onReset}
+    >
+      Reset
+    </Button>
+  );
+
   return (
     <Block display="flex" flexDirection="row">
-      <Block flex={1} marginRight="10px">
+      <Block flex={1} marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
         <FormControl label={() => 'Generation size'}>
           {generationSizeSelector}
         </FormControl>
       </Block>
 
-      <Block flex={1} marginLeft="10px" marginRight="10px">
+      <Block flex={1} marginLeft="10px" marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
         <FormControl label={() => 'Group size'}>
           {batchSizeSelector}
         </FormControl>
       </Block>
 
-      <Block flex={1} marginLeft="10px">
-        <FormControl label={() => 'Generation lifetime'}>
+      <Block flex={1} marginLeft="10px" marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
+        <FormControl label={() => 'Generation lifetime, s'}>
           {generationLifetimeChanger}
+        </FormControl>
+      </Block>
+
+      <Block marginLeft="10px" display="flex" flexDirection="column" justifyContent="flex-end">
+        <FormControl>
+          {resetButton}
         </FormControl>
       </Block>
     </Block>

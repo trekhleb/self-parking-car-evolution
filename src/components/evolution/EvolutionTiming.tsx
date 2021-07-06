@@ -35,7 +35,7 @@ function EvolutionTiming(props: EvolutionTimingProps) {
       <Block
         display="flex"
         flexDirection={['column', 'row', 'row']}
-        alignItems={['flex-start', 'center', 'center']}
+        alignItems={['flex-start', 'flex-end', 'center']}
         justifyContent="space-between"
         width="auto"
         flex="1"
