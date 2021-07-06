@@ -10,8 +10,8 @@ type FitnessHistoryProps = {
 
 // @see: Nivo docs: https://nivo.rocks/line
 function FitnessHistory(props: FitnessHistoryProps) {
-  // const {history} = props;
-  const history: number[] = new Array(100).fill(null).map(() => Math.random() * 10);
+  const {history} = props;
+  // const history: number[] = new Array(100).fill(null).map(() => Math.random() * 10);
 
   const emptyStateData: [number] = [0];
   const chartData: Datum[] = (history.length ? history : emptyStateData).map((fitness: number, generationIndex: number): Datum => {
