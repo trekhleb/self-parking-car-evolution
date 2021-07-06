@@ -1,4 +1,4 @@
-import { RectanglePoints } from './vectors';
+import { RectanglePoints } from '../../../types/vectors';
 
 export type CarLicencePlateType = string;
 

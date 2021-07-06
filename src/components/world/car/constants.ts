@@ -1,4 +1,4 @@
-import { NumVec3 } from '../types/vectors';
+import { NumVec3 } from '../../../types/vectors';
 import { getModelPath } from '../utils/models';
 
 // Wheels.

@@ -7,7 +7,7 @@ import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 import { Intersection } from 'three/src/core/Raycaster';
 import { acceleratedRaycast } from 'three-mesh-bvh';
 
-import { NumVec3 } from '../types/vectors';
+import { NumVec3 } from '../../../types/vectors';
 import { SENSOR_DISTANCE } from './constants';
 import { INTERSECT_THROTTLE_TIMEOUT, ON_RAY_THROTTLE_TIMEOUT } from '../constants/performance';
 

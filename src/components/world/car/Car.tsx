@@ -36,7 +36,7 @@ import throttle from 'lodash/throttle';
 import { ON_MOVE_THROTTLE_TIMEOUT, ON_UPDATE_LABEL_THROTTLE_TIMEOUT } from '../constants/performance';
 import { PARKING_SPOT_POINTS } from '../surroundings/ParkingSpot';
 import { formatLossValue } from '../../evolution/utils/evolution';
-import { RectanglePoints, ThreeRectanglePoints } from '../types/vectors';
+import { RectanglePoints, ThreeRectanglePoints } from '../../../types/vectors';
 import { loss } from '../../../lib/carGenetic';
 
 export type OnCarReadyArgs = {

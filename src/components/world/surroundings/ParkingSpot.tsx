@@ -2,7 +2,7 @@ import React from 'react';
 import { Line } from '@react-three/drei';
 
 import { CHASSIS_LENGTH, CHASSIS_WIDTH } from '../car/constants';
-import { NumVec3, RectanglePoints } from '../types/vectors';
+import { NumVec3, RectanglePoints } from '../../../types/vectors';
 
 type ParkingSpotProps = {
   color?: string,

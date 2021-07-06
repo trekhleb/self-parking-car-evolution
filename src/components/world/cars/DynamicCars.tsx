@@ -12,7 +12,7 @@ import {
   onWheelsStraight
 } from '../utils/controllers';
 import { getRandomColor } from '../../../utils/colors';
-import { RectanglePoints } from '../types/vectors';
+import { RectanglePoints } from '../../../types/vectors';
 
 type DynamicCarsProps = {
   cars: CarType[],

@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePlane, PlaneProps, } from '@react-three/cannon';
-import { NumVec2 } from '../types/vectors';
+import { NumVec2 } from '../../../types/vectors';
 
 function Ground(props: PlaneProps) {
   const args: NumVec2 = [200, 200];

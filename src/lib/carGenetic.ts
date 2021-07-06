@@ -1,4 +1,4 @@
-import { NumVec3, RectanglePoints } from '../components/world/types/vectors';
+import { NumVec3, RectanglePoints } from '../types/vectors';
 
 // Car has 16 distance sensors.
 export const CAR_SENSORS_NUM = 16;

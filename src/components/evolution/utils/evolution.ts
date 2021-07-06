@@ -7,7 +7,7 @@ import {
   WheelOptionsType
 } from '../../world/types/car';
 import { PARKING_SPOT_POINTS } from '../../world/surroundings/ParkingSpot';
-import { RectanglePoints } from '../../world/types/vectors';
+import { RectanglePoints } from '../../../types/vectors';
 import { CAR_SENSORS_NUM, loss } from '../../../lib/carGenetic';
 
 const generateLicencePlate = (

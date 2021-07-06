@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 
 import Car from '../car/Car';
-import { NumVec3 } from '../types/vectors';
+import { NumVec3 } from '../../../types/vectors';
 import { CHASSIS_BASE_COLOR, CHASSIS_BASE_TOUCHED_COLOR, CHASSIS_LENGTH, CHASSIS_WIDTH } from '../car/constants';
 import { CarMetaData } from '../types/car';
 import { generateStaticCarUUID } from '../utils/uuid';
