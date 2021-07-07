@@ -150,7 +150,7 @@ const binaryArrayToNumber = (genes: Gene[]): number => {
   );
 };
 
-const engineFormula = (genome: Genome, sensors: SensorValues): FormulaResult => {
+export const engineFormula = (genome: Genome, sensors: SensorValues): FormulaResult => {
   const {engineFormulaCoefficients} = decodeGenome(genome);
   const rawResult = linearPolynomial(engineFormulaCoefficients, sensors);
   const normalizedResult = sigmoid(rawResult);
@@ -158,7 +158,7 @@ const engineFormula = (genome: Genome, sensors: SensorValues): FormulaResult => 
   return categoricalResult;
 };
 
-const wheelsFormula = (genome: Genome, sensors: SensorValues): FormulaResult => {
+export const wheelsFormula = (genome: Genome, sensors: SensorValues): FormulaResult => {
   const {wheelsFormulaCoefficients} = decodeGenome(genome);
   const rawResult = linearPolynomial(wheelsFormulaCoefficients, sensors);
   const normalizedResult = sigmoid(rawResult);
