@@ -54,7 +54,8 @@ function EvolutionBoard() {
 
   const carsLossRef = useRef<CarsLossType[]>([{}]);
   const [carsLoss, setCarsLoss] = useState<CarsLossType[]>([{}]);
-  const [lossHistory, setLossHistory] = useState<number[]>([]);
+  const [lossHistory, setLossHistory
+  ] = useState<number[]>([]);
 
   const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
   const carsInProgress: CarsInProgressType = carsBatch.reduce((cars: CarsInProgressType, car: CarType) => {
@@ -259,6 +260,9 @@ function EvolutionBoard() {
     }
     cancelBatchTimer();
     batchTimer.current = setTimeout(() => {
+      setCarsLoss(_.cloneDeep<CarsLossType[]>(carsLossRef.current));
+      syncLossHistory();
+      syncBestGenome();
       const nextBatchIndex = carsBatchIndex + 1;
       if (nextBatchIndex >= carsBatchesTotal) {
         setCarsBatch([]);
@@ -268,10 +272,7 @@ function EvolutionBoard() {
         }
         return;
       }
-      setCarsLoss(_.cloneDeep<CarsLossType[]>(carsLossRef.current));
       setCarsBatchIndex(nextBatchIndex);
-      syncLossHistory();
-      syncBestGenome();
     }, generationLifetimeMs);
   }, [carsBatch]);
 
