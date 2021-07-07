@@ -38,7 +38,7 @@ function GenomePreview(props: GenomePreviewProps) {
     </Block>
   );
 
-  const genomeString = (genome || []).join('');
+  const genomeString = (genome || []).join(' ');
   const genomeOutput = (
     <FormControl
       label={() => (
@@ -46,10 +46,9 @@ function GenomePreview(props: GenomePreviewProps) {
       )}
       caption={genomeCaption}
     >
-      <Textarea
-        value={genomeString}
-        size={TEXTAREA_SIZE.compact}
-      />
+      <CodeBlock>
+        {genomeString}
+      </CodeBlock>
     </FormControl>
   );
 
@@ -129,7 +128,7 @@ function CodeBlock(props: CodeBlockProps) {
     <>
       <Block $style={{
         border: '1px dotted #CCCCCC',
-        padding: '10px',
+        padding: '15px',
         borderRadius: '3px',
       }}>
         <code>
