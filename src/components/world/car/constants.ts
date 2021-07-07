@@ -37,6 +37,7 @@ export const CHASSIS_RELATIVE_POSITION: NumVec3 = [0, -0.6, 0];
 export const SENSORS_NUM = 16;
 export const SENSOR_HEIGHT = -0.15;
 export const SENSOR_DISTANCE = 4;
+export const SENSOR_DISTANCE_FALLBACK = SENSOR_DISTANCE;
 
 // Car.
 export const CAR_MAX_STEER_VALUE = 0.5;
