@@ -3,12 +3,13 @@ import {
   CarLicencePlateType,
   CarsType,
   EngineOptionsType,
-  SensorValuesType,
+  SensorValuesType, SensorValueType,
   WheelOptionsType
 } from '../../world/types/car';
 import { PARKING_SPOT_POINTS } from '../../world/surroundings/ParkingSpot';
 import { RectanglePoints } from '../../../types/vectors';
-import { CAR_SENSORS_NUM, loss } from '../../../lib/carGenetic';
+import { CAR_SENSORS_NUM, engineFormula, loss, wheelsFormula } from '../../../lib/carGenetic';
+import { SENSOR_DISTANCE_FALLBACK } from '../../world/car/constants';
 
 const generateLicencePlate = (
   generationIndex: number | null,
@@ -36,25 +37,25 @@ export const generationToCars = (props: GenerationToCarsProps): CarsType => {
     const licencePlate = generateLicencePlate(generationIndex, genomeIndex);
 
     const onEngine = (sensors: SensorValuesType): EngineOptionsType => {
-      const random = Math.random();
-      if (random < 0.3) {
+      const formulaOutput = engineFormula(genome, cleanUpSensors(sensors));
+      if (formulaOutput === -1) {
         return 'backwards';
       }
-      if (random > 0.6) {
+      if (formulaOutput === 1) {
         return 'forward'
       }
       return 'neutral';
     };
 
     const onWheel = (sensors: SensorValuesType): WheelOptionsType => {
-      const random = Math.random();
-      if (random < 0.3) {
+      const formulaOutput = wheelsFormula(genome, cleanUpSensors(sensors));
+      if (formulaOutput === -1) {
         return 'left';
       }
-      if (random > 0.6) {
-        return 'straight'
+      if (formulaOutput === 1) {
+        return 'right'
       }
-      return 'right';
+      return 'straight';
     };
 
     const onMove = (wheelsPoints: RectanglePoints) => {
@@ -76,6 +77,15 @@ export const generationToCars = (props: GenerationToCarsProps): CarsType => {
     };
   });
   return cars;
+};
+
+const cleanUpSensors = (sensors: SensorValuesType): number[] => {
+  return sensors.map((sensor: SensorValueType) => {
+    if (sensor === null || sensor === undefined) {
+      return SENSOR_DISTANCE_FALLBACK;
+    }
+    return sensor;
+  });
 };
 
 export const formatLossValue = (lossValue: number | null | undefined): number | null => {
