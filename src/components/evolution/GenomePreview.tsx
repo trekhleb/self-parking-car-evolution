@@ -111,19 +111,32 @@ function Coefficients(props: CoefficientsProps) {
         label={() => label}
         caption={() => caption}
       >
-        <>
-          <Block $style={{
-            border: '1px dotted #CCCCCC',
-            padding: '10px',
-            borderRadius: '3px',
-          }}>
-            <code>
-              {coefficientsString}
-            </code>
-          </Block>
-        </>
+        <CodeBlock>
+          {coefficientsString}
+        </CodeBlock>
       </FormControl>
     </Block>
+  );
+}
+
+type CodeBlockProps = {
+  children: React.ReactNode,
+};
+
+function CodeBlock(props: CodeBlockProps) {
+  const {children} = props;
+  return (
+    <>
+      <Block $style={{
+        border: '1px dotted #CCCCCC',
+        padding: '10px',
+        borderRadius: '3px',
+      }}>
+        <code>
+          {children}
+        </code>
+      </Block>
+    </>
   );
 }
 
