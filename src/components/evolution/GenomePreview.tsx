@@ -60,7 +60,7 @@ function GenomePreview(props: GenomePreviewProps) {
       <Coefficients
         label="Engine formula"
         caption={
-          `Multipliers for ${CAR_SENSORS_NUM} car sensors that define the engine work (backward, neutral, forward)`
+          `Multipliers for ${CAR_SENSORS_NUM} car sensors that define the engine mode (backward, neutral, forward)`
         }
         coefficients={engineFormulaCoefficients}
       />
