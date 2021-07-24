@@ -1,16 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Block } from 'baseui/block';
 import _ from 'lodash';
-import { StatelessAccordion, Panel } from 'baseui/accordion';
 
 import { createGeneration, Generation, Genome } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
 import PopulationTable, { CarsLossType, CarsInProgressType } from './PopulationTable';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
-import { generationToCars } from './utils/evolution';
-import { getIntSearchParam, setSearchParam } from '../../utils/url';
-import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
-import { getWorldKeyFromUrl } from './utils/url';
 import EvolutionBoardParams, {
   DEFAULT_BATCH_SIZE,
   DEFAULT_GENERATION_LIFETIME,
@@ -19,17 +14,16 @@ import EvolutionBoardParams, {
 } from './EvolutionBoardParams';
 import EvolutionTiming from './EvolutionTiming';
 import LossHistory from './LossHistory';
-import GenomePreview from './GenomePreview';
+import BestGenomes from './BestGenomes';
 import { GENOME_LENGTH } from '../../lib/carGenetic';
+import { getWorldKeyFromUrl } from './utils/url';
+import { generationToCars } from './utils/evolution';
+import { getIntSearchParam, setSearchParam } from '../../utils/url';
+import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 
 const GENERATION_SIZE_URL_PARAM = 'generation-size';
 const GROUP_SIZE_URL_PARAM = 'group-size';
 const GENERATION_LIFETIME_URL_PARAM = 'generation-lifetime';
-
-const GENOME_PANELS = {
-  firstBestGenome: 'first-best-genome',
-  secondBestGenome: 'second-best-genome',
-};
 
 function EvolutionBoard() {
   const [worldIndex, setWorldIndex] = useState<number>(0);
@@ -57,10 +51,6 @@ function EvolutionBoard() {
   const [secondBestGenome, setSecondBestGenome] = useState<Genome | null>(null);
   const [secondMinLoss, setSecondMinLoss] = useState<number | null>(null);
   const [secondBestCarLicencePlate, setSecondBestCarLicencePlate] = useState<CarLicencePlateType | null>(null);
-
-  const [genomeExpandedTabs, setGenomeExpandedTabs] = React.useState<React.Key[]>([
-    GENOME_PANELS.firstBestGenome
-  ]);
 
   const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(getWorldKeyFromUrl(EVOLUTION_WORLD_KEY));
 
@@ -395,22 +385,6 @@ function EvolutionBoard() {
     </Block>
   );
 
-  const bestGenomePreview = (
-    <GenomePreview
-      genome={bestGenome}
-      licencePlate={bestCarLicencePlate}
-      loss={minLoss}
-    />
-  );
-
-  const secondBestGenomePreview = (
-    <GenomePreview
-      genome={secondBestGenome}
-      licencePlate={secondBestCarLicencePlate}
-      loss={secondMinLoss}
-    />
-  );
-
   const evolutionAnalytics = activeWorldKey === EVOLUTION_WORLD_KEY ? (
     <>
       {timingDetails}
@@ -424,26 +398,14 @@ function EvolutionBoard() {
         </Block>
       </Block>
 
-      <StatelessAccordion
-        expanded={genomeExpandedTabs}
-        onChange={({key, expanded}) => {
-          const newGenomeExpandedTabs = [...genomeExpandedTabs];
-          const openedTabIndex = newGenomeExpandedTabs.indexOf(key);
-          if (openedTabIndex === -1) {
-            newGenomeExpandedTabs.push(key);
-          } else {
-            newGenomeExpandedTabs.splice(openedTabIndex);
-          }
-          setGenomeExpandedTabs(newGenomeExpandedTabs);
-        }}
-      >
-        <Panel title="1st Best Car Genome" key={GENOME_PANELS.firstBestGenome}>
-          {bestGenomePreview}
-        </Panel>
-        <Panel title="2nd Best Car Genome" key={GENOME_PANELS.secondBestGenome}>
-          {secondBestGenomePreview}
-        </Panel>
-      </StatelessAccordion>
+      <BestGenomes
+        bestGenome={bestGenome}
+        bestCarLicencePlate={bestCarLicencePlate}
+        minLoss={minLoss}
+        secondBestGenome={secondBestGenome}
+        secondBestCarLicencePlate={secondBestCarLicencePlate}
+        secondMinLoss={secondMinLoss}
+      />
     </>
   ) : null;
 
