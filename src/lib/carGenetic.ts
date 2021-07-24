@@ -1,5 +1,6 @@
 import { NumVec3, RectanglePoints } from '../types/vectors';
 import { Gene, Genome } from './genetic';
+import { bitsToFloat16, precisionConfigs } from './binaryFloats';
 
 // Car has 16 distance sensors.
 export const CAR_SENSORS_NUM = 16;
@@ -7,27 +8,7 @@ export const CAR_SENSORS_NUM = 16;
 export const BIAS_UNITS = 1;
 
 // How many genes we need to encode each numeric parameter for the formulas.
-export const GENES_PER_NUMBER = 8;
-
-/*
-0 123 4567 - genes indices
-X XXX XXXX - 8-bits number
-_ ___ ____
-|  |   |
-|  |   |____ fraction bits
-|  |
-|  |________ exponent bits (biased)
-|            Bias equals to 2^(k−1) − 1, where k is the number of bits in the exponent
-|
-|___________ sign bit (0 - positive, 1 - negative)
-
-@see: https://en.wikipedia.org/wiki/Exponent_bias
-@see: https://medium.com/@sarafecadu/64-bit-floating-point-a-javascript-story-fa6aad266665
-*/
-const SIGN_GENE_INDEX = 0;
-const EXPONENT_GENE_INDEX = 1;
-const FRACTION_GENE_INDEX = 4;
-const EXPONENT_BIAS = 2 ** (FRACTION_GENE_INDEX - EXPONENT_GENE_INDEX - 1) - 1;
+export const GENES_PER_NUMBER = precisionConfigs.half.totalBitsCount;
 
 // Based on 16 distance sensors we need to provide two formulas that would define car's behaviour:
 // 1. Engine formula (input: 16 sensors; output: -1 (backward), 0 (neutral), +1 (forward))
@@ -111,59 +92,24 @@ const decodeNumbers = (genes: Gene[]): number[] => {
   }
   const numbers: number[] = [];
   for (let numberIndex = 0; numberIndex < genes.length; numberIndex += GENES_PER_NUMBER) {
-    const number: number = decodeNumber(genes.slice(numberIndex, numberIndex + GENES_PER_NUMBER));
+    const number: number = bitsToFloat16(genes.slice(numberIndex, numberIndex + GENES_PER_NUMBER));
     numbers.push(number);
   }
   return numbers;
-};
-
-const decodeNumber = (genes: Gene[]): number => {
-  if (genes.length !== GENES_PER_NUMBER) {
-    throw new Error('Wrong number of genes in the number genome');
-  }
-  // Getting the sign.
-  const sign = genes[SIGN_GENE_INDEX] ? -1 : 1;
-
-  // Getting the exponent.
-  const exponentGenes = genes.slice(EXPONENT_GENE_INDEX, FRACTION_GENE_INDEX);
-  const exponent = binaryArrayToNumber(exponentGenes) - EXPONENT_BIAS;
-
-  // Getting the fraction.
-  const fractionGenes = genes.slice(FRACTION_GENE_INDEX);
-  const fraction = binaryArrayToNumber(fractionGenes);
-
-  return sign * fraction * (10 ** exponent);
-};
-
-/**
- * Converts array of genes (bits) to a number.
- *
- * Powers of 2: 8421
- *             [1010] -> (2 + 8) -> 10
- */
-const binaryArrayToNumber = (genes: Gene[]): number => {
-  return genes.reduce(
-    (result: number, gene: Gene, geneIndex: number) => {
-      return result + gene * (2 ** (genes.length - geneIndex - 1));
-    },
-    0
-  );
 };
 
 export const engineFormula = (genome: Genome, sensors: SensorValues): FormulaResult => {
   const {engineFormulaCoefficients} = decodeGenome(genome);
   const rawResult = linearPolynomial(engineFormulaCoefficients, sensors);
   const normalizedResult = sigmoid(rawResult);
-  const categoricalResult = sigmoidToCategorical(normalizedResult);
-  return categoricalResult;
+  return sigmoidToCategorical(normalizedResult);
 };
 
 export const wheelsFormula = (genome: Genome, sensors: SensorValues): FormulaResult => {
   const {wheelsFormulaCoefficients} = decodeGenome(genome);
   const rawResult = linearPolynomial(wheelsFormulaCoefficients, sensors);
   const normalizedResult = sigmoid(rawResult);
-  const categoricalResult = sigmoidToCategorical(normalizedResult);
-  return categoricalResult;
+  return sigmoidToCategorical(normalizedResult);
 };
 
 const linearPolynomial = (coefficients: number[], variables: number[]): number => {

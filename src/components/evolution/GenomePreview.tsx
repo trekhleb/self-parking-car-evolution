@@ -3,7 +3,6 @@ import { Block } from 'baseui/block';
 
 import { Genome } from '../../lib/genetic';
 import { CarLicencePlateType } from '../world/types/car';
-import { Textarea, SIZE as TEXTAREA_SIZE} from 'baseui/textarea';
 import { FormControl } from 'baseui/form-control';
 import { formatLossValue } from './utils/evolution';
 import { CAR_SENSORS_NUM, decodeGenome, FormulaCoefficients } from '../../lib/carGenetic';
@@ -130,6 +129,7 @@ function CodeBlock(props: CodeBlockProps) {
         border: '1px dotted #CCCCCC',
         padding: '15px',
         borderRadius: '3px',
+        fontSize: '12px',
       }}>
         <code>
           {children}
@@ -140,7 +140,7 @@ function CodeBlock(props: CodeBlockProps) {
 }
 
 function formatCoefficient(coefficient: number): number {
-  return Math.ceil(coefficient * 100) / 100;
+  return Math.ceil(coefficient * 10000) / 10000;
 }
 
 export default GenomePreview;
