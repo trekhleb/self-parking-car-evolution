@@ -5,6 +5,7 @@ import { bitsToFloat16, precisionConfigs } from './binaryFloats';
 // Car has 16 distance sensors.
 export const CAR_SENSORS_NUM = 16;
 
+// Additional formula coefficient that is not connected to a sensor.
 export const BIAS_UNITS = 1;
 
 // How many genes we need to encode each numeric parameter for the formulas.
@@ -133,13 +134,13 @@ const sigmoid = (x: number): number => {
 
 const sigmoidToCategorical = (
   sigmoidValue: number,
-  aroundZeroMargin: number = 0.5, // Value between 0 and 1
+  aroundZeroMargin: number = 0.25, // Value between 0 and 1:  [0 ... (0.5 - margin) ... 0.5 ... (0.5 + margin) ... 1]
 ): FormulaResult => {
-  if (sigmoidValue > (0.5 + aroundZeroMargin / 2)) {
-    return 1;
-  }
-  if (sigmoidValue < (0.5 - aroundZeroMargin / 2)) {
+  if (sigmoidValue < (0.5 - aroundZeroMargin)) {
     return -1;
+  }
+  if (sigmoidValue > (0.5 + aroundZeroMargin)) {
+    return 1;
   }
   return 0;
 };
