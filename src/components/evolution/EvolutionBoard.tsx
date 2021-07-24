@@ -337,7 +337,7 @@ function EvolutionBoard() {
   const bestGenomePreview = (
     <Block marginBottom="10px">
       <GenomePreview
-        title="Best genome so far"
+        title="Best car genome so far"
         genome={bestGenome}
         licencePlate={bestCarLicencePlate}
         loss={minLoss}

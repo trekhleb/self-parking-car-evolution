@@ -9,8 +9,8 @@ import { formatLossValue } from './utils/evolution';
 import { CAR_SENSORS_NUM, decodeGenome, FormulaCoefficients } from '../../lib/carGenetic';
 
 type GenomePreviewProps = {
-  title: string,
   genome: Genome | null,
+  title?: string,
   licencePlate?: CarLicencePlateType | null,
   loss?: number | null,
 };
@@ -41,11 +41,13 @@ function GenomePreview(props: GenomePreviewProps) {
     </Block>
   );
 
+  const label = title || 'Car genome';
+
   const genomeString = (genome || []).join(' ');
   const genomeOutput = (
     <FormControl
       label={() => (
-        <span>Car genome</span>
+        <span>{label}</span>
       )}
       caption={genomeCaption}
     >
