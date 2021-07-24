@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Block } from 'baseui/block';
 import _ from 'lodash';
+import { StatelessAccordion, Panel } from 'baseui/accordion';
 
 import { createGeneration, Generation, Genome } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
@@ -25,6 +26,11 @@ const GENERATION_SIZE_URL_PARAM = 'generation-size';
 const GROUP_SIZE_URL_PARAM = 'group-size';
 const GENERATION_LIFETIME_URL_PARAM = 'generation-lifetime';
 
+const GENOME_PANELS = {
+  firstBestGenome: 'first-best-genome',
+  secondBestGenome: 'second-best-genome',
+};
+
 function EvolutionBoard() {
   const [worldIndex, setWorldIndex] = useState<number>(0);
 
@@ -47,6 +53,14 @@ function EvolutionBoard() {
   const [bestGenome, setBestGenome] = useState<Genome | null>(null);
   const [minLoss, setMinLoss] = useState<number | null>(null);
   const [bestCarLicencePlate, setBestCarLicencePlate] = useState<CarLicencePlateType | null>(null);
+
+  const [secondBestGenome, setSecondBestGenome] = useState<Genome | null>(null);
+  const [secondMinLoss, setSecondMinLoss] = useState<number | null>(null);
+  const [secondBestCarLicencePlate, setSecondBestCarLicencePlate] = useState<CarLicencePlateType | null>(null);
+
+  const [genomeExpandedTabs, setGenomeExpandedTabs] = React.useState<React.Key[]>([
+    GENOME_PANELS.firstBestGenome
+  ]);
 
   const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(getWorldKeyFromUrl(EVOLUTION_WORLD_KEY));
 
@@ -211,6 +225,7 @@ function EvolutionBoard() {
       });
       setGeneration(generation);
       setBestGenome(generation[0]);
+      setSecondBestGenome(generation[1]);
     } else {
       // Mate and mutate existing population.
       // @TODO: Mate and mutate.
@@ -335,14 +350,19 @@ function EvolutionBoard() {
   );
 
   const bestGenomePreview = (
-    <Block marginBottom="10px">
-      <GenomePreview
-        title="Best car genome so far"
-        genome={bestGenome}
-        licencePlate={bestCarLicencePlate}
-        loss={minLoss}
-      />
-    </Block>
+    <GenomePreview
+      genome={bestGenome}
+      licencePlate={bestCarLicencePlate}
+      loss={minLoss}
+    />
+  );
+
+  const secondBestGenomePreview = (
+    <GenomePreview
+      genome={secondBestGenome}
+      licencePlate={secondBestCarLicencePlate}
+      loss={secondMinLoss}
+    />
   );
 
   const evolutionAnalytics = activeWorldKey === EVOLUTION_WORLD_KEY ? (
@@ -357,7 +377,20 @@ function EvolutionBoard() {
           {populationTable}
         </Block>
       </Block>
-      {bestGenomePreview}
+
+      <StatelessAccordion
+        expanded={genomeExpandedTabs}
+        onChange={({key, expanded}) => {
+          setGenomeExpandedTabs(expanded);
+        }}
+      >
+        <Panel title="1st Best Car Genome" key={GENOME_PANELS.firstBestGenome}>
+          {bestGenomePreview}
+        </Panel>
+        <Panel title="2nd Best Car Genome" key={GENOME_PANELS.secondBestGenome}>
+          {secondBestGenomePreview}
+        </Panel>
+      </StatelessAccordion>
     </>
   ) : null;
 

@@ -141,6 +141,7 @@ function CodeBlock(props: CodeBlockProps) {
         padding: '15px',
         borderRadius: '3px',
         fontSize: '12px',
+        backgroundColor: '#FFFFFF',
       }}>
         <code>
           {children}
