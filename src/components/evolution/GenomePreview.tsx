@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Block } from 'baseui/block';
+import { useState } from 'react';
 
 import { Genome } from '../../lib/genetic';
 import { CarLicencePlateType } from '../world/types/car';
@@ -16,6 +17,9 @@ type GenomePreviewProps = {
 
 function GenomePreview(props: GenomePreviewProps) {
   const {title, genome, licencePlate, loss} = props;
+
+  const [shortEngineFormula, setShortEngineFormula] = useState<boolean>(true);
+  const [shortWheelsFormula, setShortWheelsFormula] = useState<boolean>(true);
 
   const genomeCaption = (
     <Block display="flex" flexDirection="row">
@@ -62,6 +66,7 @@ function GenomePreview(props: GenomePreviewProps) {
           `Multipliers for ${CAR_SENSORS_NUM} car sensors that define the engine mode (backward, neutral, forward)`
         }
         coefficients={engineFormulaCoefficients}
+        shortNumbers={shortEngineFormula}
       />
     );
     decodedWheelsFormula = (
@@ -71,6 +76,7 @@ function GenomePreview(props: GenomePreviewProps) {
           `Multipliers for ${CAR_SENSORS_NUM} car sensors that define the wheels direction (left, straight, right)`
         }
         coefficients={wheelsFormulaCoefficients}
+        shortNumbers={shortWheelsFormula}
       />
     );
   }
@@ -98,11 +104,14 @@ type CoefficientsProps = {
   label: string,
   caption: string,
   coefficients: FormulaCoefficients,
+  shortNumbers: boolean,
 };
 
 function Coefficients(props: CoefficientsProps) {
-  const {coefficients, label, caption} = props;
-  const coefficientsString = coefficients.map(formatCoefficient).join(', ');
+  const {coefficients, label, caption, shortNumbers} = props;
+  const coefficientsString = coefficients
+    .map((coefficient: number) => formatCoefficient(coefficient, shortNumbers))
+    .join(', ');
   return (
     <Block>
       <FormControl
@@ -139,8 +148,11 @@ function CodeBlock(props: CodeBlockProps) {
   );
 }
 
-function formatCoefficient(coefficient: number): number {
-  return Math.ceil(coefficient * 10000) / 10000;
+function formatCoefficient(coefficient: number, shortNumber: boolean = true): number {
+  if (shortNumber) {
+    return Math.ceil(coefficient * 1000) / 1000;
+  }
+  return coefficient;
 }
 
 export default GenomePreview;
