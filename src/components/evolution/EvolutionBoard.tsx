@@ -421,7 +421,14 @@ function EvolutionBoard() {
       <StatelessAccordion
         expanded={genomeExpandedTabs}
         onChange={({key, expanded}) => {
-          setGenomeExpandedTabs(expanded);
+          const newGenomeExpandedTabs = [...genomeExpandedTabs];
+          const openedTabIndex = newGenomeExpandedTabs.indexOf(key);
+          if (openedTabIndex === -1) {
+            newGenomeExpandedTabs.push(key);
+          } else {
+            newGenomeExpandedTabs.splice(openedTabIndex);
+          }
+          setGenomeExpandedTabs(newGenomeExpandedTabs);
         }}
       >
         <Panel title="1st Best Car Genome" key={GENOME_PANELS.firstBestGenome}>
