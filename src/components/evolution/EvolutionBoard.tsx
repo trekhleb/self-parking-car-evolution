@@ -185,6 +185,45 @@ function EvolutionBoard() {
     setBestCarLicencePlate(bestCarLicensePlate);
   };
 
+  const syncSecondBestGenome = () => {
+    if (generationIndex === null || bestCarLicencePlate === null) {
+      return;
+    }
+
+    const generationLoss: CarsLossType = carsLossRef.current[generationIndex];
+    if (!generationLoss) {
+      return;
+    }
+
+    let secondBestCarLicensePlate: CarLicencePlateType | null = null;
+    let secondMinLoss: number = Infinity;
+    let secondBestGenomeIndex: number = -1;
+
+    Object.keys(generationLoss).forEach((licencePlate: CarLicencePlateType) => {
+      // Skiping the best car genome.
+      if (licencePlate === bestCarLicencePlate) {
+        return;
+      }
+      const carLoss: number | null = generationLoss[licencePlate];
+      if (carLoss === null) {
+        return;
+      }
+      if (carLoss < secondMinLoss) {
+        secondMinLoss = carLoss;
+        secondBestCarLicensePlate = licencePlate;
+        secondBestGenomeIndex = cars[licencePlate].generationIndex;
+      }
+    });
+
+    if (secondBestGenomeIndex === -1) {
+      return;
+    }
+
+    setSecondMinLoss(secondMinLoss);
+    setSecondBestGenome(generation[secondBestGenomeIndex]);
+    setSecondBestCarLicencePlate(secondBestCarLicensePlate);
+  };
+
   const syncLossHistory = () => {
     if (generationIndex === null) {
       return;
@@ -278,6 +317,7 @@ function EvolutionBoard() {
       setCarsLoss(_.cloneDeep<CarsLossType[]>(carsLossRef.current));
       syncLossHistory();
       syncBestGenome();
+      syncSecondBestGenome();
       const nextBatchIndex = carsBatchIndex + 1;
       if (nextBatchIndex >= carsBatchesTotal) {
         setCarsBatch([]);
