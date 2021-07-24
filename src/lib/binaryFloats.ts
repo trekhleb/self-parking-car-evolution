@@ -85,13 +85,3 @@ function binaryFloats(bits: Bits, precisionConfig: PrecisionConfig): number {
 export function bitsToFloat16(bits: Bits): number {
   return binaryFloats(bits, precisionConfigs.half);
 }
-
-// Converts the 32-bit binary representation of the floating point number to decimal float number.
-export function bitsToFloat32(bits: Bits): number {
-  return binaryFloats(bits, precisionConfigs.single);
-}
-
-// Converts the 64-bit binary representation of the floating point number to decimal float number.
-export function bitsToFloat64(bits: Bits): number {
-  return binaryFloats(bits, precisionConfigs.double);
-}
