@@ -37,7 +37,7 @@ import { ON_MOVE_THROTTLE_TIMEOUT, ON_UPDATE_LABEL_THROTTLE_TIMEOUT } from '../c
 import { PARKING_SPOT_POINTS } from '../surroundings/ParkingSpot';
 import { formatLossValue } from '../../evolution/utils/evolution';
 import { RectanglePoints, ThreeRectanglePoints } from '../../../types/vectors';
-import { loss } from '../../../lib/carGenetic';
+import { carLoss as getCarLoss } from '../../../lib/carGenetic';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
@@ -238,11 +238,11 @@ function Car(props: CarProps) {
   // @TODO: Move the logic of label content population to the evolution components.
   // Car shouldn't know about the evolution loss function.
   const onUpdateLabel = (wheelsPositions: RectanglePoints) => {
-    const carLoss = loss({
+    const loss = getCarLoss({
       wheelsPosition: wheelsPositions,
       parkingLotCorners: PARKING_SPOT_POINTS,
     });
-    setCarLoss(carLoss);
+    setCarLoss(loss);
   };
 
   const onUpdateLabelThrottled = throttle(onUpdateLabel, ON_UPDATE_LABEL_THROTTLE_TIMEOUT, {

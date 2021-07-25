@@ -1,6 +1,9 @@
-import { NumVec3, RectanglePoints } from '../types/vectors';
+import { RectanglePoints } from '../types/vectors';
 import { Gene, Genome } from './genetic';
-import { bitsToFloat16, precisionConfigs } from './binaryFloats';
+import { bitsToFloat16, precisionConfigs } from './math/floats';
+import { linearPolynomial } from './math/polynomial';
+import { sigmoid, sigmoidToCategories } from './math/sigmoid';
+import { euclideanDistance } from './math/geometry';
 
 // Car has 16 distance sensors.
 export const CAR_SENSORS_NUM = 16;
@@ -27,7 +30,7 @@ type LossParams = {
 
 // Loss function calculates how far the car is from the parking lot
 // by comparing the wheels positions with parking lot corners positions.
-export const loss = (params: LossParams): number => {
+export const carLoss = (params: LossParams): number => {
   const { wheelsPosition, parkingLotCorners } = params;
 
   const {
@@ -44,20 +47,12 @@ export const loss = (params: LossParams): number => {
     bl: blCorner,
   } = parkingLotCorners;
 
-  const flDistance = distance(flWheel, flCorner);
-  const frDistance = distance(frWheel, frCorner);
-  const brDistance = distance(brWheel, brCorner);
-  const blDistance = distance(blWheel, blCorner);
+  const flDistance = euclideanDistance(flWheel, flCorner);
+  const frDistance = euclideanDistance(frWheel, frCorner);
+  const brDistance = euclideanDistance(brWheel, brCorner);
+  const blDistance = euclideanDistance(blWheel, blCorner);
 
   return (flDistance + frDistance + brDistance + blDistance) / 4;
-};
-
-// Calculates the XZ distance between two points in space.
-// The vertical Y distance is not being taken into account.
-const distance = (from: NumVec3, to: NumVec3) => {
-  const [fromX, fromY, fromZ] = from;
-  const [toX, toY, toZ] = to;
-  return Math.sqrt((fromX - toX) ** 2 + (fromZ - toZ) ** 2);
 };
 
 type SensorValues = number[];
@@ -103,44 +98,12 @@ export const engineFormula = (genome: Genome, sensors: SensorValues): FormulaRes
   const {engineFormulaCoefficients} = decodeGenome(genome);
   const rawResult = linearPolynomial(engineFormulaCoefficients, sensors);
   const normalizedResult = sigmoid(rawResult);
-  return sigmoidToCategorical(normalizedResult);
+  return sigmoidToCategories(normalizedResult);
 };
 
 export const wheelsFormula = (genome: Genome, sensors: SensorValues): FormulaResult => {
   const {wheelsFormulaCoefficients} = decodeGenome(genome);
   const rawResult = linearPolynomial(wheelsFormulaCoefficients, sensors);
   const normalizedResult = sigmoid(rawResult);
-  return sigmoidToCategorical(normalizedResult);
-};
-
-const linearPolynomial = (coefficients: number[], variables: number[]): number => {
-  if (coefficients.length !== (variables.length + 1)) {
-    throw new Error('Incompatible number polynomial coefficients and variables');
-  }
-  let result = 0;
-  coefficients.forEach((coefficient: number, coefficientIndex: number) => {
-    if (coefficientIndex < variables.length) {
-      result += coefficient * variables[coefficientIndex];
-    } else {
-      result += coefficient
-    }
-  });
-  return result;
-};
-
-const sigmoid = (x: number): number => {
-  return 1 / (1 + Math.E ** -x);
-};
-
-const sigmoidToCategorical = (
-  sigmoidValue: number,
-  aroundZeroMargin: number = 0.25, // Value between 0 and 1:  [0 ... (0.5 - margin) ... 0.5 ... (0.5 + margin) ... 1]
-): FormulaResult => {
-  if (sigmoidValue < (0.5 - aroundZeroMargin)) {
-    return -1;
-  }
-  if (sigmoidValue > (0.5 + aroundZeroMargin)) {
-    return 1;
-  }
-  return 0;
+  return sigmoidToCategories(normalizedResult);
 };

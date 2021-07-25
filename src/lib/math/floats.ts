@@ -49,7 +49,7 @@ export const precisionConfigs: PrecisionConfigs = {
 };
 
 // Converts the binary representation of the floating point number to decimal float number.
-function binaryFloats(bits: Bits, precisionConfig: PrecisionConfig): number {
+function bitsToFloat(bits: Bits, precisionConfig: PrecisionConfig): number {
   const { signBitsCount, exponentBitsCount } = precisionConfig;
 
   // Figuring out the sign.
@@ -83,5 +83,5 @@ function binaryFloats(bits: Bits, precisionConfig: PrecisionConfig): number {
 
 // Converts the 16-bit binary representation of the floating point number to decimal float number.
 export function bitsToFloat16(bits: Bits): number {
-  return binaryFloats(bits, precisionConfigs.half);
+  return bitsToFloat(bits, precisionConfigs.half);
 }

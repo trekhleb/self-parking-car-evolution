@@ -8,7 +8,7 @@ import {
 } from '../../world/types/car';
 import { PARKING_SPOT_POINTS } from '../../world/surroundings/ParkingSpot';
 import { RectanglePoints } from '../../../types/vectors';
-import { CAR_SENSORS_NUM, engineFormula, loss, wheelsFormula } from '../../../lib/carGenetic';
+import { CAR_SENSORS_NUM, engineFormula, carLoss, wheelsFormula } from '../../../lib/carGenetic';
 import { SENSOR_DISTANCE_FALLBACK } from '../../world/car/constants';
 
 const generateLicencePlate = (
@@ -59,11 +59,11 @@ export const generationToCars = (props: GenerationToCarsProps): CarsType => {
     };
 
     const onMove = (wheelsPoints: RectanglePoints) => {
-      const carLoss = loss({
+      const loss = carLoss({
         wheelsPosition: wheelsPoints,
         parkingLotCorners: PARKING_SPOT_POINTS,
       });
-      onLossUpdate(licencePlate, carLoss);
+      onLossUpdate(licencePlate, loss);
     };
 
     cars[licencePlate] = {
