@@ -70,6 +70,7 @@ export const generationToCars = (props: GenerationToCarsProps): CarsType => {
       licencePlate,
       generationIndex: generationIndex !== null ? generationIndex : -1,
       sensorsNum: CAR_SENSORS_NUM,
+      genomeIndex,
       onEngine,
       onWheel,
       onMove,

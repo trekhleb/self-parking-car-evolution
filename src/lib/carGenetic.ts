@@ -55,6 +55,10 @@ export const carLoss = (params: LossParams): number => {
   return (flDistance + frDistance + brDistance + blDistance) / 4;
 };
 
+export const carLossToFitness = (loss: number): number => {
+  return 1 / (loss + 1);
+};
+
 type SensorValues = number[];
 
 export type FormulaCoefficients = number[];

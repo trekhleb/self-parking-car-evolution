@@ -24,7 +24,8 @@ import {
   WHEEL_SUSPENSION_STIFFNESS
 } from './constants';
 import {
-  CarMetaData, CarType,
+  CarMetaData,
+  CarType,
   RaycastVehiclePublicApi,
   SensorValuesType,
   userCarUUID,
@@ -90,7 +91,7 @@ function Car(props: CarProps) {
     onCarDestroy = () => {},
     onSensors = () => {},
     onMove = () => {},
-    car = { licencePlate: '', generationIndex: 0 },
+    car = { licencePlate: '', generationIndex: 0, genomeIndex: 0 },
   } = props;
 
   const chassis = useRef<THREE.Object3D | undefined>();

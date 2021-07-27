@@ -6,7 +6,7 @@ import { Genome } from '../../lib/genetic';
 import { CarLicencePlateType } from '../world/types/car';
 import { FormControl } from 'baseui/form-control';
 import { formatLossValue } from './utils/evolution';
-import { CAR_SENSORS_NUM, decodeGenome, FormulaCoefficients } from '../../lib/carGenetic';
+import { CAR_SENSORS_NUM, carLossToFitness, decodeGenome, FormulaCoefficients } from '../../lib/carGenetic';
 
 type GenomePreviewProps = {
   genome: Genome | null,
@@ -34,8 +34,13 @@ function GenomePreview(props: GenomePreviewProps) {
         </Block>
       )}
       {loss && (
-        <Block>
+        <Block marginRight="15px">
           Loss: <b>{formatLossValue(loss)}</b>
+        </Block>
+      )}
+      {loss && (
+        <Block>
+          Fitness: <b>{formatLossValue(carLossToFitness(loss))}</b>
         </Block>
       )}
     </Block>

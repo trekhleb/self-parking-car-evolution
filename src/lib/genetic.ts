@@ -4,9 +4,6 @@ export type Genome = Gene[];
 
 export type Generation = Genome[];
 
-// The number between 0 and 1.
-export type Probability = number;
-
 export type GenerationParams = {
   generationSize: number,
   genomeLength: number,
@@ -25,13 +22,18 @@ export function createGeneration(params: GenerationParams): Generation {
     .map(() => createGenome(genomeLength));
 }
 
+// The number between 0 and 1.
+export type Probability = number;
+
+type MateOptions = {
+  mutationProbability?: Probability,
+};
+
 // Performs Uniform Crossover: each bit is chosen from either parent with equal probability.
 // @see: https://en.wikipedia.org/wiki/Crossover_(genetic_algorithm)
-export function mate(
-  father: Genome,
-  mother: Genome,
-  mutationProbability: Probability = 0.2
-): [Genome, Genome] {
+function mate(father: Genome, mother: Genome, options?: MateOptions): [Genome, Genome] {
+  const { mutationProbability = 0.2 } = options || {};
+
   if (father.length !== mother.length) {
     throw new Error('Cannot mate different species');
   }
@@ -64,4 +66,30 @@ function mutate(genome: Genome, mutationProbability: Probability): Genome {
     genome[geneIndex] = Math.random() < mutationProbability ? mutatedGene : gene;
   }
   return genome;
+}
+
+export type FitnessFunction = (genome: Genome) => number;
+
+// @see: https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)
+export function select(generation: Generation, fitness: FitnessFunction) {
+  const newGeneration: Generation = [];
+
+  const sortedGeneration = [...generation];
+  // First one - the fittest one.
+  sortedGeneration.sort((genomeA: Genome, genomeB: Genome): number => {
+    const fitnessA = fitness(genomeA);
+    const fitnessB = fitness(genomeB);
+    if (fitnessA < fitnessB) {
+      return 1;
+    }
+    if (fitnessA > fitnessB) {
+      return -1;
+    }
+    return 0;
+  });
+
+  return [...generation];
+
+  // @TODO: Mate best genomes. Preserve two best genomes.
+  // return newGeneration;
 }
