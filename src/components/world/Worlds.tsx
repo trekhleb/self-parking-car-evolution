@@ -9,6 +9,9 @@ import ErrorBoundary from '../shared/ErrorBoundary';
 import WorldParamsController from './controllers/WorldParamsController';
 import { CarType } from './types/car';
 import { getSearchParam } from '../../utils/url';
+import { Block } from 'baseui/block';
+import Hint from '../shared/Hint';
+import Row from '../shared/Row';
 
 export const EVOLUTION_WORLD_KEY = '0';
 export const MANUAL_PARKING_WORLD_KEY = '1';
@@ -80,7 +83,14 @@ function Worlds(props: WorldsProps) {
       onChange={onTabSwitch}
       activeKey={activeWorldKey}
     >
-      <Tab title="Automatic Parking">
+      <Tab
+        title={(
+          <Row>
+            <Block marginRight="7px">Parking Evolution</Block>
+            <Hint hint="Using the Genetic Algorithm to train the car to do self-parking" />
+          </Row>
+        )}
+      >
         <ErrorBoundary>
           <World withPerfStats={withStat} version={version}>
             <ParkingAutomatic
@@ -93,7 +103,14 @@ function Worlds(props: WorldsProps) {
         </ErrorBoundary>
       </Tab>
 
-      <Tab title="Manual Parking">
+      <Tab
+        title={(
+          <Row>
+            <Block marginRight="7px">Manual Parking</Block>
+            <Hint hint="Try to park the car by yourself" />
+          </Row>
+        )}
+      >
         <ErrorBoundary>
           <World
             withPerfStats={withStat}
