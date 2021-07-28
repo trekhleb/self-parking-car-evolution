@@ -4,22 +4,20 @@ import _ from 'lodash';
 
 import { createGeneration, Generation, Genome, select } from '../../lib/genetic';
 import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
-import PopulationTable, { CarsLossType, CarsInProgressType } from './PopulationTable';
+import { CarsLossType, CarsInProgressType } from './PopulationTable';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
-import EvolutionBoardParams, {
+import {
   DEFAULT_BATCH_SIZE,
   DEFAULT_GENERATION_LIFETIME,
   DEFAULT_GENERATION_SIZE,
   SECOND
 } from './EvolutionBoardParams';
-import EvolutionTiming from './EvolutionTiming';
-import LossHistory from './LossHistory';
-import BestGenomes from './BestGenomes';
 import { carLossToFitness, GENOME_LENGTH } from '../../lib/carGenetic';
 import { getWorldKeyFromUrl } from './utils/url';
-import { generationToCars } from './utils/evolution';
+import { generateWorldVersion, generationToCars } from './utils/evolution';
 import { getIntSearchParam, setSearchParam } from '../../utils/url';
 import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
+import EvolutionAnalytics from './EvolutionAnalytics';
 
 const GENERATION_SIZE_URL_PARAM = 'generation-size';
 const GROUP_SIZE_URL_PARAM = 'group-size';
@@ -72,6 +70,8 @@ function EvolutionBoard() {
     cars[car.licencePlate] = true;
     return cars;
   }, {});
+
+  const batchVersion = generateWorldVersion(generationIndex, carsBatchIndex);
 
   const generationLifetimeMs = generationLifetime * SECOND;
 
@@ -366,8 +366,6 @@ function EvolutionBoard() {
     }, generationLifetimeMs);
   }, [carsBatch]);
 
-  const batchVersion = generateWorldVersion(generationIndex, carsBatchIndex);
-
   const worlds = (
     <Block>
       <Worlds
@@ -379,72 +377,30 @@ function EvolutionBoard() {
     </Block>
   );
 
-  const timingDetails = (
-    <Block marginBottom="30px" marginTop="30px">
-      <EvolutionTiming
-        generationIndex={generationIndex}
-        batchIndex={carsBatchIndex}
-        batchVersion={batchVersion}
-        worldVersion={`${worldIndex}`}
-        generationLifetimeMs={generationLifetimeMs}
-      />
-    </Block>
-  );
-
-  const evolutionParams = (
-    <Block marginBottom="30px">
-      <EvolutionBoardParams
-        generationSize={generationSize}
-        batchSize={carsBatchSize}
-        generationLifetime={generationLifetime}
-        onGenerationSizeChange={onGenerationSizeChange}
-        onBatchSizeChange={onBatchSizeChange}
-        onGenerationLifetimeChange={onGenerationLifetimeChange}
-      />
-    </Block>
-  );
-
-  const lossHistoryChart = (
-    <Block marginBottom="30px">
-      <LossHistory history={lossHistory} />
-    </Block>
-  );
-
-  const populationTable = (
-    <Block>
-      <PopulationTable
-        cars={cars}
-        carsInProgress={carsInProgress}
-        carsLoss={
-          generationIndex !== null && carsLoss[generationIndex]
-            ? carsLoss[generationIndex]
-            : {}
-        }
-      />
-    </Block>
-  );
-
   const evolutionAnalytics = activeWorldKey === EVOLUTION_WORLD_KEY ? (
-    <>
-      {timingDetails}
-      {evolutionParams}
-      <Block display="flex" flexDirection={['column', 'column', 'row-reverse']}>
-        <Block flex={2} marginBottom="30px" marginLeft={['0px', '0px', '15px']}>
-          {lossHistoryChart}
-        </Block>
-        <Block flex={1} marginBottom="30px" marginRight={['0px', '0px', '15px']}>
-          {populationTable}
-        </Block>
-      </Block>
-      <BestGenomes
-        bestGenome={bestGenome}
-        bestCarLicencePlate={bestCarLicencePlate}
-        minLoss={minLoss}
-        secondBestGenome={secondBestGenome}
-        secondBestCarLicencePlate={secondBestCarLicencePlate}
-        secondMinLoss={secondMinLoss}
-      />
-    </>
+    <EvolutionAnalytics
+      generationIndex={generationIndex}
+      carsBatchIndex={carsBatchIndex}
+      worldIndex={worldIndex}
+      generationLifetimeMs={generationLifetimeMs}
+      generationSize={generationSize}
+      carsBatchSize={carsBatchSize}
+      generationLifetime={generationLifetime}
+      batchVersion={batchVersion}
+      onGenerationSizeChange={onGenerationSizeChange}
+      onBatchSizeChange={onBatchSizeChange}
+      onGenerationLifetimeChange={onGenerationLifetimeChange}
+      lossHistory={lossHistory}
+      cars={cars}
+      carsInProgress={carsInProgress}
+      carsLoss={carsLoss}
+      bestGenome={bestGenome}
+      bestCarLicencePlate={bestCarLicencePlate}
+      minLoss={minLoss}
+      secondBestGenome={secondBestGenome}
+      secondBestCarLicencePlate={secondBestCarLicencePlate}
+      secondMinLoss={secondMinLoss}
+    />
   ) : null;
 
   return (
@@ -454,14 +410,5 @@ function EvolutionBoard() {
     </Block>
   );
 }
-
-const generateWorldVersion = (
-  generationIndex: number | null,
-  batchIndex: number | null
-): string => {
-  const generation = generationIndex === null ? -1 : generationIndex;
-  const batch = batchIndex === null ? -1: batchIndex;
-  return `world-${generation}-${batch}`;
-};
 
 export default EvolutionBoard;

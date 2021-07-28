@@ -95,3 +95,12 @@ export const formatLossValue = (lossValue: number | null | undefined): number | 
   }
   return Math.ceil(lossValue * 100) / 100;
 };
+
+export const generateWorldVersion = (
+  generationIndex: number | null,
+  batchIndex: number | null
+): string => {
+  const generation = generationIndex === null ? -1 : generationIndex;
+  const batch = batchIndex === null ? -1: batchIndex;
+  return `world-${generation}-${batch}`;
+};
