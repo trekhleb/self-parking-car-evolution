@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoInfo } from 'react-icons/all';
+import { BiInfoCircle } from 'react-icons/all';
 import { Button, SHAPE as BUTTON_SHAPE, KIND as BUTTON_KIND } from 'baseui/button';
 import { StatefulTooltip } from 'baseui/tooltip';
 
@@ -29,7 +29,7 @@ const Hint = (props: HintProps) => {
           },
         }}
       >
-        <GoInfo />
+        <BiInfoCircle />
       </Button>
     </StatefulTooltip>
   );
