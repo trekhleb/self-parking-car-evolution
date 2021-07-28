@@ -18,8 +18,8 @@ type GenomePreviewProps = {
 function GenomePreview(props: GenomePreviewProps) {
   const {title, genome, licencePlate, loss} = props;
 
-  const [shortEngineFormula, setShortEngineFormula] = useState<boolean>(true);
-  const [shortWheelsFormula, setShortWheelsFormula] = useState<boolean>(true);
+  const [shortEngineFormula] = useState<boolean>(true);
+  const [shortWheelsFormula] = useState<boolean>(true);
 
   const genomeCaption = (
     <Block display="flex" flexDirection="row">

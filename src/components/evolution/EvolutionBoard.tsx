@@ -18,6 +18,7 @@ import { generateWorldVersion, generationToCars } from './utils/evolution';
 import { getIntSearchParam, setSearchParam } from '../../utils/url';
 import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 import EvolutionAnalytics from './EvolutionAnalytics';
+import { loggerBuilder } from '../../utils/logger';
 
 const GENERATION_SIZE_URL_PARAM = 'generation-size';
 const GROUP_SIZE_URL_PARAM = 'group-size';
@@ -62,17 +63,15 @@ function EvolutionBoard() {
   const [carsLoss, setCarsLoss] = useState<CarsLossType[]>([{}]);
   const [lossHistory, setLossHistory
   ] = useState<number[]>([]);
-
   const genomeLossRef = useRef<GenomeLossType[]>([{}]);
 
+  const logger = loggerBuilder({ context: 'EvolutionBoard' });
   const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
   const carsInProgress: CarsInProgressType = carsBatch.reduce((cars: CarsInProgressType, car: CarType) => {
     cars[car.licencePlate] = true;
     return cars;
   }, {});
-
   const batchVersion = generateWorldVersion(generationIndex, carsBatchIndex);
-
   const generationLifetimeMs = generationLifetime * SECOND;
 
   const onWorldSwitch = (worldKey: React.Key): void => {
@@ -123,19 +122,22 @@ function EvolutionBoard() {
       return;
     }
 
+    // Save the car loss to the "LicencePlate → Loss" map.
     if (!carsLossRef.current[generationIndex]) {
       carsLossRef.current[generationIndex] = {};
     }
     carsLossRef.current[generationIndex][licensePlate] = loss;
 
+    // Save the car loss to the "GenomeKey → Loss" map.
     if (!genomeLossRef.current[generationIndex]) {
       genomeLossRef.current[generationIndex] = {};
     }
-    if (!carsRef.current[licensePlate]) {
-      throw new Error(`Cannot fetch genome index for a car with the licence plate ${licensePlate}`);
+    if (carsRef.current[licensePlate]) {
+      const carGenomeIndex = carsRef.current[licensePlate].genomeIndex;
+      const carGenome: Genome = generation[carGenomeIndex];
+      const carGenomeKey: GenomeKey = carGenome.join('');
+      genomeLossRef.current[generationIndex][carGenomeKey] = loss;
     }
-    const carGenome: Genome = generation[carsRef.current[licensePlate].genomeIndex];
-    genomeLossRef.current[generationIndex][carGenome.join('')] = loss;
   };
 
   const onGenerationSizeChange = (size: number) => {
@@ -281,37 +283,39 @@ function EvolutionBoard() {
     return carLossToFitness(loss);
   };
 
-  // Start the evolution.
-  useEffect(() => {
+  const startEvolution = () => {
+    logger.info('Start evolution');
     setGenerationIndex(0);
-  }, []);
+  };
 
-  // Once generation index is changed we need to create (or mate) a new generation.
-  useEffect(() => {
+  const createFirstGeneration = () => {
     if (generationIndex === null) {
       return;
     }
-    if (generationIndex === 0) {
-      // Create the very first generation.
-      const generation: Generation = createGeneration({
-        generationSize,
-        genomeLength: GENOME_LENGTH,
-      });
-      setGeneration(generation);
-      setBestGenome(generation[0]);
-      setSecondBestGenome(generation[1]);
-    } else {
-      // Mate and mutate existing population.
-      const newGeneration = select(generation, carFitnessFunction(generationIndex - 1));
-      setGeneration(newGeneration);
-    }
-  }, [generationIndex, worldIndex]);
+    logger.info('Create first generation');
+    const generation: Generation = createGeneration({
+      generationSize,
+      genomeLength: GENOME_LENGTH,
+    });
+    setGeneration(generation);
+    setBestGenome(generation[0]);
+    setSecondBestGenome(generation[1]);
+  };
 
-  // Once generation is changed we need to create cars.
-  useEffect(() => {
+  const mateExistingGeneration = () => {
+    if (generationIndex === null) {
+      return;
+    }
+    logger.info(`Mate generation #${generationIndex}`);
+    const newGeneration = select(generation, carFitnessFunction(generationIndex - 1));
+    setGeneration(newGeneration);
+  };
+
+  const createCarsFromGeneration = () => {
     if (!generation || !generation.length) {
       return;
     }
+    logger.info(`Create cars from generation #${generationIndex}`);
     const cars = generationToCars({
       generation,
       generationIndex,
@@ -320,10 +324,9 @@ function EvolutionBoard() {
     setCars(cars);
     setCarsBatchIndex(0);
     carsRef.current = _.cloneDeep(cars);
-  }, [generation]);
+  };
 
-  // Once the cars batch index is updated we need to generate a cars batch.
-  useEffect(() => {
+  const generateNextCarsBatch = () => {
     if (carsBatchIndex === null || generationIndex === null) {
       return;
     }
@@ -333,37 +336,73 @@ function EvolutionBoard() {
     if (carsBatchIndex >= carsBatchesTotal) {
       return;
     }
+    logger.info(`Generate cars batch #${carsBatchIndex}`);
     const batchStart = carsBatchSize * carsBatchIndex;
     const batchEnd = batchStart + carsBatchSize;
     const carsBatch: CarType[] = Object.values(cars).slice(batchStart, batchEnd);
     setCarsBatch(carsBatch);
-  }, [carsBatchIndex]);
+  };
 
-  // Once the new cars batch is created we need to start generation timer.
-  useEffect(() => {
+  const onBatchLifetimeEnd = () => {
+    if (carsBatchIndex === null) {
+      return;
+    }
+    logger.info(`Batch #${carsBatchIndex} lifetime ended`);
+    setCarsLoss(_.cloneDeep<CarsLossType[]>(carsLossRef.current));
+    syncLossHistory();
+    const bestLicensePlate = syncBestGenome();
+    syncSecondBestGenome(bestLicensePlate);
+    const nextBatchIndex = carsBatchIndex + 1;
+    if (nextBatchIndex >= carsBatchesTotal) {
+      setCarsBatch([]);
+      if (generationIndex !== null) {
+        setCarsBatchIndex(null);
+        setGenerationIndex(generationIndex + 1);
+      }
+      return;
+    }
+    setCarsBatchIndex(nextBatchIndex);
+  };
+
+  const countDownBatchLifetime = (onLifetimeEnd: () => void) => {
     if (carsBatchIndex === null) {
       return;
     }
     if (!carsBatch || !carsBatch.length) {
       return;
     }
+    logger.info(`Batch #${carsBatchIndex} lifetime started`);
     cancelBatchTimer();
-    batchTimer.current = setTimeout(() => {
-      setCarsLoss(_.cloneDeep<CarsLossType[]>(carsLossRef.current));
-      syncLossHistory();
-      const bestLicensePlate = syncBestGenome();
-      syncSecondBestGenome(bestLicensePlate);
-      const nextBatchIndex = carsBatchIndex + 1;
-      if (nextBatchIndex >= carsBatchesTotal) {
-        setCarsBatch([]);
-        if (generationIndex !== null) {
-          setCarsBatchIndex(null);
-          setGenerationIndex(generationIndex + 1);
-        }
-        return;
-      }
-      setCarsBatchIndex(nextBatchIndex);
-    }, generationLifetimeMs);
+    batchTimer.current = setTimeout(onLifetimeEnd, generationLifetimeMs);
+  };
+
+  // Start the evolution.
+  useEffect(() => {
+    startEvolution();
+  }, []);
+
+  // Once generation index is changed we need to create (or mate) a new generation.
+  useEffect(() => {
+    if (generationIndex === 0) {
+      createFirstGeneration();
+    } else {
+      mateExistingGeneration();
+    }
+  }, [generationIndex, worldIndex]);
+
+  // Once generation is changed we need to create cars.
+  useEffect(() => {
+    createCarsFromGeneration();
+  }, [generation]);
+
+  // Once the cars batch index is updated we need to generate a cars batch.
+  useEffect(() => {
+    generateNextCarsBatch();
+  }, [carsBatchIndex]);
+
+  // Once the new cars batch is created we need to start generation timer.
+  useEffect(() => {
+    countDownBatchLifetime(onBatchLifetimeEnd);
   }, [carsBatch]);
 
   const worlds = (

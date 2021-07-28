@@ -1,6 +1,6 @@
 import React from 'react';
 import { Block } from 'baseui/block';
-import { BiDna, FaGithub, FaReadme, FaTwitter, RiFilePaper2Fill } from 'react-icons/all';
+import { FaGithub, FaTwitter, RiFilePaper2Fill } from 'react-icons/all';
 import { IconType } from 'react-icons/lib';
 
 import { ARTICLE_LINK, GITHUB_LINK, TWITTER_LINK } from '../../constants/links';
