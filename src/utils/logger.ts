@@ -8,6 +8,7 @@ type LoggerCallback = (...params: any[]) => void;
 
 type Logger = {
   info: LoggerCallback,
+  warn: LoggerCallback,
   error: LoggerCallback,
 };
 
@@ -27,6 +28,19 @@ export const loggerBuilder = (params: LoggerParams): Logger => {
     );
   };
 
+  const warn: LoggerCallback = (message, ...optionalParams) => {
+    if (!logToConsole) {
+      return;
+    }
+    console.info(
+      `%c${context}`,
+      'background: red; color: white; padding: 0 3px; border-radius: 3px;',
+      '→',
+      message,
+      ...optionalParams
+    );
+  };
+
   const error: LoggerCallback = (message, ...optionalParams) => {
     if (!logToConsole) {
       return;
@@ -34,5 +48,5 @@ export const loggerBuilder = (params: LoggerParams): Logger => {
     console.error(context, message, ...optionalParams);
   };
 
-  return { info, error };
+  return { info, warn, error };
 };

@@ -2,7 +2,8 @@ export const WORLD_SEARCH_PARAM = 'parking';
 
 export const WORLD_TAB_INDEX_TO_NAME_MAP: Record<string, string> = {
   '0': 'evolution',
-  '1': 'manual',
+  '1': 'automatic',
+  '2': 'manual',
 };
 
 export const WORLD_NAME_TO_TAB_INDEX_MAP: Record<string, string> = Object.keys(WORLD_TAB_INDEX_TO_NAME_MAP)

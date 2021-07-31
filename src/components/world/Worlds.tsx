@@ -14,24 +14,27 @@ import Hint from '../shared/Hint';
 import Row from '../shared/Row';
 
 export const EVOLUTION_WORLD_KEY = '0';
-export const MANUAL_PARKING_WORLD_KEY = '1';
+export const AUTOMATIC_PARKING_WORLD_KEY = '1';
+export const MANUAL_PARKING_WORLD_KEY = '2';
 
 const STAT_SEARCH_PARAM_NAME = 'stats';
 
 type WorldsProps = {
   cars: CarType[],
+  bestCars: CarType[],
   activeWorldKey: string | number,
   onWorldSwitch?: (worldKey: React.Key) => void,
-  version?: string,
+  evolutionWorldVersion?: string,
   withWorldParams?: boolean,
 };
 
 function Worlds(props: WorldsProps) {
   const {
     cars,
+    bestCars,
     activeWorldKey,
     onWorldSwitch = (worldKey) => {},
-    version = '0',
+    evolutionWorldVersion = '0',
     withWorldParams = false,
   } = props;
 
@@ -42,6 +45,7 @@ function Worlds(props: WorldsProps) {
   const tabBarStyle: StyleObject = {
     paddingLeft: 0,
     paddingRight: 0,
+    overflow: 'hidden',
   };
 
   const tabContentStyle: StyleObject = {
@@ -92,11 +96,31 @@ function Worlds(props: WorldsProps) {
         )}
       >
         <ErrorBoundary>
-          <World withPerfStats={withStat} version={version}>
+          <World withPerfStats={withStat} version={evolutionWorldVersion}>
             <ParkingAutomatic
               withVisibleSensors={withSensors}
               withLabels={withLabels}
               cars={cars}
+            />
+          </World>
+          {worldParamsController}
+        </ErrorBoundary>
+      </Tab>
+
+      <Tab
+        title={(
+          <Row>
+            <Block marginRight="7px">Automatic Parking</Block>
+            <Hint hint="See trained self-parking car in action" />
+          </Row>
+        )}
+      >
+        <ErrorBoundary>
+          <World withPerfStats={withStat} version={evolutionWorldVersion}>
+            <ParkingAutomatic
+              withVisibleSensors={withSensors}
+              withLabels={withLabels}
+              cars={bestCars}
             />
           </World>
           {worldParamsController}

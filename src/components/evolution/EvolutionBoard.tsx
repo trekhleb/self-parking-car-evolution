@@ -50,6 +50,8 @@ function EvolutionBoard() {
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
   const carsRef = useRef<CarsType>({});
 
+  const [bestCars, setBestCars] = useState<CarType[]>([]);
+
   const [bestGenome, setBestGenome] = useState<Genome | null>(null);
   const [minLoss, setMinLoss] = useState<number | null>(null);
   const [bestCarLicencePlate, setBestCarLicencePlate] = useState<CarLicencePlateType | null>(null);
@@ -274,7 +276,7 @@ function EvolutionBoard() {
       !genomeLossRef.current[generationIndex] ||
       typeof genomeLossRef.current[generationIndex][genomeKey] !== 'number'
     ) {
-      throw new Error('Fitness value is undefined');
+      throw new Error('Fitness value for specified genome is undefined');
     }
     const loss = genomeLossRef.current[generationIndex][genomeKey];
     if (typeof loss !== 'number') {
@@ -307,8 +309,16 @@ function EvolutionBoard() {
       return;
     }
     logger.info(`Mate generation #${generationIndex}`);
-    const newGeneration = select(generation, carFitnessFunction(generationIndex - 1));
-    setGeneration(newGeneration);
+    try {
+      const newGeneration = select(generation, carFitnessFunction(generationIndex - 1));
+      setGeneration(newGeneration);
+    } catch (e) {
+      // If selection failed for some reason, clone the existing generation and try again.
+      setGeneration([...generation]);
+      const errorMessage = 'The selection for the new generation has failed. Cloning the existing generation to try it next time.';
+      const exceptionMessage = e && e.message ? e.message : '';
+      logger.warn(errorMessage, exceptionMessage);
+    }
   };
 
   const createCarsFromGeneration = () => {
@@ -409,9 +419,10 @@ function EvolutionBoard() {
     <Block>
       <Worlds
         cars={carsBatch}
+        bestCars={bestCars}
         activeWorldKey={activeWorldKey}
         onWorldSwitch={onWorldSwitch}
-        version={batchVersion}
+        evolutionWorldVersion={batchVersion}
       />
     </Block>
   );
