@@ -7,11 +7,11 @@ import {Notification, KIND as NOTIFICATION_KIND} from 'baseui/notification';
 import Timer from '../shared/Timer';
 
 type EvolutionTimingProps = {
-  generationIndex: number | null,
-  batchIndex: number | null,
-  generationLifetimeMs: number,
-  batchVersion: string,
-  worldVersion: string,
+  generationIndex?: number | null,
+  batchIndex?: number | null,
+  generationLifetimeMs?: number,
+  batchVersion?: string,
+  worldVersion?: string,
 };
 
 function EvolutionTiming(props: EvolutionTimingProps) {
@@ -22,6 +22,38 @@ function EvolutionTiming(props: EvolutionTimingProps) {
     batchVersion,
     worldVersion,
   } = props;
+
+  const generationInfo = generationIndex !== undefined ? (
+    <TimingColumn caption="Generation">
+      <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
+        <small>#</small>{(generationIndex || 0) + 1}
+      </Tag>
+    </TimingColumn>
+  ) : null;
+
+  const groupInfo = batchIndex !== undefined ? (
+    <TimingColumn caption="Group">
+      <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
+        <small>#</small>{(batchIndex || 0) + 1}
+      </Tag>
+    </TimingColumn>
+  ) : null;
+
+  const groupLifetime = generationLifetimeMs !== undefined && batchVersion !== undefined ? (
+    <TimingColumn caption="Group lifetime">
+      <Block padding="3px">
+        <Timer timout={generationLifetimeMs} version={batchVersion} />
+      </Block>
+    </TimingColumn>
+  ) : null;
+
+  const worldAge = worldVersion !== undefined ? (
+    <TimingColumn caption="World age">
+      <Block padding="3px">
+        <Timer version={worldVersion} />
+      </Block>
+    </TimingColumn>
+  ) : null;
 
   return (
     <Notification
@@ -40,30 +72,10 @@ function EvolutionTiming(props: EvolutionTimingProps) {
         width="auto"
         flex="1"
       >
-        <TimingColumn caption="Generation">
-          <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
-            <small>#</small>{(generationIndex || 0) + 1}
-          </Tag>
-        </TimingColumn>
-
-        <TimingColumn caption="Group">
-          <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
-            <small>#</small>{(batchIndex || 0) + 1}
-          </Tag>
-        </TimingColumn>
-
-        <TimingColumn caption="Group lifetime">
-          <Block padding="3px">
-            <Timer timout={generationLifetimeMs} version={batchVersion} />
-          </Block>
-        </TimingColumn>
-
-        <TimingColumn caption="World age">
-          <Block padding="3px">
-            <Timer version={worldVersion} />
-          </Block>
-        </TimingColumn>
-
+        {generationInfo}
+        {groupInfo}
+        {groupLifetime}
+        {worldAge}
       </Block>
     </Notification>
   );
