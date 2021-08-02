@@ -8,6 +8,7 @@ import { APP_BASE_PATH } from '../../constants/app';
 
 export const SECOND = 1000;
 export const DEFAULT_GENERATION_LIFETIME = 30;
+export const TRAINED_CAR_GENERATION_LIFETIME = 20;
 
 const GENERATION_SIZES = [10, 50, 100];
 const BATCH_SIZES = [1, 2, 5, 10, 20];
