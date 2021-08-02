@@ -10,19 +10,23 @@ const GENOME_PANELS = {
 };
 
 type BestGenomesProps = {
+  bestGenomePanelTitle?: string,
   bestGenome: Genome | null,
-  bestCarLicencePlate: CarLicencePlateType | null,
-  minLoss: number | null,
-  secondBestGenome: Genome | null,
-  secondBestCarLicencePlate: CarLicencePlateType | null,
-  secondMinLoss: number | null,
+  bestCarLicencePlate?: CarLicencePlateType | null,
+  minLoss?: number | null,
+  secondBestGenomePanelTitle?: string,
+  secondBestGenome?: Genome | null,
+  secondBestCarLicencePlate?: CarLicencePlateType | null,
+  secondMinLoss?: number | null,
 };
 
 function BestGenomes(props: BestGenomesProps): React.ReactElement {
   const {
+    bestGenomePanelTitle = '1st Best Car Genome',
     bestGenome,
     bestCarLicencePlate,
     minLoss,
+    secondBestGenomePanelTitle = '2nd Best Car Genome',
     secondBestGenome,
     secondBestCarLicencePlate,
     secondMinLoss,
@@ -53,25 +57,39 @@ function BestGenomes(props: BestGenomesProps): React.ReactElement {
     />
   );
 
-  const secondBestGenomePreview = (
+  const secondBestGenomePreview = secondBestGenome !== undefined ? (
     <GenomePreview
       genome={secondBestGenome}
       licencePlate={secondBestCarLicencePlate}
       loss={secondMinLoss}
     />
+  ) : null;
+
+  const panels = [];
+
+  const firstBestGenomePanel = (
+    <Panel title={bestGenomePanelTitle} key={GENOME_PANELS.firstBestGenome}>
+      {bestGenomePreview}
+    </Panel>
   );
+
+  const secondBestGenomePanel = secondBestGenomePreview ? (
+    <Panel title={secondBestGenomePanelTitle} key={GENOME_PANELS.secondBestGenome}>
+      {secondBestGenomePreview}
+    </Panel>
+  ) : null;
+
+  panels.push(firstBestGenomePanel);
+  if (secondBestGenomePanel) {
+    panels.push(secondBestGenomePanel);
+  }
 
   return (
     <StatelessAccordion
       expanded={genomeExpandedTabs}
       onChange={onPanelChange}
     >
-      <Panel title="1st Best Car Genome" key={GENOME_PANELS.firstBestGenome}>
-        {bestGenomePreview}
-      </Panel>
-      <Panel title="2nd Best Car Genome" key={GENOME_PANELS.secondBestGenome}>
-        {secondBestGenomePreview}
-      </Panel>
+      {panels}
     </StatelessAccordion>
   );
 }
