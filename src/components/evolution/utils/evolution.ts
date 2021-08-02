@@ -1,4 +1,4 @@
-import { Generation, Genome } from '../../../lib/genetic';
+import { Gene, Generation, Genome } from '../../../lib/genetic';
 import {
   CarLicencePlateType,
   CarsType,
@@ -103,4 +103,13 @@ export const generateWorldVersion = (
   const generation = generationIndex === null ? -1 : generationIndex;
   const batch = batchIndex === null ? -1: batchIndex;
   return `world-${generation}-${batch}`;
+};
+
+export const genomeStringToGenome = (genomeString: string): Genome => {
+  return genomeString
+    .split(' ')
+    .map<Gene>((geneString: string) => {
+      const gene: Gene = parseInt(geneString, 10) === 1 ? 1 : 0;
+      return gene;
+    });
 };

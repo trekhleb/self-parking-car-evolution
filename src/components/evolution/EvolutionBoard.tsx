@@ -19,6 +19,7 @@ import { getIntSearchParam, setSearchParam } from '../../utils/url';
 import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 import EvolutionAnalytics from './EvolutionAnalytics';
 import { loggerBuilder } from '../../utils/logger';
+import { FIRST_BEST_GENOME } from './constants/genomes';
 
 const GENERATION_SIZE_URL_PARAM = 'generation-size';
 const GROUP_SIZE_URL_PARAM = 'group-size';
@@ -50,7 +51,14 @@ function EvolutionBoard() {
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
   const carsRef = useRef<CarsType>({});
 
-  const [bestCars, setBestCars] = useState<CarType[]>([]);
+  const [bestCars, setBestCars] = useState<CarType[]>(
+    Object.values(
+      generationToCars({
+        generation: [FIRST_BEST_GENOME],
+        generationIndex: 0,
+      })
+    )
+  );
 
   const [bestGenome, setBestGenome] = useState<Genome | null>(null);
   const [minLoss, setMinLoss] = useState<number | null>(null);
