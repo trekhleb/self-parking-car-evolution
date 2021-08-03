@@ -12,6 +12,8 @@ type EvolutionTimingProps = {
   generationLifetimeMs?: number,
   batchVersion?: string,
   worldVersion?: string,
+  groupLabel?: string,
+  batchLifetimeLabel?: string,
 };
 
 function EvolutionTiming(props: EvolutionTimingProps) {
@@ -21,6 +23,8 @@ function EvolutionTiming(props: EvolutionTimingProps) {
     generationLifetimeMs,
     batchVersion,
     worldVersion,
+    groupLabel = 'Group',
+    batchLifetimeLabel = 'Group lifetime',
   } = props;
 
   const generationInfo = generationIndex !== undefined ? (
@@ -32,7 +36,7 @@ function EvolutionTiming(props: EvolutionTimingProps) {
   ) : null;
 
   const groupInfo = batchIndex !== undefined ? (
-    <TimingColumn caption="Group">
+    <TimingColumn caption={groupLabel}>
       <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
         <small>#</small>{(batchIndex || 0) + 1}
       </Tag>
@@ -40,7 +44,7 @@ function EvolutionTiming(props: EvolutionTimingProps) {
   ) : null;
 
   const groupLifetime = generationLifetimeMs !== undefined && batchVersion !== undefined ? (
-    <TimingColumn caption="Group lifetime">
+    <TimingColumn caption={batchLifetimeLabel}>
       <Block padding="3px">
         <Timer timout={generationLifetimeMs} version={batchVersion} />
       </Block>

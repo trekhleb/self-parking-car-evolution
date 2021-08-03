@@ -3,14 +3,15 @@ import { Block } from 'baseui/block';
 import _ from 'lodash';
 
 import { createGeneration, Generation, Genome, select } from '../../lib/genetic';
-import Worlds, { EVOLUTION_WORLD_KEY } from '../world/Worlds';
+import Worlds, { AUTOMATIC_PARKING_WORLD_KEY, EVOLUTION_WORLD_KEY } from '../world/Worlds';
 import { CarsLossType, CarsInProgressType } from './PopulationTable';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import {
   DEFAULT_BATCH_SIZE,
   DEFAULT_GENERATION_LIFETIME,
   DEFAULT_GENERATION_SIZE,
-  SECOND
+  SECOND,
+  TRAINED_CAR_GENERATION_LIFETIME
 } from './EvolutionBoardParams';
 import { carLossToFitness, GENOME_LENGTH } from '../../lib/carGenetic';
 import { getWorldKeyFromUrl } from './utils/url';
@@ -20,16 +21,23 @@ import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url
 import EvolutionAnalytics from './EvolutionAnalytics';
 import { loggerBuilder } from '../../utils/logger';
 import { FIRST_BEST_GENOME } from './constants/genomes';
+import AutomaticParkingAnalytics from './AutomaticParkingAnalytics';
 
 const GENERATION_SIZE_URL_PARAM = 'generation-size';
 const GROUP_SIZE_URL_PARAM = 'group-size';
 const GENERATION_LIFETIME_URL_PARAM = 'generation-lifetime';
+
+const bestDefaultTrainedGeneration: Generation = [
+  FIRST_BEST_GENOME,
+];
 
 //  Genome array, concatenated to a string (i.e. '1010011')
 type GenomeKey = string;
 
 type GenomeLossType = Record<GenomeKey, number | null>;
 
+// @TODO: Component is too big. Split it!
+// Separation of concerns are ignored for the faster proof-of-concept development.
 function EvolutionBoard() {
   const [activeWorldKey, setActiveWorldKey] = React.useState<string | number>(getWorldKeyFromUrl(EVOLUTION_WORLD_KEY));
   const [worldIndex, setWorldIndex] = useState<number>(0);
@@ -51,11 +59,20 @@ function EvolutionBoard() {
   const [carsBatchIndex, setCarsBatchIndex] = useState<number | null>(null);
   const carsRef = useRef<CarsType>({});
 
-  const [bestCars, setBestCars] = useState<CarType[]>(
+  const bestTrainedCarLossRef = useRef<number | null>(null);
+  const onTrainedCarLossUpdate = (licensePlate: CarLicencePlateType, loss: number) => {
+    bestTrainedCarLossRef.current = loss;
+  };
+
+  const [bestTrainedCarLoss, setBestTrainedCarLoss] = useState<number | null>(null);
+  const [bestTrainedCarCycleIndex, setBestTrainedCarCycleIndex] = useState<number>(0);
+  const [bestTrainedGeneration] = useState<Generation>(bestDefaultTrainedGeneration);
+  const [bestTrainedCars] = useState<CarType[]>(
     Object.values(
       generationToCars({
-        generation: [FIRST_BEST_GENOME],
+        generation: bestDefaultTrainedGeneration,
         generationIndex: 0,
+        onLossUpdate: onTrainedCarLossUpdate,
       })
     )
   );
@@ -68,6 +85,7 @@ function EvolutionBoard() {
   const [secondBestCarLicencePlate, setSecondBestCarLicencePlate] = useState<CarLicencePlateType | null>(null);
 
   const batchTimer = useRef<NodeJS.Timeout | null>(null);
+  const automaticParkingLifetimeTimer = useRef<NodeJS.Timeout | null>(null);
 
   const carsLossRef = useRef<CarsLossType[]>([{}]);
   const [carsLoss, setCarsLoss] = useState<CarsLossType[]>([{}]);
@@ -83,14 +101,28 @@ function EvolutionBoard() {
   }, {});
   const batchVersion = generateWorldVersion(generationIndex, carsBatchIndex);
   const generationLifetimeMs = generationLifetime * SECOND;
+  const automaticParkingCycleLifetimeMs = TRAINED_CAR_GENERATION_LIFETIME * SECOND;
+  const automaticWorldVersion = `automatic-${bestTrainedCarCycleIndex}`;
+
+  const isEvolutionWorld = activeWorldKey === EVOLUTION_WORLD_KEY;
+  const isAutomaticParkingWorld = activeWorldKey === AUTOMATIC_PARKING_WORLD_KEY;
 
   const onWorldSwitch = (worldKey: React.Key): void => {
+    logger.info(`World has switched to ${worldKey}`);
+
     setActiveWorldKey(worldKey);
     setSearchParam(WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP[worldKey]);
+
     if (worldKey === EVOLUTION_WORLD_KEY) {
       setGenerationIndex(0);
     } else {
       onEvolutionReset();
+    }
+
+    if (worldKey === AUTOMATIC_PARKING_WORLD_KEY) {
+      setBestTrainedCarCycleIndex(bestTrainedCarCycleIndex + 1);
+    } else {
+      onAutomaticParkingReset();
     }
   };
 
@@ -109,6 +141,12 @@ function EvolutionBoard() {
     setSecondBestGenome(null);
     setSecondMinLoss(null);
     setSecondBestCarLicencePlate(null);
+  };
+
+  const onAutomaticParkingReset = () => {
+    cancelAutomaticCycleTimer();
+    setBestTrainedCarCycleIndex(0);
+    setBestTrainedCarLoss(null);
   };
 
   const onEvolutionReset = () => {
@@ -168,11 +206,33 @@ function EvolutionBoard() {
   };
 
   const cancelBatchTimer = () => {
+    logger.info('Trying to cancel batch timer');
     if (batchTimer.current === null) {
       return;
     }
     clearTimeout(batchTimer.current);
     batchTimer.current = null;
+  };
+
+  const onAutomaticCycleLifetimeEnd = () => {
+    logger.info(`Automatic cycle #${bestTrainedCarCycleIndex} lifetime ended`);
+    setBestTrainedCarLoss(bestTrainedCarLossRef.current);
+    setBestTrainedCarCycleIndex(bestTrainedCarCycleIndex + 1);
+  };
+
+  const cancelAutomaticCycleTimer = () => {
+    logger.info('Trying to cancel automatic parking cycle timer');
+    if (automaticParkingLifetimeTimer.current === null) {
+      return;
+    }
+    clearTimeout(automaticParkingLifetimeTimer.current);
+    automaticParkingLifetimeTimer.current = null;
+  };
+
+  const countDownAutomaticParkingCycleLifetime = (onLifetimeEnd: () => void) => {
+    logger.info(`Automatic parking cycle started`);
+    cancelAutomaticCycleTimer();
+    automaticParkingLifetimeTimer.current = setTimeout(onLifetimeEnd, automaticParkingCycleLifetimeMs);
   };
 
   const syncBestGenome = (): string | null | undefined => {
@@ -394,8 +454,25 @@ function EvolutionBoard() {
     batchTimer.current = setTimeout(onLifetimeEnd, generationLifetimeMs);
   };
 
+
+  // Start the automatic parking cycles.
+  useEffect(() => {
+    if (!isAutomaticParkingWorld) {
+      return;
+    }
+    countDownAutomaticParkingCycleLifetime(onAutomaticCycleLifetimeEnd);
+    return () => {
+      cancelAutomaticCycleTimer();
+    };
+  }, [
+    bestTrainedCarCycleIndex,
+  ]);
+
   // Start the evolution.
   useEffect(() => {
+    if (!isEvolutionWorld) {
+      return;
+    }
     startEvolution();
   }, []);
 
@@ -421,21 +498,25 @@ function EvolutionBoard() {
   // Once the new cars batch is created we need to start generation timer.
   useEffect(() => {
     countDownBatchLifetime(onBatchLifetimeEnd);
+    return () => {
+      cancelBatchTimer();
+    };
   }, [carsBatch]);
 
   const worlds = (
     <Block>
       <Worlds
         cars={carsBatch}
-        bestCars={bestCars}
+        bestCars={bestTrainedCars}
         activeWorldKey={activeWorldKey}
         onWorldSwitch={onWorldSwitch}
         evolutionWorldVersion={batchVersion}
+        automaticWorldVersion={automaticWorldVersion}
       />
     </Block>
   );
 
-  const evolutionAnalytics = activeWorldKey === EVOLUTION_WORLD_KEY ? (
+  const evolutionAnalytics = isEvolutionWorld ? (
     <EvolutionAnalytics
       generationIndex={generationIndex}
       carsBatchIndex={carsBatchIndex}
@@ -461,10 +542,21 @@ function EvolutionBoard() {
     />
   ) : null;
 
+  const automaticParkingAnalytics = isAutomaticParkingWorld ? (
+    <AutomaticParkingAnalytics
+      bestGenome={bestTrainedGeneration[0]}
+      minLoss={bestTrainedCarLoss}
+      generationLifetimeMs={automaticParkingCycleLifetimeMs}
+      batchVersion={automaticWorldVersion}
+      carsBatchIndex={bestTrainedCarCycleIndex}
+    />
+  ) : null;
+
   return (
     <Block>
       {worlds}
       {evolutionAnalytics}
+      {automaticParkingAnalytics}
     </Block>
   );
 }

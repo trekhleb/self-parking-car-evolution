@@ -25,6 +25,7 @@ type WorldsProps = {
   activeWorldKey: string | number,
   onWorldSwitch?: (worldKey: React.Key) => void,
   evolutionWorldVersion?: string,
+  automaticWorldVersion?: string,
   withWorldParams?: boolean,
 };
 
@@ -35,6 +36,7 @@ function Worlds(props: WorldsProps) {
     activeWorldKey,
     onWorldSwitch = (worldKey) => {},
     evolutionWorldVersion = '0',
+    automaticWorldVersion = '0',
     withWorldParams = false,
   } = props;
 
@@ -116,7 +118,7 @@ function Worlds(props: WorldsProps) {
         )}
       >
         <ErrorBoundary>
-          <World withPerfStats={withStat} version={evolutionWorldVersion}>
+          <World withPerfStats={withStat} version={automaticWorldVersion}>
             <ParkingAutomatic
               withVisibleSensors={withSensors}
               withLabels={withLabels}
