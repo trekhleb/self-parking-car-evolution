@@ -1,10 +1,10 @@
 import React from 'react';
 
-import EvolutionBoard from '../evolution/EvolutionBoard';
+import EvolutionTabs from '../evolution/EvolutionTabs';
 
 function HomeScreen() {
   return (
-    <EvolutionBoard />
+    <EvolutionTabs />
   );
 }
 
