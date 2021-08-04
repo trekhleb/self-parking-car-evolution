@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stats, Environment} from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
@@ -11,12 +11,12 @@ import CarJoystickController from './controllers/CarJoystickController';
 import CarKeyboardController from './controllers/CarKeyboardController';
 import { WORLD_CONTAINER_HEIGHT } from './constants/world';
 import FadeIn from '../shared/FadeIn';
+import { getSearchParam } from '../../utils/url';
 
 type WorldProps = {
   children: React.ReactNode,
   withJoystickControl?: boolean,
   withKeyboardControl?: boolean,
-  withPerfStats?: boolean,
   version?: string,
 };
 
@@ -32,16 +32,19 @@ const WorldSpinner = withStyle(StyledSpinnerNext, {
   borderTopColor: 'black',
 });
 
+const STAT_SEARCH_PARAM_NAME = 'stats';
+
 function World(props: WorldProps) {
   const {
     children,
     withJoystickControl = false,
     withKeyboardControl = false,
-    withPerfStats = false,
     version = '0',
   } = props;
 
-  const stats = withPerfStats ? (
+  const [withStat] = useState<boolean>(!!getSearchParam(STAT_SEARCH_PARAM_NAME));
+
+  const stats = withStat ? (
     <Stats showPanel={0} />
   ) : null;
 
