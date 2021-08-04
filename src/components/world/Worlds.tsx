@@ -98,7 +98,7 @@ function Worlds(props: WorldsProps) {
         )}
       >
         <ErrorBoundary>
-          <World withPerfStats={withStat} version={evolutionWorldVersion}>
+          <World version={evolutionWorldVersion}>
             <ParkingAutomatic
               withVisibleSensors={withSensors}
               withLabels={withLabels}
@@ -118,7 +118,7 @@ function Worlds(props: WorldsProps) {
         )}
       >
         <ErrorBoundary>
-          <World withPerfStats={withStat} version={automaticWorldVersion}>
+          <World version={automaticWorldVersion}>
             <ParkingAutomatic
               withVisibleSensors={withSensors}
               withLabels={withLabels}
@@ -139,7 +139,6 @@ function Worlds(props: WorldsProps) {
       >
         <ErrorBoundary>
           <World
-            withPerfStats={withStat}
             withJoystickControl
             withKeyboardControl
           >
