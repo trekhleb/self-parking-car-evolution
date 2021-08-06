@@ -11,6 +11,7 @@ import { getWorldKeyFromUrl } from './utils/url';
 import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 import EvolutionTabManual from './EvolutionTabManual';
 import EvolutionTabEvolution from './EvolutionTabEvolution';
+import EvolutionTabAutomatic from './EvolutionTabAutomatic';
 
 // @TODO: Refactor world tab selection: use meaningful keys.
 export const EVOLUTION_WORLD_KEY = '0';
@@ -79,14 +80,7 @@ function EvolutionTabs() {
         )}
       >
         <ErrorBoundary>
-          TODO
-          {/*<World withPerfStats={withStat} version={automaticWorldVersion}>*/}
-          {/*  <ParkingAutomatic*/}
-          {/*    withVisibleSensors={withSensors}*/}
-          {/*    withLabels={withLabels}*/}
-          {/*    cars={bestCars}*/}
-          {/*  />*/}
-          {/*</World>*/}
+          <EvolutionTabAutomatic />
         </ErrorBoundary>
       </Tab>
 

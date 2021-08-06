@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
+import { Block } from 'baseui/block';
 
 import { createGeneration, Generation, Genome, select } from '../../lib/genetic';
 import { CarsLossType, CarsInProgressType } from './PopulationTable';
@@ -62,7 +63,7 @@ function EvolutionTabEvolution() {
   ] = useState<number[]>([]);
   const genomeLossRef = useRef<GenomeLossType[]>([{}]);
 
-  const logger = loggerBuilder({ context: 'EvolutionTabEvolution' });
+  const logger = loggerBuilder({ context: 'EvolutionTab' });
   const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
   const carsInProgress: CarsInProgressType = carsBatch.reduce((cars: CarsInProgressType, car: CarType) => {
     cars[car.licencePlate] = true;
@@ -397,7 +398,7 @@ function EvolutionTabEvolution() {
   }, [carsBatch]);
 
   return (
-    <>
+    <Block>
       <World version={batchVersion}>
         <ParkingAutomatic
           cars={carsBatch}
@@ -428,7 +429,7 @@ function EvolutionTabEvolution() {
         secondBestCarLicencePlate={secondBestCarLicencePlate}
         secondMinLoss={secondMinLoss}
       />
-    </>
+    </Block>
   );
 }
 
