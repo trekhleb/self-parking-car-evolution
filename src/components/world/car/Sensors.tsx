@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import throttle from 'lodash/throttle';
+import { DebouncedFunc } from 'lodash';
+import { useThree } from '@react-three/fiber';
 
 import { CHASSIS_OBJECT_NAME, SENSOR_DISTANCE, SENSOR_HEIGHT } from './constants';
 import SensorRay from './SensorRay';
-import { useThree } from '@react-three/fiber';
 import { CarMetaData, SensorValuesType } from '../types/car';
 import { ON_SENSORS_THROTTLE_TIMEOUT } from '../constants/performance';
 
@@ -19,21 +20,26 @@ const Sensors = (props: SensorsProps) => {
   const obstacles = useRef<THREE.Object3D[]>([]);
   const sensorDistances = useRef<SensorValuesType>(new Array(sensorsNum).fill(undefined));
   const { scene } = useThree();
+  const onSensorsCallbackThrottledRef = useRef<DebouncedFunc<(...args: any[]) => any> | null>(null);
 
   const onSensorsCallback = () => {
     onSensors(sensorDistances.current);
   };
 
-  const onSensorsCallbackThrottled = throttle(onSensorsCallback, ON_SENSORS_THROTTLE_TIMEOUT, {
-    leading: true,
-    trailing: true,
-  });
+  if (!onSensorsCallbackThrottledRef.current) {
+    onSensorsCallbackThrottledRef.current = throttle(onSensorsCallback, ON_SENSORS_THROTTLE_TIMEOUT, {
+      leading: true,
+      trailing: true,
+    });
+  }
 
   const onRay = (index: number, distance: number | undefined): void => {
     sensorDistances.current[index] = typeof distance === 'number'
       ? distance
       : null;
-    onSensorsCallbackThrottled();
+    if (onSensorsCallbackThrottledRef.current) {
+      onSensorsCallbackThrottledRef.current();
+    }
   };
 
   // @ts-ignore
@@ -64,6 +70,16 @@ const Sensors = (props: SensorsProps) => {
       />
     );
   });
+
+  const onUnmount = () => {
+    if (onSensorsCallbackThrottledRef.current) {
+      onSensorsCallbackThrottledRef.current.cancel();
+    }
+  };
+
+  useEffect(() => {
+    return onUnmount;
+  }, []);
 
   return (
     <>
