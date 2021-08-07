@@ -106,6 +106,7 @@ function Car(props: CarProps) {
   });
   const [carLoss, setCarLoss] = useState<number | null>(null);
   const onUpdateLabelThrottledRef = useRef<DebouncedFunc<(...args: any[]) => any> | null>(null);
+  const onMoveThrottledRef = useRef<DebouncedFunc<(...args: any[]) => any> | null>(null);
 
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
   const wheelInfos: WheelInfoOptions[] = [];
@@ -221,6 +222,9 @@ function Car(props: CarProps) {
     if (onUpdateLabelThrottledRef.current) {
       onUpdateLabelThrottledRef.current.cancel();
     }
+    if (onMoveThrottledRef.current) {
+      onMoveThrottledRef.current.cancel();
+    }
     onCarDestroy();
   };
 
@@ -236,10 +240,12 @@ function Car(props: CarProps) {
     return onUnmount;
   }, []);
 
-  const onMoveThrottled = throttle(onMove, ON_MOVE_THROTTLE_TIMEOUT, {
-    leading: true,
-    trailing: true,
-  });
+  if (!onMoveThrottledRef.current) {
+    onMoveThrottledRef.current = throttle(onMove, ON_MOVE_THROTTLE_TIMEOUT, {
+      leading: true,
+      trailing: true,
+    });
+  }
 
   // @TODO: Move the logic of label content population to the evolution components.
   // Car shouldn't know about the evolution loss function.
@@ -287,7 +293,9 @@ function Car(props: CarProps) {
       bl: bl.toArray(),
       br: br.toArray(),
     };
-    onMoveThrottled(wheelPositions);
+    if (onMoveThrottledRef.current) {
+      onMoveThrottledRef.current(wheelPositions);
+    }
 
     // @TODO: Move the logic of label content population to the evolution components.
     // Car shouldn't know about the evolution loss function.
