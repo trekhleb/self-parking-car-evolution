@@ -4,19 +4,20 @@ import { Block } from 'baseui/block';
 
 import { StyleObject } from 'styletron-standard';
 import ErrorBoundary from '../shared/ErrorBoundary';
-import { setSearchParam } from '../../utils/url';
+import { getSearchParam, setSearchParam } from '../../utils/url';
 import Hint from '../shared/Hint';
 import Row from '../shared/Row';
-import { getWorldKeyFromUrl } from './utils/url';
-import { WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP } from './constants/url';
 import EvolutionTabManual from './EvolutionTabManual';
 import EvolutionTabEvolution from './EvolutionTabEvolution';
 import EvolutionTabAutomatic from './EvolutionTabAutomatic';
 
-// @TODO: Refactor world tab selection: use meaningful keys.
-export const EVOLUTION_WORLD_KEY = '0';
-export const AUTOMATIC_PARKING_WORLD_KEY = '1';
-export const MANUAL_PARKING_WORLD_KEY = '2';
+const WORLD_SEARCH_PARAM = 'parking';
+
+const TAB_KEYS: Record<string, string> = {
+  evolution: 'evolution',
+  automatic: 'automatic',
+  manual: 'manual',
+};
 
 const tabBarStyle: StyleObject = {
   paddingLeft: 0,
@@ -39,13 +40,16 @@ const tabStyle: StyleObject = {
 };
 
 function EvolutionTabs() {
-  const [activeWorldKey, setActiveWorldKey] = useState<string | number>(
-    getWorldKeyFromUrl(EVOLUTION_WORLD_KEY)
-  );
+  let worldKey: string = getSearchParam(WORLD_SEARCH_PARAM) || TAB_KEYS.evolution;
+  if (!TAB_KEYS.hasOwnProperty(worldKey)) {
+    worldKey = TAB_KEYS.evolution;
+  }
+
+  const [activeWorldKey, setActiveWorldKey] = useState<string | number>(worldKey);
 
   const onTabSwitch = ({ activeKey }: {activeKey: React.Key}) => {
     setActiveWorldKey(activeKey);
-    setSearchParam(WORLD_SEARCH_PARAM, WORLD_TAB_INDEX_TO_NAME_MAP[activeKey]);
+    setSearchParam(WORLD_SEARCH_PARAM, `${activeKey}`);
   }
 
   return (
@@ -59,6 +63,7 @@ function EvolutionTabs() {
       activeKey={activeWorldKey}
     >
       <Tab
+        key={TAB_KEYS.evolution}
         title={(
           <Row>
             <Block marginRight="7px">Parking Evolution</Block>
@@ -72,6 +77,7 @@ function EvolutionTabs() {
       </Tab>
 
       <Tab
+        key={TAB_KEYS.automatic}
         title={(
           <Row>
             <Block marginRight="7px">Automatic Parking</Block>
@@ -85,6 +91,7 @@ function EvolutionTabs() {
       </Tab>
 
       <Tab
+        key={TAB_KEYS.manual}
         title={(
           <Row>
             <Block marginRight="7px">Manual Parking</Block>
