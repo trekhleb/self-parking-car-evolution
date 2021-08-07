@@ -1,6 +1,10 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { BoxProps, CylinderProps, useRaycastVehicle } from '@react-three/cannon';
 import * as THREE from 'three';
+import { DebouncedFunc } from 'lodash';
+import { useFrame } from '@react-three/fiber';
+import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
+import throttle from 'lodash/throttle';
 
 import Chassis from './Chassis';
 import Wheel from './Wheel';
@@ -31,9 +35,6 @@ import {
   userCarUUID,
   WheelInfoOptions,
 } from '../types/car';
-import { useFrame } from '@react-three/fiber';
-import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
-import throttle from 'lodash/throttle';
 import { ON_MOVE_THROTTLE_TIMEOUT, ON_UPDATE_LABEL_THROTTLE_TIMEOUT } from '../constants/performance';
 import { PARKING_SPOT_POINTS } from '../surroundings/ParkingSpot';
 import { formatLossValue } from '../../evolution/utils/evolution';
@@ -104,6 +105,7 @@ function Car(props: CarProps) {
     br: new THREE.Vector3(),
   });
   const [carLoss, setCarLoss] = useState<number | null>(null);
+  const onUpdateLabelThrottledRef = useRef<DebouncedFunc<(...args: any[]) => any> | null>(null);
 
   const wheels: MutableRefObject<THREE.Object3D | undefined>[] = [];
   const wheelInfos: WheelInfoOptions[] = [];
@@ -215,20 +217,23 @@ function Car(props: CarProps) {
   apiRef.current = vehicleAPI;
   wheelsRef.current = wheels;
 
+  const onUnmount = () => {
+    if (onUpdateLabelThrottledRef.current) {
+      onUpdateLabelThrottledRef.current.cancel();
+    }
+    onCarDestroy();
+  };
+
   useEffect(() => {
     if (!apiRef.current || !chassis.current) {
-      return () => {
-        onCarDestroy();
-      };
+      return onUnmount;
     }
     onCarReady({
       api: apiRef.current,
       chassis: chassis.current,
       wheelsNum: wheelsRef.current.length,
     });
-    return () => {
-      onCarDestroy();
-    };
+    return onUnmount;
   }, []);
 
   const onMoveThrottled = throttle(onMove, ON_MOVE_THROTTLE_TIMEOUT, {
@@ -246,10 +251,12 @@ function Car(props: CarProps) {
     setCarLoss(loss);
   };
 
-  const onUpdateLabelThrottled = throttle(onUpdateLabel, ON_UPDATE_LABEL_THROTTLE_TIMEOUT, {
-    leading: false,
-    trailing: true,
-  });
+  if (!onUpdateLabelThrottledRef.current) {
+    onUpdateLabelThrottledRef.current = throttle(onUpdateLabel, ON_UPDATE_LABEL_THROTTLE_TIMEOUT, {
+      leading: false,
+      trailing: true,
+    });
+  }
 
   useFrame((state: RootState, delta: number) => {
     if (!wheels || wheels.length !== 4) {
@@ -284,8 +291,8 @@ function Car(props: CarProps) {
 
     // @TODO: Move the logic of label content population to the evolution components.
     // Car shouldn't know about the evolution loss function.
-    if (withLabel) {
-      onUpdateLabelThrottled(wheelPositions);
+    if (withLabel && onUpdateLabelThrottledRef.current) {
+      onUpdateLabelThrottledRef.current(wheelPositions);
     }
   });
 
