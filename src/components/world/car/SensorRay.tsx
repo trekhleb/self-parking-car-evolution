@@ -6,6 +6,7 @@ import throttle from 'lodash/throttle';
 import { RootState } from '@react-three/fiber/dist/declarations/src/core/store';
 import { Intersection } from 'three/src/core/Raycaster';
 import { acceleratedRaycast } from 'three-mesh-bvh';
+import { DebouncedFunc } from 'lodash';
 
 import { NumVec3 } from '../../../types/vectors';
 import { SENSOR_DISTANCE } from './constants';
@@ -45,6 +46,9 @@ const SensorRay = (props: SensorRayProps) => {
   const directionRef = useRef<THREE.Vector3>(new THREE.Vector3());
   const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
 
+  const intersectObjectsThrottledRef = useRef<DebouncedFunc<(...args: any[]) => any> | null>(null);
+  const onRayCallbackThrottledRef = useRef<DebouncedFunc<(...args: any[]) => any> | null>(null);
+
   const intersectionRef = useRef<Intersection[]>([]);
   raycasterRef.current.near = 0;
   raycasterRef.current.far = SENSOR_DISTANCE;
@@ -56,7 +60,13 @@ const SensorRay = (props: SensorRayProps) => {
     intersectionRef.current = raycasterRef.current.intersectObjects(obstacles, true);
   };
 
-  const intersectObjectsThrottled = throttle(intersectObjects, INTERSECT_THROTTLE_TIMEOUT, {
+  // if (!intersectObjectsThrottledRef.current) {
+  //   intersectObjectsThrottledRef.current = throttle(intersectObjects, INTERSECT_THROTTLE_TIMEOUT, {
+  //     leading: true,
+  //     trailing: true,
+  //   });
+  // }
+  intersectObjectsThrottledRef.current = throttle(intersectObjects, INTERSECT_THROTTLE_TIMEOUT, {
     leading: true,
     trailing: true,
   });
@@ -65,10 +75,12 @@ const SensorRay = (props: SensorRayProps) => {
     onRay(index, distance);
   };
 
-  const onRayCallbackThrottled = throttle(onRayCallback, ON_RAY_THROTTLE_TIMEOUT, {
-    leading: true,
-    trailing: true,
-  });
+  if (!onRayCallbackThrottledRef.current) {
+    onRayCallbackThrottledRef.current = throttle(onRayCallback, ON_RAY_THROTTLE_TIMEOUT, {
+      leading: true,
+      trailing: true,
+    });
+  }
 
   useFrame((state: RootState, delta: number) => {
     if (!lineRef?.current) {
@@ -80,13 +92,17 @@ const SensorRay = (props: SensorRayProps) => {
 
     raycasterRef.current.set(positionRef.current, directionRef.current);
 
-    intersectObjectsThrottled();
+    if (intersectObjectsThrottledRef.current) {
+      intersectObjectsThrottledRef.current();
+    }
 
     const distance = intersectionRef.current.length
       ? intersectionRef.current[0].distance
       : undefined;
 
-    onRayCallbackThrottled(index, distance);
+    if (onRayCallbackThrottledRef.current) {
+      onRayCallbackThrottledRef.current(index, distance);
+    }
 
     if (distance === undefined) {
       lineRef.current.material.color = beamColor;
@@ -96,6 +112,19 @@ const SensorRay = (props: SensorRayProps) => {
       lineRef.current.material.color = beamDangerColor;
     }
   });
+
+  const onUnmount = () => {
+    if (intersectObjectsThrottledRef.current) {
+      intersectObjectsThrottledRef.current.cancel();
+    }
+    if (onRayCallbackThrottledRef.current) {
+      onRayCallbackThrottledRef.current.cancel();
+    }
+  };
+
+  useEffect(() => {
+    return onUnmount;
+  }, [])
 
   useEffect(() => {
     if (!lineRef.current) {
