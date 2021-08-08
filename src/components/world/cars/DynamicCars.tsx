@@ -116,7 +116,7 @@ function DynamicCars(props: DynamicCarsProps) {
       }
     };
 
-    const position = [0, 2, 4 * Math.random() - 2];
+    const position = [0, 2, 3 * Math.random() - 2];
     const angularVelocity = [-0.2, 0, 0];
 
     const styledCar = !withRandomColors;
