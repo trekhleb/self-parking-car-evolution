@@ -11,6 +11,7 @@ type AutomaticParkingAnalyticsProps = {
   bestGenome: Genome | null,
   minLoss: number | null,
   carsBatchIndex: number | null,
+  onBestGenomeEdit?: (genome: Genome) => void,
 };
 
 function AutomaticParkingAnalytics(props: AutomaticParkingAnalyticsProps) {
@@ -20,6 +21,7 @@ function AutomaticParkingAnalytics(props: AutomaticParkingAnalyticsProps) {
     batchVersion,
     minLoss,
     carsBatchIndex,
+    onBestGenomeEdit = (genome: Genome) => {},
   } = props;
 
   const timingDetails = (
@@ -41,6 +43,8 @@ function AutomaticParkingAnalytics(props: AutomaticParkingAnalyticsProps) {
         bestGenomePanelTitle="Self-parking car genome"
         bestGenome={bestGenome}
         minLoss={minLoss}
+        onBestGenomeEdit={onBestGenomeEdit}
+        editable
       />
     </>
   );

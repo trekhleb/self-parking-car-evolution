@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Block } from 'baseui/block';
 
-import { Generation } from '../../lib/genetic';
+import { Generation, Genome } from '../../lib/genetic';
 import { CarLicencePlateType, CarType } from '../world/types/car';
 import {
   SECOND,
@@ -26,8 +26,8 @@ function EvolutionTabAutomatic() {
 
   const [bestTrainedCarLoss, setBestTrainedCarLoss] = useState<number | null>(null);
   const [bestTrainedCarCycleIndex, setBestTrainedCarCycleIndex] = useState<number>(0);
-  const [bestTrainedGeneration] = useState<Generation>(bestDefaultTrainedGeneration);
-  const [bestTrainedCars] = useState<CarType[]>(
+  const [bestTrainedGeneration, setBestTrainedGeneration] = useState<Generation>(bestDefaultTrainedGeneration);
+  const [bestTrainedCars, setBestTrainedCars] = useState<CarType[]>(
     Object.values(
       generationToCars({
         generation: bestDefaultTrainedGeneration,
@@ -65,6 +65,28 @@ function EvolutionTabAutomatic() {
     automaticParkingLifetimeTimer.current = setTimeout(onLifetimeEnd, automaticParkingCycleLifetimeMs);
   };
 
+  const onBestGenomeEdit = (editedGenome: Genome) => {
+    logger.info('Updating genome', editedGenome);
+
+    const updatedGeneration: Generation = [editedGenome];
+
+    setBestTrainedGeneration(updatedGeneration);
+
+    setBestTrainedCars(Object.values(
+      generationToCars({
+        generation: updatedGeneration,
+        generationIndex: 0,
+        onLossUpdate: onTrainedCarLossUpdate,
+      })
+    ));
+
+    bestTrainedCarLossRef.current = null;
+    setBestTrainedCarLoss(null);
+    setBestTrainedCarCycleIndex(bestTrainedCarCycleIndex + 1);
+
+    countDownAutomaticParkingCycleLifetime(onAutomaticCycleLifetimeEnd);
+  };
+
   // Start the automatic parking cycles.
   useEffect(() => {
     countDownAutomaticParkingCycleLifetime(onAutomaticCycleLifetimeEnd);
@@ -90,6 +112,7 @@ function EvolutionTabAutomatic() {
         generationLifetimeMs={automaticParkingCycleLifetimeMs}
         batchVersion={automaticWorldVersion}
         carsBatchIndex={bestTrainedCarCycleIndex}
+        onBestGenomeEdit={onBestGenomeEdit}
       />
     </Block>
   );

@@ -18,6 +18,8 @@ type BestGenomesProps = {
   secondBestGenome?: Genome | null,
   secondBestCarLicencePlate?: CarLicencePlateType | null,
   secondMinLoss?: number | null,
+  editable?: boolean,
+  onBestGenomeEdit?: (genome: Genome) => void,
 };
 
 function BestGenomes(props: BestGenomesProps): React.ReactElement {
@@ -30,6 +32,8 @@ function BestGenomes(props: BestGenomesProps): React.ReactElement {
     secondBestGenome,
     secondBestCarLicencePlate,
     secondMinLoss,
+    editable = false,
+    onBestGenomeEdit = (genome: Genome) => {},
   } = props;
 
   const [genomeExpandedTabs, setGenomeExpandedTabs] = React.useState<React.Key[]>([
@@ -54,6 +58,8 @@ function BestGenomes(props: BestGenomesProps): React.ReactElement {
       genome={bestGenome}
       licencePlate={bestCarLicencePlate}
       loss={minLoss}
+      editable={editable}
+      onGenomeEdit={onBestGenomeEdit}
     />
   );
 

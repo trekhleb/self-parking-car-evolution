@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { Block } from 'baseui/block';
-import { useState } from 'react';
+import { CSSProperties, FormEvent, useState } from 'react';
+import { Textarea } from 'baseui/textarea';
+import { Button, SHAPE as BUTTON_SHAPE, KIND as BUTTON_KIND, SIZE as BUTTON_SIZE } from 'baseui/button';
+import { BiEdit, FaRegSave } from 'react-icons/all';
 
-import { Genome } from '../../lib/genetic';
+import { Gene, Genome } from '../../lib/genetic';
 import { CarLicencePlateType } from '../world/types/car';
 import { FormControl } from 'baseui/form-control';
 import { formatLossValue } from './utils/evolution';
@@ -13,18 +16,73 @@ type GenomePreviewProps = {
   title?: string,
   licencePlate?: CarLicencePlateType | null,
   loss?: number | null,
+  editable?: boolean,
+  onGenomeEdit?: (genome: Genome) => void,
+};
+
+const genomeSeparator = ' ';
+
+const commonGenomeStyles: CSSProperties = {
+  paddingTop: '15px',
+  paddingRight: '15px',
+  paddingBottom: '15px',
+  paddingLeft: '15px',
+  fontSize: '12px',
+  backgroundColor: '#FFFFFF',
+  lineHeight: '20px',
+  fontFamily: 'monospace',
 };
 
 function GenomePreview(props: GenomePreviewProps) {
-  const {title, genome, licencePlate, loss} = props;
+  const {
+    title,
+    genome,
+    licencePlate,
+    loss,
+    editable = false,
+    onGenomeEdit = (genome: Genome) => {},
+  } = props;
 
   const [shortEngineFormula] = useState<boolean>(true);
   const [shortWheelsFormula] = useState<boolean>(true);
 
+  const [isEditableGenome, setIsEditableGenome] = useState<boolean>(false);
+  const [editedGenome, setEditedGenome] = useState<Genome | null>(genome);
+  const [genomeError, setGenomeError] = useState<string | null>(null);
+
+  const onGenomeUpdate = (genomeString: string) => {
+    if (!genome) {
+      return;
+    }
+
+    const genomeFromString: Genome = genomeString
+      .trim()
+      .split('')
+      .filter((geneString: string) => ['0', '1'].includes(geneString))
+      .map((geneString: string) => {
+        const gene: Gene = geneString === '0' ? 0 : 1;
+        return gene;
+      });
+    setEditedGenome(genomeFromString);
+
+    if (genomeFromString.length !== genome.length) {
+      setGenomeError(`Genome must have ${genome.length} genes. Currently it has ${genomeFromString.length} genes.`);
+    } else {
+      setGenomeError(null);
+    }
+  };
+
+  const onEditToggle = () => {
+    if (editedGenome && isEditableGenome && !genomeError) {
+      onGenomeEdit(editedGenome)
+    }
+    setIsEditableGenome(!isEditableGenome);
+  };
+
   const genomeCaption = (
     <Block display="flex" flexDirection="row">
       {genome && (
-        <Block marginRight="15px">
+        <Block marginRight="10px">
           Genes: <b>{genome.length}</b>
         </Block>
       )}
@@ -48,12 +106,62 @@ function GenomePreview(props: GenomePreviewProps) {
 
   const label = title || 'Car genome';
 
-  const genomeString = (genome || []).join(' ');
-  const genomeOutput = (
+  const genomeEditButtonIcon = !isEditableGenome ? (
+    <BiEdit title="Edit genome" />
+  ) : null;
+
+  const genomeSaveButtonIcon = isEditableGenome ? (
+    <FaRegSave title="Save genome" />
+  ) : null;
+
+  const genomeEditButtons = editable ? (
+    <Block
+      display="flex"
+      flexDirection="row"
+      justifyContent="flex-end"
+      alignItems="center"
+      marginBottom="-30px"
+    >
+      <Button
+        onClick={onEditToggle}
+        shape={BUTTON_SHAPE.pill}
+        kind={BUTTON_KIND.minimal}
+        size={BUTTON_SIZE.default}
+        disabled={!!genomeError}
+        overrides={{
+          BaseButton: {
+            style: {
+              paddingTop: 0,
+              paddingRight: 0,
+              paddingBottom: 0,
+              paddingLeft: 0,
+              marginTop: '5px',
+              display: 'block',
+            },
+            props: {
+              title: isEditableGenome ? 'Save genome' : 'Edit genome',
+            },
+          },
+        }}
+      >
+        <Block>
+          {genomeEditButtonIcon}
+          {genomeSaveButtonIcon}
+        </Block>
+      </Button>
+    </Block>
+  ) : null;
+
+  const genomePreviewLabel = (
+    <Block>
+      {label}
+    </Block>
+  );
+
+  const genomeString = (genome || []).join(genomeSeparator);
+  const genomePreviewOutput = (
     <FormControl
-      label={() => (
-        <span>{label}</span>
-      )}
+      label={genomePreviewLabel}
       caption={genomeCaption}
     >
       <CodeBlock>
@@ -61,6 +169,39 @@ function GenomePreview(props: GenomePreviewProps) {
       </CodeBlock>
     </FormControl>
   );
+
+  const editedGenomeString = (editedGenome || []).join(genomeSeparator);
+  const genomeEditableOutput = (
+    <FormControl
+      label={() => genomePreviewLabel}
+      caption={(
+        <span>
+          Copy/paste whole genome or double-click the specific gene and change it
+        </span>
+      )}
+      error={genomeError}
+    >
+      <Textarea
+        value={editedGenomeString}
+        onChange={(event: FormEvent<HTMLTextAreaElement>) => {
+          // @ts-ignore
+          onGenomeUpdate(event.target.value);
+        }}
+        overrides={{
+          Input: {
+            style: {
+              ...commonGenomeStyles,
+              height: '200px',
+            },
+          },
+        }}
+        error={!!genomeError}
+        autoFocus
+      />
+    </FormControl>
+  );
+
+  const genomeOutput = isEditableGenome ? genomeEditableOutput : genomePreviewOutput;
 
   let decodedEngineFormula = null;
   let decodedWheelsFormula = null;
@@ -93,6 +234,7 @@ function GenomePreview(props: GenomePreviewProps) {
   return (
     <Block>
       <Block marginBottom={blocksMarginBottom}>
+        {genomeEditButtons}
         {genomeOutput}
       </Block>
 
@@ -142,11 +284,9 @@ function CodeBlock(props: CodeBlockProps) {
   return (
     <>
       <Block $style={{
+        ...commonGenomeStyles,
         border: '1px dotted #CCCCCC',
-        padding: '15px',
         borderRadius: '3px',
-        fontSize: '12px',
-        backgroundColor: '#FFFFFF',
       }}>
         <code>
           {children}
