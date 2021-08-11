@@ -25,6 +25,17 @@ export function createGeneration(params: GenerationParams): Generation {
 // The number between 0 and 1.
 export type Probability = number;
 
+// @see: https://en.wikipedia.org/wiki/Mutation_(genetic_algorithm)
+function mutate(genome: Genome, mutationProbability: Probability): Genome {
+  // Conceive children.
+  for (let geneIndex = 0; geneIndex < genome.length; geneIndex += 1) {
+    const gene: Gene = genome[geneIndex];
+    const mutatedGene: Gene = gene === 0 ? 1 : 0;
+    genome[geneIndex] = Math.random() < mutationProbability ? mutatedGene : gene;
+  }
+  return genome;
+}
+
 type MateOptions = {
   mutationProbability?: Probability,
 };
@@ -32,7 +43,9 @@ type MateOptions = {
 // Performs Uniform Crossover: each bit is chosen from either parent with equal probability.
 // @see: https://en.wikipedia.org/wiki/Crossover_(genetic_algorithm)
 function mate(father: Genome, mother: Genome, options?: MateOptions): [Genome, Genome] {
-  const { mutationProbability = 0.2 } = options || {};
+  const {
+    mutationProbability = 0.2
+  } = options || {};
 
   if (father.length !== mother.length) {
     throw new Error('Cannot mate different species');
@@ -57,21 +70,14 @@ function mate(father: Genome, mother: Genome, options?: MateOptions): [Genome, G
   ];
 }
 
-// @see: https://en.wikipedia.org/wiki/Mutation_(genetic_algorithm)
-function mutate(genome: Genome, mutationProbability: Probability): Genome {
-  // Conceive children.
-  for (let geneIndex = 0; geneIndex < genome.length; geneIndex += 1) {
-    const gene: Gene = genome[geneIndex];
-    const mutatedGene: Gene = gene === 0 ? 1 : 0;
-    genome[geneIndex] = Math.random() < mutationProbability ? mutatedGene : gene;
-  }
-  return genome;
-}
-
 export type FitnessFunction = (genome: Genome) => number;
 
 // @see: https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)
-export function select(generation: Generation, fitness: FitnessFunction) {
+export function select(
+  generation: Generation,
+  fitness: FitnessFunction,
+  options?: MateOptions,
+) {
   const newGeneration: Generation = [];
 
   const sortedGeneration = [...generation];
