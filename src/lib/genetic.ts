@@ -1,3 +1,5 @@
+import { weightedRandom } from './math/probability';
+
 export type Gene = 0 | 1;
 
 export type Genome = Gene[];
@@ -93,6 +95,10 @@ export function select(
     }
     return 0;
   });
+
+  const fitnessPerGenome: number[] = generation.map((genome: Genome) => fitness(genome));
+  const father: Genome = weightedRandom<Genome>(generation, fitnessPerGenome);
+  const mother: Genome = weightedRandom<Genome>(generation, fitnessPerGenome);
 
   return [...generation];
 
