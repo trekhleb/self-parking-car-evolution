@@ -96,9 +96,33 @@ export function select(
     return 0;
   });
 
+  // Get the data about he fitness of each individuum.
   const fitnessPerGenome: number[] = generation.map((genome: Genome) => fitness(genome));
-  const father: Genome = weightedRandom<Genome>(generation, fitnessPerGenome);
-  const mother: Genome = weightedRandom<Genome>(generation, fitnessPerGenome);
+
+  // Select random father and mother from the population.
+  // The fittest individuums have higher chances to be selected.
+  let father: Genome | null = null;
+  let fatherGenomeIndex: number | null = null;
+  let mother: Genome | null = null;
+  let matherGenomeIndex: number | null = null;
+
+  while (!father || !mother || fatherGenomeIndex === matherGenomeIndex) {
+    const {
+      item: randomFather,
+      index: randomFatherGenomeIndex,
+    } = weightedRandom<Genome>(generation, fitnessPerGenome);
+
+    const {
+      item: randomMother,
+      index: randomMotherGenomeIndex,
+    } = weightedRandom<Genome>(generation, fitnessPerGenome);
+
+    father = randomFather;
+    fatherGenomeIndex = randomFatherGenomeIndex;
+
+    mother = randomMother;
+    matherGenomeIndex = randomMotherGenomeIndex;
+  }
 
   return [...generation];
 

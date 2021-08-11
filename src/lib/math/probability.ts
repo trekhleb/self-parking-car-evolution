@@ -1,6 +1,6 @@
 // Picks the random item based on its weight.
 // The items with higher weight will be picked more often.
-export const weightedRandom = <T>(items: T[], weights: number[]): T => {
+export const weightedRandom = <T>(items: T[], weights: number[]): { item: T, index: number } => {
   if (items.length !== weights.length) {
     throw new Error('Items and weights must be of the same size');
   }
@@ -26,8 +26,14 @@ export const weightedRandom = <T>(items: T[], weights: number[]): T => {
   // The items with higher weight will be picked more often.
   for (let i = 0; i < items.length; i += 1) {
     if (cumulativeWeights[i] >= randomNumber) {
-      return items[i];
+      return {
+        item: items[i],
+        index: i,
+      };
     }
   }
-  return items[items.length - 1];
+  return {
+    item: items[items.length - 1],
+    index: items.length - 1,
+  };
 };
