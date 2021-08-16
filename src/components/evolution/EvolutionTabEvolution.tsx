@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { Block } from 'baseui/block';
 
-import { createGeneration, Generation, Genome, select } from '../../lib/genetic';
+import { createGeneration, Generation, Genome, Probability, select } from '../../lib/genetic';
 import { CarsLossType, CarsInProgressType } from './PopulationTable';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import {
@@ -62,6 +62,9 @@ function EvolutionTabEvolution() {
   const [lossHistory, setLossHistory
   ] = useState<number[]>([]);
   const genomeLossRef = useRef<GenomeLossType[]>([{}]);
+
+  const [mutationProbability, setMutationProbability] = useState<Probability>(0);
+  const [longLivingProbability, setLongLivingProbability] = useState<Probability>(0.2);
 
   const logger = loggerBuilder({ context: 'EvolutionTab' });
   const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
@@ -289,7 +292,14 @@ function EvolutionTabEvolution() {
     }
     logger.info(`Mate generation #${generationIndex}`);
     try {
-      const newGeneration = select(generation, carFitnessFunction(generationIndex - 1));
+      const newGeneration = select(
+        generation,
+        carFitnessFunction(generationIndex - 1),
+        {
+          mutationProbability,
+          longLivingProbability,
+        },
+      );
       setGeneration(newGeneration);
     } catch (e) {
       // If selection failed for some reason, clone the existing generation and try again.
