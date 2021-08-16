@@ -38,17 +38,18 @@ function mutate(genome: Genome, mutationProbability: Probability): Genome {
   return genome;
 }
 
-type MateOptions = {
-  mutationProbability?: Probability,
+type SelectionOptions = {
+  mutationProbability: Probability,
+  longLivingProbability: Probability,
 };
 
 // Performs Uniform Crossover: each bit is chosen from either parent with equal probability.
 // @see: https://en.wikipedia.org/wiki/Crossover_(genetic_algorithm)
-function mate(father: Genome, mother: Genome, options?: MateOptions): [Genome, Genome] {
-  const {
-    mutationProbability = 0.2
-  } = options || {};
-
+function mate(
+  father: Genome,
+  mother: Genome,
+  mutationProbability: Probability,
+): [Genome, Genome] {
   if (father.length !== mother.length) {
     throw new Error('Cannot mate different species');
   }
@@ -78,13 +79,18 @@ export type FitnessFunction = (genome: Genome) => number;
 export function select(
   generation: Generation,
   fitness: FitnessFunction,
-  options?: MateOptions,
+  options: SelectionOptions,
 ) {
+  const {
+    mutationProbability,
+    longLivingProbability,
+  } = options;
+
   const newGeneration: Generation = [];
 
-  const sortedGeneration = [...generation];
+  const oldGeneration = [...generation];
   // First one - the fittest one.
-  sortedGeneration.sort((genomeA: Genome, genomeB: Genome): number => {
+  oldGeneration.sort((genomeA: Genome, genomeB: Genome): number => {
     const fitnessA = fitness(genomeA);
     const fitnessB = fitness(genomeB);
     if (fitnessA < fitnessB) {
@@ -96,36 +102,50 @@ export function select(
     return 0;
   });
 
-  // Get the data about he fitness of each individuum.
-  const fitnessPerGenome: number[] = generation.map((genome: Genome) => fitness(genome));
-
-  // Select random father and mother from the population.
-  // The fittest individuums have higher chances to be selected.
-  let father: Genome | null = null;
-  let fatherGenomeIndex: number | null = null;
-  let mother: Genome | null = null;
-  let matherGenomeIndex: number | null = null;
-
-  while (!father || !mother || fatherGenomeIndex === matherGenomeIndex) {
-    const {
-      item: randomFather,
-      index: randomFatherGenomeIndex,
-    } = weightedRandom<Genome>(generation, fitnessPerGenome);
-
-    const {
-      item: randomMother,
-      index: randomMotherGenomeIndex,
-    } = weightedRandom<Genome>(generation, fitnessPerGenome);
-
-    father = randomFather;
-    fatherGenomeIndex = randomFatherGenomeIndex;
-
-    mother = randomMother;
-    matherGenomeIndex = randomMotherGenomeIndex;
+  // Let long-livers continue living in the new generation.
+  const longLiversCount = longLivingProbability * oldGeneration.length;
+  if (longLiversCount) {
+    newGeneration.concat(oldGeneration.slice(0, longLiversCount));
   }
 
-  return [...generation];
+  // Get the data about he fitness of each individuum.
+  const fitnessPerGenome: number[] = oldGeneration.map((genome: Genome) => fitness(genome));
 
-  // @TODO: Mate best genomes. Preserve two best genomes.
-  // return newGeneration;
+  // Populate the next generation until it becomes the same size as a old generation.
+  while (newGeneration.length < generation.length) {
+    // Select random father and mother from the population.
+    // The fittest individuums have higher chances to be selected.
+    let father: Genome | null = null;
+    let fatherGenomeIndex: number | null = null;
+    let mother: Genome | null = null;
+    let matherGenomeIndex: number | null = null;
+
+    // To produce children the father and mother need each other.
+    // It must be two different individuums.
+    while (!father || !mother || fatherGenomeIndex === matherGenomeIndex) {
+      const {
+        item: randomFather,
+        index: randomFatherGenomeIndex,
+      } = weightedRandom<Genome>(generation, fitnessPerGenome);
+
+      const {
+        item: randomMother,
+        index: randomMotherGenomeIndex,
+      } = weightedRandom<Genome>(generation, fitnessPerGenome);
+
+      father = randomFather;
+      fatherGenomeIndex = randomFatherGenomeIndex;
+
+      mother = randomMother;
+      matherGenomeIndex = randomMotherGenomeIndex;
+    }
+
+    // Let father and mother produce two children.
+    const [firstChild, secondChild] = mate(father, mother, mutationProbability);
+
+    newGeneration.push(firstChild);
+    newGeneration.push(secondChild);
+  }
+
+  return newGeneration;
 }
