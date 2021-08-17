@@ -419,6 +419,7 @@ function EvolutionTabEvolution() {
       <EvolutionAnalytics
         generationIndex={generationIndex}
         carsBatchIndex={carsBatchIndex}
+        totalBatches={carsBatchesTotal}
         worldIndex={worldIndex}
         generationLifetimeMs={generationLifetimeMs}
         generationSize={generationSize}

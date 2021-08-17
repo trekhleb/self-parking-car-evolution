@@ -12,6 +12,7 @@ import { Genome } from '../../lib/genetic';
 type EvolutionAnalyticsProps = {
   generationIndex: number | null,
   carsBatchIndex: number | null,
+  totalBatches: number | null,
   worldIndex: number,
   generationLifetimeMs: number,
   generationSize: number,
@@ -37,6 +38,7 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
   const {
     generationIndex,
     carsBatchIndex,
+    totalBatches,
     worldIndex,
     generationLifetimeMs,
     generationSize,
@@ -63,6 +65,7 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
       <EvolutionTiming
         generationIndex={generationIndex}
         batchIndex={carsBatchIndex}
+        totalBatches={totalBatches}
         batchVersion={batchVersion}
         worldVersion={`${worldIndex}`}
         generationLifetimeMs={generationLifetimeMs}

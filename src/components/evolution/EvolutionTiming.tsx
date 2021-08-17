@@ -8,6 +8,7 @@ import Timer from '../shared/Timer';
 
 type EvolutionTimingProps = {
   generationIndex?: number | null,
+  totalBatches?: number | null,
   batchIndex?: number | null,
   generationLifetimeMs?: number,
   batchVersion?: string,
@@ -20,6 +21,7 @@ function EvolutionTiming(props: EvolutionTimingProps) {
   const {
     generationIndex,
     batchIndex,
+    totalBatches,
     generationLifetimeMs,
     batchVersion,
     worldVersion,
@@ -39,6 +41,7 @@ function EvolutionTiming(props: EvolutionTimingProps) {
     <TimingColumn caption={groupLabel}>
       <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
         <small>#</small>{(batchIndex || 0) + 1}
+        {totalBatches && (<span> / {totalBatches}</span>)}
       </Tag>
     </TimingColumn>
   ) : null;
