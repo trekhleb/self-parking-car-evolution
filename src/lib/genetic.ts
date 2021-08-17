@@ -105,11 +105,13 @@ export function select(
   // Let long-livers continue living in the new generation.
   const longLiversCount = longLivingProbability * oldGeneration.length;
   if (longLiversCount) {
-    newGeneration.concat(oldGeneration.slice(0, longLiversCount));
+    oldGeneration.slice(0, longLiversCount).forEach((longLivingGenome: Genome) => {
+      newGeneration.push(longLivingGenome);
+    });
   }
 
   // Get the data about he fitness of each individuum.
-  const fitnessPerGenome: number[] = oldGeneration.map((genome: Genome) => fitness(genome));
+  const fitnessPerOldGenome: number[] = oldGeneration.map((genome: Genome) => fitness(genome));
 
   // Populate the next generation until it becomes the same size as a old generation.
   while (newGeneration.length < generation.length) {
@@ -126,12 +128,12 @@ export function select(
       const {
         item: randomFather,
         index: randomFatherGenomeIndex,
-      } = weightedRandom<Genome>(generation, fitnessPerGenome);
+      } = weightedRandom<Genome>(generation, fitnessPerOldGenome);
 
       const {
         item: randomMother,
         index: randomMotherGenomeIndex,
-      } = weightedRandom<Genome>(generation, fitnessPerGenome);
+      } = weightedRandom<Genome>(generation, fitnessPerOldGenome);
 
       father = randomFather;
       fatherGenomeIndex = randomFatherGenomeIndex;
