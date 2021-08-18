@@ -63,8 +63,8 @@ function EvolutionTabEvolution() {
   ] = useState<number[]>([]);
   const genomeLossRef = useRef<GenomeLossType[]>([{}]);
 
-  const [mutationProbability, setMutationProbability] = useState<Probability>(0);
-  const [longLivingProbability, setLongLivingProbability] = useState<Probability>(0.2);
+  const [mutationProbability, setMutationProbability] = useState<Probability>(0.2);
+  const [longLivingProbability, setLongLivingProbability] = useState<Probability>(0.02);
 
   const logger = loggerBuilder({ context: 'EvolutionTab' });
   const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
