@@ -7,7 +7,7 @@ import EvolutionTiming from './EvolutionTiming';
 import LossHistory from './LossHistory';
 import BestGenomes from './BestGenomes';
 import { CarLicencePlateType, CarsType } from '../world/types/car';
-import { Genome } from '../../lib/genetic';
+import { Genome, Probability } from '../../lib/genetic';
 
 type EvolutionAnalyticsProps = {
   generationIndex: number | null,
@@ -17,11 +17,14 @@ type EvolutionAnalyticsProps = {
   generationLifetimeMs: number,
   generationSize: number,
   carsBatchSize: number,
+  mutationProbability: Probability,
   generationLifetime: number,
   batchVersion: string,
   onGenerationSizeChange: (size: number) => void,
   onBatchSizeChange: (size: number) => void,
   onGenerationLifetimeChange: (time: number) => void,
+  onReset: () => void,
+  onMutationProbabilityChange: (probability: Probability) => void,
   lossHistory: number[],
   cars: CarsType,
   carsInProgress: CarsInProgressType,
@@ -39,6 +42,7 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
     generationIndex,
     carsBatchIndex,
     totalBatches,
+    mutationProbability,
     worldIndex,
     generationLifetimeMs,
     generationSize,
@@ -48,6 +52,8 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
     onGenerationSizeChange,
     onBatchSizeChange,
     onGenerationLifetimeChange,
+    onReset,
+    onMutationProbabilityChange,
     lossHistory,
     cars,
     carsInProgress,
@@ -78,10 +84,13 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
       <EvolutionBoardParams
         generationSize={generationSize}
         batchSize={carsBatchSize}
+        mutationProbability={mutationProbability}
         generationLifetime={generationLifetime}
         onGenerationSizeChange={onGenerationSizeChange}
         onBatchSizeChange={onBatchSizeChange}
         onGenerationLifetimeChange={onGenerationLifetimeChange}
+        onMutationProbabilityChange={onMutationProbabilityChange}
+        onReset={onReset}
       />
     </Block>
   );

@@ -8,20 +8,22 @@ import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import {
   DEFAULT_BATCH_SIZE,
   DEFAULT_GENERATION_LIFETIME,
-  DEFAULT_GENERATION_SIZE,
+  DEFAULT_GENERATION_SIZE, DEFAULT_MUTATION_PROBABILITY,
   SECOND,
 } from './EvolutionBoardParams';
 import { carLossToFitness, GENOME_LENGTH } from '../../lib/carGenetic';
 import { generateWorldVersion, generationToCars } from './utils/evolution';
-import { getIntSearchParam, setSearchParam } from '../../utils/url';
+import { getFloatSearchParam, getIntSearchParam, setSearchParam } from '../../utils/url';
 import EvolutionAnalytics from './EvolutionAnalytics';
 import { loggerBuilder } from '../../utils/logger';
 import ParkingAutomatic from '../world/parkings/ParkingAutomatic';
 import World from '../world/World';
+import { APP_BASE_PATH } from '../../constants/app';
 
-const GENERATION_SIZE_URL_PARAM = 'generation-size';
-const GROUP_SIZE_URL_PARAM = 'group-size';
-const GENERATION_LIFETIME_URL_PARAM = 'generation-lifetime';
+const GENERATION_SIZE_URL_PARAM = 'generation';
+const GROUP_SIZE_URL_PARAM = 'group';
+const GENERATION_LIFETIME_URL_PARAM = 'lifetime';
+const MUTATION_PROBABILITY_URL_PARAM = 'mutation';
 
 //  Genome array, concatenated to a string (i.e. '1010011')
 type GenomeKey = string;
@@ -63,7 +65,9 @@ function EvolutionTabEvolution() {
   ] = useState<number[]>([]);
   const genomeLossRef = useRef<GenomeLossType[]>([{}]);
 
-  const [mutationProbability, setMutationProbability] = useState<Probability>(0.2);
+  const [mutationProbability, setMutationProbability] = useState<Probability>(
+    getFloatSearchParam(MUTATION_PROBABILITY_URL_PARAM, DEFAULT_MUTATION_PROBABILITY)
+  );
   const [longLivingProbability, setLongLivingProbability] = useState<Probability>(0.02);
 
   const logger = loggerBuilder({ context: 'EvolutionTab' });
@@ -127,6 +131,15 @@ function EvolutionTabEvolution() {
     setGenerationSize(size);
     setSearchParam(GENERATION_SIZE_URL_PARAM, `${size}`);
     onEvolutionRestart();
+  };
+
+  const onReset = () => {
+    document.location.href = APP_BASE_PATH;
+  };
+
+  const onMutationProbabilityChange = (probability: Probability) => {
+    setMutationProbability(probability);
+    setSearchParam(MUTATION_PROBABILITY_URL_PARAM, `${probability}`);
   };
 
   const onBatchSizeChange = (size: number) => {
@@ -417,6 +430,8 @@ function EvolutionTabEvolution() {
         />
       </World>
       <EvolutionAnalytics
+        mutationProbability={mutationProbability}
+        onMutationProbabilityChange={onMutationProbabilityChange}
         generationIndex={generationIndex}
         carsBatchIndex={carsBatchIndex}
         totalBatches={carsBatchesTotal}
@@ -429,6 +444,7 @@ function EvolutionTabEvolution() {
         onGenerationSizeChange={onGenerationSizeChange}
         onBatchSizeChange={onBatchSizeChange}
         onGenerationLifetimeChange={onGenerationLifetimeChange}
+        onReset={onReset}
         lossHistory={lossHistory}
         cars={cars}
         carsInProgress={carsInProgress}

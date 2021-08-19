@@ -27,7 +27,7 @@
     "@types/styletron-react": "^5.0.2",
     "@types/styletron-standard": "^2.0.1",
     "@types/three": "^0.127.1",
-    "baseui": "^9.116.1",
+    "baseui": "^10.0.0",
     "cannon-es": "^0.17.0",
     "gh-pages": "^3.1.0",
     "lodash": "^4.17.21",

@@ -22,3 +22,11 @@ export const getIntSearchParam = (name: string, defaultValue: number): number =>
   }
   return parseInt(searchParam);
 };
+
+export const getFloatSearchParam = (name: string, defaultValue: number): number => {
+  const searchParam: string | null = getSearchParam(name);
+  if (searchParam === null) {
+    return defaultValue;
+  }
+  return parseFloat(searchParam);
+};

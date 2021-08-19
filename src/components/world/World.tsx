@@ -32,7 +32,7 @@ const WorldSpinner = withStyle(StyledSpinnerNext, {
   borderTopColor: 'black',
 });
 
-const STAT_SEARCH_PARAM_NAME = 'stats';
+const STAT_SEARCH_PARAM_NAME = 'debug';
 
 function World(props: WorldProps) {
   const {

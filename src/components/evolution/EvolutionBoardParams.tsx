@@ -1,10 +1,11 @@
-import React, { FormEvent } from 'react';
+import React, { useState } from 'react';
 import { Block } from 'baseui/block';
 import { OnChangeParams, Select, SIZE as SELECT_SIZE } from 'baseui/select';
 import { FormControl } from 'baseui/form-control';
-import { Input, SIZE as INPUT_SIZE } from 'baseui/input';
 import { Button, SIZE as BUTTON_SIZE } from 'baseui/button';
-import { APP_BASE_PATH } from '../../constants/app';
+import { Slider } from 'baseui/slider';
+
+import { Probability } from '../../lib/genetic';
 
 export const SECOND = 1000;
 export const DEFAULT_GENERATION_LIFETIME = 30;
@@ -15,14 +16,18 @@ const BATCH_SIZES = [1, 2, 5, 10, 20, 50];
 
 export const DEFAULT_GENERATION_SIZE = GENERATION_SIZES[0];
 export const DEFAULT_BATCH_SIZE = BATCH_SIZES[0];
+export const DEFAULT_MUTATION_PROBABILITY = 0.2;
 
 type EvolutionBoardParamsProps = {
   generationSize: number,
   batchSize: number,
+  mutationProbability: Probability,
   generationLifetime: number,
-  onGenerationSizeChange: (size: number) => void;
-  onBatchSizeChange: (size: number) => void;
-  onGenerationLifetimeChange: (time: number) => void;
+  onGenerationSizeChange: (size: number) => void,
+  onBatchSizeChange: (size: number) => void,
+  onGenerationLifetimeChange: (time: number) => void,
+  onMutationProbabilityChange: (probability: Probability) => void,
+  onReset: () => void,
 };
 
 function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
@@ -33,7 +38,13 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
     onGenerationSizeChange,
     onBatchSizeChange,
     onGenerationLifetimeChange,
+    mutationProbability,
+    onMutationProbabilityChange,
+    onReset,
   } = props;
+
+  const [mutationProbabilityInternal, setMutationProbabilityInternal] = useState<Probability>(mutationProbability);
+  const [generationLifetimeInternal, setGenerationLifetimeInternal] = useState<number>(generationLifetime);
 
   const generationSizeCurrentValue = [{
     id: `${generationSize}`,
@@ -82,19 +93,30 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
   );
 
   const generationLifetimeChanger = (
-    <Input
-      value={generationLifetime}
-      size={INPUT_SIZE.compact}
-      // @ts-ignore
-      onChange={(e: FormEvent<HTMLInputElement>) => onGenerationLifetimeChange(e.target.value)}
-      type="number"
-      min={5}
+    <Slider
+      step={5}
+      marks
+      persistentThumb={false}
+      min={10}
+      max={30}
+      value={[generationLifetimeInternal]}
+      onChange={({ value }) => value && setGenerationLifetimeInternal(value[0])}
+      onFinalChange={({value}) => onGenerationLifetimeChange(value[0])}
     />
   );
 
-  const onReset = () => {
-    document.location.href = APP_BASE_PATH;
-  };
+  const mutationProbabilityChanger = (
+    <Slider
+      step={0.1}
+      marks
+      persistentThumb={false}
+      min={0}
+      max={1}
+      value={[mutationProbabilityInternal]}
+      onChange={({ value }) => value && setMutationProbabilityInternal(value[0])}
+      onFinalChange={({value}) => onMutationProbabilityChange(value[0])}
+    />
+  );
 
   const resetButton = (
     <Button
@@ -106,29 +128,37 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
   );
 
   return (
-    <Block display="flex" flexDirection="row">
-      <Block flex={1} marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
-        <FormControl label={() => 'Generation size'}>
-          {generationSizeSelector}
-        </FormControl>
-      </Block>
+    <Block>
+      <Block display="flex" flexDirection="row">
+        <Block flex={1} marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
+          <FormControl label={() => 'Generation size'}>
+            {generationSizeSelector}
+          </FormControl>
+        </Block>
 
-      <Block flex={1} marginLeft="10px" marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
-        <FormControl label={() => 'Group size'}>
-          {batchSizeSelector}
-        </FormControl>
-      </Block>
+        <Block flex={1} marginLeft="10px" marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
+          <FormControl label={() => 'Group size'}>
+            {batchSizeSelector}
+          </FormControl>
+        </Block>
 
-      <Block flex={1} marginLeft="10px" marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
-        <FormControl label={() => 'Generation lifetime, s'}>
-          {generationLifetimeChanger}
-        </FormControl>
-      </Block>
+        <Block flex={1} marginLeft="10px" marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
+          <FormControl label={() => 'Generation lifetime, s'}>
+            {generationLifetimeChanger}
+          </FormControl>
+        </Block>
 
-      <Block marginLeft="10px" display="flex" flexDirection="column" justifyContent="flex-end">
-        <FormControl>
-          {resetButton}
-        </FormControl>
+        <Block flex={1} marginLeft="10px" marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
+          <FormControl label={() => 'Mutation probability'}>
+            {mutationProbabilityChanger}
+          </FormControl>
+        </Block>
+
+        <Block marginLeft="10px" display="flex" flexDirection="column" justifyContent="flex-end">
+          <FormControl>
+            {resetButton}
+          </FormControl>
+        </Block>
       </Block>
     </Block>
   );
