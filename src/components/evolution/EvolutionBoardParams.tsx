@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Block } from 'baseui/block';
 import { OnChangeParams, Select, SIZE as SELECT_SIZE } from 'baseui/select';
 import { FormControl } from 'baseui/form-control';
-import { Button, SIZE as BUTTON_SIZE } from 'baseui/button';
+import { Button, SIZE as BUTTON_SIZE, SHAPE as BUTTON_SHAPE } from 'baseui/button';
 import { Slider } from 'baseui/slider';
+import { BiReset } from 'react-icons/all';
 
 import { Probability } from '../../lib/genetic';
+import FormElementsRow from '../shared/FormElementsRow';
 
 export const SECOND = 1000;
 export const DEFAULT_GENERATION_LIFETIME = 30;
@@ -57,16 +59,18 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
     };
   });
   const generationSizeSelector = (
-    <Select
-      options={generationSizes}
-      value={generationSizeCurrentValue}
-      onChange={(params: OnChangeParams) => onGenerationSizeChange(params.value[0].size)}
-      labelKey="id"
-      valueKey="size"
-      size={SELECT_SIZE.compact}
-      clearable={false}
-      searchable={false}
-    />
+    <FormControl label={() => 'Generation size'}>
+      <Select
+        options={generationSizes}
+        value={generationSizeCurrentValue}
+        onChange={(params: OnChangeParams) => onGenerationSizeChange(params.value[0].size)}
+        labelKey="id"
+        valueKey="size"
+        size={SELECT_SIZE.compact}
+        clearable={false}
+        searchable={false}
+      />
+    </FormControl>
   );
 
   const batchSizeCurrentValue = [{
@@ -80,86 +84,100 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
     };
   });
   const batchSizeSelector = (
-    <Select
-      options={batchSizes}
-      value={batchSizeCurrentValue}
-      onChange={(params: OnChangeParams) => onBatchSizeChange(params.value[0].size)}
-      labelKey="id"
-      valueKey="size"
-      size={SELECT_SIZE.compact}
-      clearable={false}
-      searchable={false}
-    />
+    <FormControl label={() => 'Group size'}>
+      <Select
+        options={batchSizes}
+        value={batchSizeCurrentValue}
+        onChange={(params: OnChangeParams) => onBatchSizeChange(params.value[0].size)}
+        labelKey="id"
+        valueKey="size"
+        size={SELECT_SIZE.compact}
+        clearable={false}
+        searchable={false}
+      />
+    </FormControl>
   );
 
+  const sliderOverrides = {
+    TickBar: {
+      style: {
+        paddingBottom: 0,
+      },
+    },
+    InnerThumb: ({$value, $thumbIndex}: {$value: number[], $thumbIndex: number}) => (
+      <React.Fragment>{$value[$thumbIndex]}</React.Fragment>
+    ),
+    ThumbValue: () => null,
+    Thumb: {
+      style: () => ({
+        color: 'white',
+        fontSize: '10px',
+        fontWeight: 600,
+      }),
+    },
+  };
+
   const generationLifetimeChanger = (
-    <Slider
-      step={5}
-      marks
-      persistentThumb={false}
-      min={10}
-      max={30}
-      value={[generationLifetimeInternal]}
-      onChange={({ value }) => value && setGenerationLifetimeInternal(value[0])}
-      onFinalChange={({value}) => onGenerationLifetimeChange(value[0])}
-    />
+    <FormControl label={() => 'Generation lifetime'}>
+      <Slider
+        step={5}
+        marks
+        persistentThumb
+        min={10}
+        max={30}
+        value={[generationLifetimeInternal]}
+        onChange={({ value }) => value && setGenerationLifetimeInternal(value[0])}
+        onFinalChange={({value}) => onGenerationLifetimeChange(value[0])}
+        valueToLabel={(value) => `${value}s`}
+        overrides={sliderOverrides}
+      />
+    </FormControl>
   );
 
   const mutationProbabilityChanger = (
-    <Slider
-      step={0.1}
-      marks
-      persistentThumb={false}
-      min={0}
-      max={1}
-      value={[mutationProbabilityInternal]}
-      onChange={({ value }) => value && setMutationProbabilityInternal(value[0])}
-      onFinalChange={({value}) => onMutationProbabilityChange(value[0])}
-    />
+    <FormControl label={() => 'Gene mutation probability'}>
+      <Slider
+        step={0.1}
+        marks
+        persistentThumb
+        min={0}
+        max={1}
+        value={[mutationProbabilityInternal]}
+        onChange={({ value }) => value && setMutationProbabilityInternal(value[0])}
+        onFinalChange={({value}) => onMutationProbabilityChange(value[0])}
+        overrides={sliderOverrides}
+      />
+    </FormControl>
   );
 
   const resetButton = (
-    <Button
-      size={BUTTON_SIZE.compact}
-      onClick={onReset}
-    >
-      Reset
-    </Button>
+    <FormControl>
+      <Button
+        size={BUTTON_SIZE.compact}
+        shape={BUTTON_SHAPE.pill}
+        onClick={onReset}
+        startEnhancer={() => <BiReset size={18} />}
+      >
+        Reset
+      </Button>
+    </FormControl>
   );
 
   return (
-    <Block>
-      <Block display="flex" flexDirection="row">
-        <Block flex={1} marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
-          <FormControl label={() => 'Generation size'}>
-            {generationSizeSelector}
-          </FormControl>
-        </Block>
-
-        <Block flex={1} marginLeft="10px" marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
-          <FormControl label={() => 'Group size'}>
-            {batchSizeSelector}
-          </FormControl>
-        </Block>
-
-        <Block flex={1} marginLeft="10px" marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
-          <FormControl label={() => 'Generation lifetime, s'}>
-            {generationLifetimeChanger}
-          </FormControl>
-        </Block>
-
-        <Block flex={1} marginLeft="10px" marginRight="10px" display="flex" flexDirection="column" justifyContent="flex-end">
-          <FormControl label={() => 'Mutation probability'}>
-            {mutationProbabilityChanger}
-          </FormControl>
-        </Block>
-
-        <Block marginLeft="10px" display="flex" flexDirection="column" justifyContent="flex-end">
-          <FormControl>
-            {resetButton}
-          </FormControl>
-        </Block>
-      </Block>
+    <Block display="flex" flexDirection="column">
+      <FormElementsRow
+        nodes={[
+          generationLifetimeChanger,
+          mutationProbabilityChanger,
+        ]}
+      />
+      <FormElementsRow
+        nodes={[
+          generationSizeSelector,
+          batchSizeSelector,
+        ]}
+        buttons={resetButton}
+      />
     </Block>
   );
 }
