@@ -10,6 +10,9 @@ import { PARKING_SPOT_POINTS } from '../../world/surroundings/ParkingSpot';
 import { RectanglePoints } from '../../../types/vectors';
 import { CAR_SENSORS_NUM, engineFormula, carLoss, wheelsFormula } from '../../../libs/carGenetic';
 import { SENSOR_DISTANCE_FALLBACK } from '../../world/car/constants';
+import { read, remove, write } from '../../../utils/storage';
+
+const GENERATION_STORAGE_KEY = 'generation';
 
 const generateLicencePlate = (
   generationIndex: number | null,
@@ -112,4 +115,16 @@ export const genomeStringToGenome = (genomeString: string): Genome => {
       const gene: Gene = parseInt(geneString, 10) === 1 ? 1 : 0;
       return gene;
     });
+};
+
+export const loadGenerationFromStorage = (): Generation | null => {
+  return read(GENERATION_STORAGE_KEY);
+};
+
+export const saveGenerationToStorage = (generation: Generation): boolean => {
+  return write(GENERATION_STORAGE_KEY, generation);
+};
+
+export const removeGenerationFromStorage = (): void => {
+  return remove(GENERATION_STORAGE_KEY);
 };

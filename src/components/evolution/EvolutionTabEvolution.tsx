@@ -16,7 +16,12 @@ import {
   SECOND,
 } from './EvolutionBoardParams';
 import { carLossToFitness, GENOME_LENGTH } from '../../libs/carGenetic';
-import { generateWorldVersion, generationToCars } from './utils/evolution';
+import {
+  generateWorldVersion,
+  generationToCars, loadGenerationFromStorage,
+  removeGenerationFromStorage,
+  saveGenerationToStorage
+} from './utils/evolution';
 import { deleteSearchParam, getFloatSearchParam, getIntSearchParam, setSearchParam } from '../../utils/url';
 import EvolutionAnalytics from './EvolutionAnalytics';
 import { loggerBuilder } from '../../utils/logger';
@@ -156,6 +161,7 @@ function EvolutionTabEvolution() {
   };
 
   const onReset = () => {
+    removeGenerationFromStorage();
     onSetDefaultFilterValues();
     onEvolutionRestart();
     enqueue({
@@ -322,13 +328,24 @@ function EvolutionTabEvolution() {
       return;
     }
     logger.info('Create first generation');
-    const generation: Generation = createGeneration({
+    const newGeneration: Generation = createGeneration({
       generationSize,
       genomeLength: GENOME_LENGTH,
     });
-    setGeneration(generation);
-    setBestGenome(generation[0]);
-    setSecondBestGenome(generation[1]);
+    let firstGeneration: Generation = newGeneration;
+
+    const generationFromStorage: Generation | null = loadGenerationFromStorage();
+    if (generationFromStorage && generationFromStorage.length === generationSize) {
+      firstGeneration = generationFromStorage;
+      enqueue({
+        message: 'Generation has been restored from the saved checkpoint. Press Reset button to start from scratch.',
+        startEnhancer: ({size}) => <Check size={size} />,
+      }, DURATION.medium);
+    }
+
+    setGeneration(firstGeneration);
+    setBestGenome(firstGeneration[0]);
+    setSecondBestGenome(firstGeneration[1]);
   };
 
   const mateExistingGeneration = () => {
@@ -346,6 +363,7 @@ function EvolutionTabEvolution() {
         },
       );
       setGeneration(newGeneration);
+      saveGenerationToStorage(newGeneration);
     } catch (e) {
       // If selection failed for some reason, clone the existing generation and try again.
       setGeneration([...generation]);
