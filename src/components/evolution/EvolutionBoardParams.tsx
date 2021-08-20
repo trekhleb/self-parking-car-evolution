@@ -118,7 +118,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
   };
 
   const generationLifetimeChanger = (
-    <FormControl label={() => 'Generation lifetime'}>
+    <FormControl label={() => 'Generation lifetime, s'}>
       <Slider
         step={5}
         marks
