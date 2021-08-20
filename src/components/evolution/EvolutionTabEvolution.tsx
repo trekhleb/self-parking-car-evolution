@@ -338,7 +338,7 @@ function EvolutionTabEvolution() {
     if (generationFromStorage && generationFromStorage.length === generationSize) {
       firstGeneration = generationFromStorage;
       enqueue({
-        message: 'Generation has been restored from the saved checkpoint. Press Reset button to start from scratch.',
+        message: 'Generation has been restored from the saved checkpoint. To start from scratch, press Reset button.',
         startEnhancer: ({size}) => <Check size={size} />,
       }, DURATION.medium);
     }
@@ -363,7 +363,7 @@ function EvolutionTabEvolution() {
         },
       );
       setGeneration(newGeneration);
-      saveGenerationToStorage(newGeneration);
+      saveGenerationToStorage(newGeneration, generationIndex);
     } catch (e) {
       // If selection failed for some reason, clone the existing generation and try again.
       setGeneration([...generation]);

@@ -13,6 +13,7 @@ import { SENSOR_DISTANCE_FALLBACK } from '../../world/car/constants';
 import { read, remove, write } from '../../../utils/storage';
 
 const GENERATION_STORAGE_KEY = 'generation';
+const GENERATION_INDEX_STORAGE_KEY = 'generation-index';
 
 const generateLicencePlate = (
   generationIndex: number | null,
@@ -121,10 +122,12 @@ export const loadGenerationFromStorage = (): Generation | null => {
   return read(GENERATION_STORAGE_KEY);
 };
 
-export const saveGenerationToStorage = (generation: Generation): boolean => {
+export const saveGenerationToStorage = (generation: Generation, generationIndex: number): boolean => {
+  write(GENERATION_INDEX_STORAGE_KEY, generationIndex);
   return write(GENERATION_STORAGE_KEY, generation);
 };
 
 export const removeGenerationFromStorage = (): void => {
-  return remove(GENERATION_STORAGE_KEY);
+  remove(GENERATION_STORAGE_KEY);
+  remove(GENERATION_INDEX_STORAGE_KEY);
 };
