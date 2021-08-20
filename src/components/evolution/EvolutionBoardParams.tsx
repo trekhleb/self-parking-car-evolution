@@ -10,16 +10,16 @@ import { Percentage, Probability } from '../../libs/genetic';
 import FormElementsRow from '../shared/FormElementsRow';
 
 export const SECOND = 1000;
-export const DEFAULT_GENERATION_LIFETIME = 30;
-export const TRAINED_CAR_GENERATION_LIFETIME = 20;
 
 const GENERATION_SIZES = [10, 50, 100, 200, 500, 1000];
 const BATCH_SIZES = [1, 2, 5, 10, 20, 50];
 
 export const DEFAULT_GENERATION_SIZE = GENERATION_SIZES[0];
 export const DEFAULT_BATCH_SIZE = BATCH_SIZES[0];
-export const DEFAULT_MUTATION_PROBABILITY = 0.2;
-export const DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE = 10;
+export const DEFAULT_MUTATION_PROBABILITY = 0.1;
+export const DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE = 5;
+export const DEFAULT_GENERATION_LIFETIME = 20;
+export const TRAINED_CAR_GENERATION_LIFETIME = 20;
 
 type EvolutionBoardParamsProps = {
   generationSize: number,
@@ -167,6 +167,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
         value={[longLivingChampionsPercentageInternal]}
         onChange={({ value }) => value && setLongLivingChampionsPercentageInternal(value[0])}
         onFinalChange={({value}) => onLongLivingChampionsPercentageChange(value[0])}
+        valueToLabel={(value) => `${value}%`}
         overrides={sliderOverrides}
       />
     </FormControl>
