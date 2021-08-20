@@ -1,4 +1,4 @@
-import { Genome } from '../../../lib/genetic';
+import { Genome } from '../../../libs/genetic';
 import { genomeStringToGenome } from '../utils/evolution';
 
 export const FIRST_BEST_GENOME: Genome = genomeStringToGenome(

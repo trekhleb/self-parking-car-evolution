@@ -1,6 +1,6 @@
 import React from 'react';
 import { Panel, StatelessAccordion } from 'baseui/accordion';
-import { Genome } from '../../lib/genetic';
+import { Genome } from '../../libs/genetic';
 import GenomePreview from './GenomePreview';
 import { CarLicencePlateType } from '../world/types/car';
 

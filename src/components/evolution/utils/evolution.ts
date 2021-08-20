@@ -1,4 +1,4 @@
-import { Gene, Generation, Genome } from '../../../lib/genetic';
+import { Gene, Generation, Genome } from '../../../libs/genetic';
 import {
   CarLicencePlateType,
   CarsType,
@@ -8,7 +8,7 @@ import {
 } from '../../world/types/car';
 import { PARKING_SPOT_POINTS } from '../../world/surroundings/ParkingSpot';
 import { RectanglePoints } from '../../../types/vectors';
-import { CAR_SENSORS_NUM, engineFormula, carLoss, wheelsFormula } from '../../../lib/carGenetic';
+import { CAR_SENSORS_NUM, engineFormula, carLoss, wheelsFormula } from '../../../libs/carGenetic';
 import { SENSOR_DISTANCE_FALLBACK } from '../../world/car/constants';
 
 const generateLicencePlate = (

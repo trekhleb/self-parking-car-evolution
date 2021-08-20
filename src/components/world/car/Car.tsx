@@ -39,7 +39,7 @@ import { ON_MOVE_THROTTLE_TIMEOUT, ON_UPDATE_LABEL_THROTTLE_TIMEOUT } from '../c
 import { PARKING_SPOT_POINTS } from '../surroundings/ParkingSpot';
 import { formatLossValue } from '../../evolution/utils/evolution';
 import { RectanglePoints, ThreeRectanglePoints } from '../../../types/vectors';
-import { carLoss as getCarLoss } from '../../../lib/carGenetic';
+import { carLoss as getCarLoss } from '../../../libs/carGenetic';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,

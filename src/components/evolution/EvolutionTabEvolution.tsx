@@ -2,16 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { Block } from 'baseui/block';
 
-import { createGeneration, Generation, Genome, Probability, select } from '../../lib/genetic';
+import { createGeneration, Generation, Genome, Percentage, Probability, select } from '../../libs/genetic';
 import { CarsLossType, CarsInProgressType } from './PopulationTable';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import {
   DEFAULT_BATCH_SIZE,
   DEFAULT_GENERATION_LIFETIME,
-  DEFAULT_GENERATION_SIZE, DEFAULT_MUTATION_PROBABILITY,
+  DEFAULT_GENERATION_SIZE, DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE, DEFAULT_MUTATION_PROBABILITY,
   SECOND,
 } from './EvolutionBoardParams';
-import { carLossToFitness, GENOME_LENGTH } from '../../lib/carGenetic';
+import { carLossToFitness, GENOME_LENGTH } from '../../libs/carGenetic';
 import { generateWorldVersion, generationToCars } from './utils/evolution';
 import { getFloatSearchParam, getIntSearchParam, setSearchParam } from '../../utils/url';
 import EvolutionAnalytics from './EvolutionAnalytics';
@@ -24,6 +24,7 @@ const GENERATION_SIZE_URL_PARAM = 'generation';
 const GROUP_SIZE_URL_PARAM = 'group';
 const GENERATION_LIFETIME_URL_PARAM = 'lifetime';
 const MUTATION_PROBABILITY_URL_PARAM = 'mutation';
+const LONG_LIVING_CHAMPIONS_URL_PARAM = 'champions';
 
 //  Genome array, concatenated to a string (i.e. '1010011')
 type GenomeKey = string;
@@ -68,7 +69,9 @@ function EvolutionTabEvolution() {
   const [mutationProbability, setMutationProbability] = useState<Probability>(
     getFloatSearchParam(MUTATION_PROBABILITY_URL_PARAM, DEFAULT_MUTATION_PROBABILITY)
   );
-  const [longLivingProbability, setLongLivingProbability] = useState<Probability>(0.02);
+  const [longLivingChampionsPercentage, setLongLivingChampionsPercentage] = useState<Percentage>(
+    getIntSearchParam(LONG_LIVING_CHAMPIONS_URL_PARAM, DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE)
+  );
 
   const logger = loggerBuilder({ context: 'EvolutionTab' });
   const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
@@ -140,6 +143,11 @@ function EvolutionTabEvolution() {
   const onMutationProbabilityChange = (probability: Probability) => {
     setMutationProbability(probability);
     setSearchParam(MUTATION_PROBABILITY_URL_PARAM, `${probability}`);
+  };
+
+  const onLongLivingChampionsPercentageChange = (percentage: Percentage) => {
+    setLongLivingChampionsPercentage(percentage);
+    setSearchParam(LONG_LIVING_CHAMPIONS_URL_PARAM, `${percentage}`);
   };
 
   const onBatchSizeChange = (size: number) => {
@@ -310,7 +318,7 @@ function EvolutionTabEvolution() {
         carFitnessFunction(generationIndex - 1),
         {
           mutationProbability,
-          longLivingProbability,
+          longLivingChampionsPercentage: longLivingChampionsPercentage,
         },
       );
       setGeneration(newGeneration);
@@ -432,6 +440,7 @@ function EvolutionTabEvolution() {
       <EvolutionAnalytics
         mutationProbability={mutationProbability}
         onMutationProbabilityChange={onMutationProbabilityChange}
+        longLivingChampionsPercentage={longLivingChampionsPercentage}
         generationIndex={generationIndex}
         carsBatchIndex={carsBatchIndex}
         totalBatches={carsBatchesTotal}
@@ -444,6 +453,7 @@ function EvolutionTabEvolution() {
         onGenerationSizeChange={onGenerationSizeChange}
         onBatchSizeChange={onBatchSizeChange}
         onGenerationLifetimeChange={onGenerationLifetimeChange}
+        onLongLivingChampionsPercentageChange={onLongLivingChampionsPercentageChange}
         onReset={onReset}
         lossHistory={lossHistory}
         cars={cars}

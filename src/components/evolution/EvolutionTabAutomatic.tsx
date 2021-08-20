@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Block } from 'baseui/block';
 
-import { Generation, Genome } from '../../lib/genetic';
+import { Generation, Genome } from '../../libs/genetic';
 import { CarLicencePlateType, CarType } from '../world/types/car';
 import {
   SECOND,

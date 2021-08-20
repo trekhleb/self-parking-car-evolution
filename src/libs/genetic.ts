@@ -27,6 +27,9 @@ export function createGeneration(params: GenerationParams): Generation {
 // The number between 0 and 1.
 export type Probability = number;
 
+// The number between 0 and 100.
+export type Percentage = number;
+
 // @see: https://en.wikipedia.org/wiki/Mutation_(genetic_algorithm)
 function mutate(genome: Genome, mutationProbability: Probability): Genome {
   // Conceive children.
@@ -40,7 +43,7 @@ function mutate(genome: Genome, mutationProbability: Probability): Genome {
 
 type SelectionOptions = {
   mutationProbability: Probability,
-  longLivingProbability: Probability,
+  longLivingChampionsPercentage: Percentage,
 };
 
 // Performs Uniform Crossover: each bit is chosen from either parent with equal probability.
@@ -83,7 +86,7 @@ export function select(
 ) {
   const {
     mutationProbability,
-    longLivingProbability,
+    longLivingChampionsPercentage,
   } = options;
 
   const newGeneration: Generation = [];
@@ -102,8 +105,8 @@ export function select(
     return 0;
   });
 
-  // Let long-livers continue living in the new generation.
-  const longLiversCount = longLivingProbability * oldGeneration.length;
+  // Let long-liver champions continue living in the new generation.
+  const longLiversCount = Math.floor(longLivingChampionsPercentage * oldGeneration.length / 100);
   if (longLiversCount) {
     oldGeneration.slice(0, longLiversCount).forEach((longLivingGenome: Genome) => {
       newGeneration.push(longLivingGenome);

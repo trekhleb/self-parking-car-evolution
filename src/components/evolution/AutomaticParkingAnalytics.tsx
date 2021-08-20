@@ -3,7 +3,7 @@ import { Block } from 'baseui/block';
 
 import EvolutionTiming from './EvolutionTiming';
 import BestGenomes from './BestGenomes';
-import { Genome } from '../../lib/genetic';
+import { Genome } from '../../libs/genetic';
 
 type AutomaticParkingAnalyticsProps = {
   generationLifetimeMs: number,

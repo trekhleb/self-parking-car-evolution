@@ -6,7 +6,7 @@ import { Button, SIZE as BUTTON_SIZE, SHAPE as BUTTON_SHAPE } from 'baseui/butto
 import { Slider } from 'baseui/slider';
 import { BiReset } from 'react-icons/all';
 
-import { Probability } from '../../lib/genetic';
+import { Percentage, Probability } from '../../libs/genetic';
 import FormElementsRow from '../shared/FormElementsRow';
 
 export const SECOND = 1000;
@@ -19,16 +19,19 @@ const BATCH_SIZES = [1, 2, 5, 10, 20, 50];
 export const DEFAULT_GENERATION_SIZE = GENERATION_SIZES[0];
 export const DEFAULT_BATCH_SIZE = BATCH_SIZES[0];
 export const DEFAULT_MUTATION_PROBABILITY = 0.2;
+export const DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE = 10;
 
 type EvolutionBoardParamsProps = {
   generationSize: number,
   batchSize: number,
   mutationProbability: Probability,
+  longLivingChampionsPercentage: Percentage,
   generationLifetime: number,
   onGenerationSizeChange: (size: number) => void,
   onBatchSizeChange: (size: number) => void,
   onGenerationLifetimeChange: (time: number) => void,
   onMutationProbabilityChange: (probability: Probability) => void,
+  onLongLivingChampionsPercentageChange: (percentage: Percentage) => void,
   onReset: () => void,
 };
 
@@ -37,16 +40,19 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
     generationSize,
     batchSize,
     generationLifetime,
+    longLivingChampionsPercentage,
     onGenerationSizeChange,
     onBatchSizeChange,
     onGenerationLifetimeChange,
     mutationProbability,
     onMutationProbabilityChange,
+    onLongLivingChampionsPercentageChange,
     onReset,
   } = props;
 
   const [mutationProbabilityInternal, setMutationProbabilityInternal] = useState<Probability>(mutationProbability);
   const [generationLifetimeInternal, setGenerationLifetimeInternal] = useState<number>(generationLifetime);
+  const [longLivingChampionsPercentageInternal, setLongLivingChampionsPercentageInternal] = useState<Percentage>(longLivingChampionsPercentage);
 
   const generationSizeCurrentValue = [{
     id: `${generationSize}`,
@@ -150,6 +156,22 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
     </FormControl>
   );
 
+  const longLivingChampionsChanger = (
+    <FormControl label={() => 'Long-living champions, %'}>
+      <Slider
+        step={1}
+        // marks
+        persistentThumb
+        min={0}
+        max={100}
+        value={[longLivingChampionsPercentageInternal]}
+        onChange={({ value }) => value && setLongLivingChampionsPercentageInternal(value[0])}
+        onFinalChange={({value}) => onLongLivingChampionsPercentageChange(value[0])}
+        overrides={sliderOverrides}
+      />
+    </FormControl>
+  );
+
   const resetButton = (
     <FormControl>
       <Button
@@ -169,6 +191,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
         nodes={[
           generationLifetimeChanger,
           mutationProbabilityChanger,
+          longLivingChampionsChanger,
         ]}
       />
       <FormElementsRow

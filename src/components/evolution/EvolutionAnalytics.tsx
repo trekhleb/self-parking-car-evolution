@@ -7,7 +7,7 @@ import EvolutionTiming from './EvolutionTiming';
 import LossHistory from './LossHistory';
 import BestGenomes from './BestGenomes';
 import { CarLicencePlateType, CarsType } from '../world/types/car';
-import { Genome, Probability } from '../../lib/genetic';
+import { Genome, Percentage, Probability } from '../../libs/genetic';
 
 type EvolutionAnalyticsProps = {
   generationIndex: number | null,
@@ -18,6 +18,7 @@ type EvolutionAnalyticsProps = {
   generationSize: number,
   carsBatchSize: number,
   mutationProbability: Probability,
+  longLivingChampionsPercentage: Percentage,
   generationLifetime: number,
   batchVersion: string,
   onGenerationSizeChange: (size: number) => void,
@@ -25,6 +26,7 @@ type EvolutionAnalyticsProps = {
   onGenerationLifetimeChange: (time: number) => void,
   onReset: () => void,
   onMutationProbabilityChange: (probability: Probability) => void,
+  onLongLivingChampionsPercentageChange: (percentage: Percentage) => void,
   lossHistory: number[],
   cars: CarsType,
   carsInProgress: CarsInProgressType,
@@ -43,6 +45,7 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
     carsBatchIndex,
     totalBatches,
     mutationProbability,
+    longLivingChampionsPercentage,
     worldIndex,
     generationLifetimeMs,
     generationSize,
@@ -54,6 +57,7 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
     onGenerationLifetimeChange,
     onReset,
     onMutationProbabilityChange,
+    onLongLivingChampionsPercentageChange,
     lossHistory,
     cars,
     carsInProgress,
@@ -86,10 +90,12 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
         batchSize={carsBatchSize}
         mutationProbability={mutationProbability}
         generationLifetime={generationLifetime}
+        longLivingChampionsPercentage={longLivingChampionsPercentage}
         onGenerationSizeChange={onGenerationSizeChange}
         onBatchSizeChange={onBatchSizeChange}
         onGenerationLifetimeChange={onGenerationLifetimeChange}
         onMutationProbabilityChange={onMutationProbabilityChange}
+        onLongLivingChampionsPercentageChange={onLongLivingChampionsPercentageChange}
         onReset={onReset}
       />
     </Block>

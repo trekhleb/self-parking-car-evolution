@@ -5,11 +5,11 @@ import { Textarea } from 'baseui/textarea';
 import { Button, SHAPE as BUTTON_SHAPE, KIND as BUTTON_KIND, SIZE as BUTTON_SIZE } from 'baseui/button';
 import { BiEdit, FaRegSave } from 'react-icons/all';
 
-import { Gene, Genome } from '../../lib/genetic';
+import { Gene, Genome } from '../../libs/genetic';
 import { CarLicencePlateType } from '../world/types/car';
 import { FormControl } from 'baseui/form-control';
 import { formatLossValue } from './utils/evolution';
-import { CAR_SENSORS_NUM, carLossToFitness, decodeGenome, FormulaCoefficients } from '../../lib/carGenetic';
+import { CAR_SENSORS_NUM, carLossToFitness, decodeGenome, FormulaCoefficients } from '../../libs/carGenetic';
 
 type GenomePreviewProps = {
   genome: Genome | null,
