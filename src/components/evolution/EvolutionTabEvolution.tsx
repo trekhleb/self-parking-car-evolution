@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { Block } from 'baseui/block';
+import { useSnackbar, DURATION } from 'baseui/snackbar';
+import { Check } from 'baseui/icon';
 
 import { createGeneration, Generation, Genome, Percentage, Probability, select } from '../../libs/genetic';
 import { CarsLossType, CarsInProgressType } from './PopulationTable';
@@ -8,17 +10,18 @@ import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import {
   DEFAULT_BATCH_SIZE,
   DEFAULT_GENERATION_LIFETIME,
-  DEFAULT_GENERATION_SIZE, DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE, DEFAULT_MUTATION_PROBABILITY,
+  DEFAULT_GENERATION_SIZE,
+  DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE,
+  DEFAULT_MUTATION_PROBABILITY,
   SECOND,
 } from './EvolutionBoardParams';
 import { carLossToFitness, GENOME_LENGTH } from '../../libs/carGenetic';
 import { generateWorldVersion, generationToCars } from './utils/evolution';
-import { getFloatSearchParam, getIntSearchParam, setSearchParam } from '../../utils/url';
+import { deleteSearchParam, getFloatSearchParam, getIntSearchParam, setSearchParam } from '../../utils/url';
 import EvolutionAnalytics from './EvolutionAnalytics';
 import { loggerBuilder } from '../../utils/logger';
 import ParkingAutomatic from '../world/parkings/ParkingAutomatic';
 import World from '../world/World';
-import { APP_BASE_PATH } from '../../constants/app';
 
 const GENERATION_SIZE_URL_PARAM = 'generation';
 const GROUP_SIZE_URL_PARAM = 'group';
@@ -32,6 +35,8 @@ type GenomeKey = string;
 type GenomeLossType = Record<GenomeKey, number | null>;
 
 function EvolutionTabEvolution() {
+  const {enqueue} = useSnackbar();
+
   const [worldIndex, setWorldIndex] = useState<number>(0);
 
   const [generationSize, setGenerationSize] = useState<number>(
@@ -136,8 +141,27 @@ function EvolutionTabEvolution() {
     onEvolutionRestart();
   };
 
+  const onSetDefaultFilterValues = () => {
+    deleteSearchParam(GENERATION_SIZE_URL_PARAM);
+    deleteSearchParam(GROUP_SIZE_URL_PARAM);
+    deleteSearchParam(GENERATION_LIFETIME_URL_PARAM);
+    deleteSearchParam(MUTATION_PROBABILITY_URL_PARAM);
+    deleteSearchParam(LONG_LIVING_CHAMPIONS_URL_PARAM);
+
+    setGenerationSize(DEFAULT_GENERATION_SIZE);
+    setCarsBatchSize(DEFAULT_BATCH_SIZE);
+    setGenerationLifetime(DEFAULT_GENERATION_LIFETIME);
+    setMutationProbability(DEFAULT_MUTATION_PROBABILITY);
+    setLongLivingChampionsPercentage(DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE);
+  };
+
   const onReset = () => {
-    document.location.href = APP_BASE_PATH;
+    onSetDefaultFilterValues();
+    onEvolutionRestart();
+    enqueue({
+      message: 'Evolution setup and training progress have been reset',
+      startEnhancer: ({size}) => <Check size={size} />,
+    }, DURATION.medium);
   };
 
   const onMutationProbabilityChange = (probability: Probability) => {

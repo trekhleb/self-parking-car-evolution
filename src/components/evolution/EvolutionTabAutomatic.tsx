@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Block } from 'baseui/block';
+import { useSnackbar, DURATION } from 'baseui/snackbar';
+import { Check } from 'baseui/icon';
 
 import { Generation, Genome } from '../../libs/genetic';
 import { CarLicencePlateType, CarType } from '../world/types/car';
@@ -19,6 +21,8 @@ const bestDefaultTrainedGeneration: Generation = [
 ];
 
 function EvolutionTabAutomatic() {
+  const {enqueue} = useSnackbar();
+
   const bestTrainedCarLossRef = useRef<number | null>(null);
   const onTrainedCarLossUpdate = (licensePlate: CarLicencePlateType, loss: number) => {
     bestTrainedCarLossRef.current = loss;
@@ -85,6 +89,11 @@ function EvolutionTabAutomatic() {
     setBestTrainedCarCycleIndex(bestTrainedCarCycleIndex + 1);
 
     countDownAutomaticParkingCycleLifetime(onAutomaticCycleLifetimeEnd);
+
+    enqueue({
+      message: 'Genome has been updated and applied to the displayed car',
+      startEnhancer: ({size}) => <Check size={size} />,
+    }, DURATION.medium);
   };
 
   // Start the automatic parking cycles.

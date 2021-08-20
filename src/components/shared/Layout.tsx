@@ -3,6 +3,7 @@ import { Client as Styletron } from 'styletron-engine-atomic';
 import { Provider as StyletronProvider } from 'styletron-react';
 import { BaseProvider, LightTheme } from 'baseui';
 import { Cell, Grid } from 'baseui/layout-grid';
+import { SnackbarProvider } from 'baseui/snackbar';
 
 import './Layout.css';
 import Header from './Header';
@@ -20,18 +21,20 @@ function Layout(props: LayoutProps) {
   return (
     <StyletronProvider value={engine}>
       <BaseProvider theme={LightTheme}>
-        <Grid>
-          <Cell span={[4, 8, 12]}>
-            <Header />
-            <MainNav />
-          </Cell>
-          <Cell span={[4, 8, 12]}>
-            {children}
-          </Cell>
-          <Cell span={[4, 8, 12]}>
-            <Footer />
-          </Cell>
-        </Grid>
+        <SnackbarProvider>
+          <Grid>
+            <Cell span={[4, 8, 12]}>
+              <Header />
+              <MainNav />
+            </Cell>
+            <Cell span={[4, 8, 12]}>
+              {children}
+            </Cell>
+            <Cell span={[4, 8, 12]}>
+              <Footer />
+            </Cell>
+          </Grid>
+        </SnackbarProvider>
       </BaseProvider>
     </StyletronProvider>
   );

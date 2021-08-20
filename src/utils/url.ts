@@ -10,6 +10,13 @@ export const setSearchParam = (name: string, value: string): void => {
   window.history.pushState(null, '', relativeURL);
 };
 
+export const deleteSearchParam = (name: string): void => {
+  const searchParams = getSearchParams();
+  searchParams.delete(name);
+  const relativeURL = '?' + searchParams.toString() + document.location.hash;
+  window.history.pushState(null, '', relativeURL);
+};
+
 const getSearchParams = (): URLSearchParams => {
   const searchQuery = document.location.search.substring(1);
   return new URLSearchParams(searchQuery);
