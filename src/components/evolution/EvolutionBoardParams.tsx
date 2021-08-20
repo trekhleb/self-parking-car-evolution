@@ -130,10 +130,13 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
   };
 
   const generationLifetimeChanger = (
-    <FormControl label={() => 'Generation lifetime, s'}>
+    <FormControl
+      label={() => 'Generation lifetime, s'}
+      caption={() => 'Time the cars have for parking'}
+    >
       <Slider
         step={5}
-        marks
+        marks={false}
         persistentThumb
         min={10}
         max={30}
@@ -147,10 +150,13 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
   );
 
   const mutationProbabilityChanger = (
-    <FormControl label={() => 'Gene mutation probability'}>
+    <FormControl
+      label={() => 'Gene mutation probability'}
+      caption={() => `Every gene will be mutated with ${mutationProbabilityInternal} probability`}
+    >
       <Slider
         step={0.1}
-        marks
+        marks={false}
         persistentThumb
         min={0}
         max={1}
@@ -162,11 +168,15 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
     </FormControl>
   );
 
+  const longLivingChampionsCount = Math.floor(generationSize * longLivingChampionsPercentageInternal / 100);
   const longLivingChampionsChanger = (
-    <FormControl label={() => 'Long-living champions, %'}>
+    <FormControl
+      label={() => 'Long-living champions, %'}
+      caption={() => `${longLivingChampionsCount} best cars will be copied to next generation`}
+    >
       <Slider
         step={1}
-        // marks
+        marks={false}
         persistentThumb
         min={0}
         max={100}
@@ -207,6 +217,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
           batchSizeSelector,
         ]}
         buttons={resetButton}
+        alignBottom
       />
     </Block>
   );

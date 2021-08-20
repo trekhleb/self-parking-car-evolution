@@ -1,4 +1,8 @@
-const logToConsole = true;
+import { getSearchParam } from './url';
+
+const LOG_SEARCH_PARAM_NAME = 'debug';
+
+const logToConsole = !!getSearchParam(LOG_SEARCH_PARAM_NAME);
 
 type LoggerParams = {
   context: string,

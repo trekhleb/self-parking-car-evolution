@@ -4,12 +4,13 @@ import { Block } from 'baseui/block';
 type FormElementsRowProps = {
   nodes: React.ReactNode[],
   buttons?: React.ReactNode,
+  alignBottom?: boolean,
 };
 
 const marginX = '10px';
 
 const FormElementsRow = (props: FormElementsRowProps) => {
-  const {nodes, buttons} = props;
+  const {nodes, buttons, alignBottom = false} = props;
 
   const rows = nodes.map((node: React.ReactNode, nodeIndex: number) => {
     const marginLeft = nodeIndex === 0 ? 0 : marginX;
@@ -41,12 +42,14 @@ const FormElementsRow = (props: FormElementsRowProps) => {
     </Block>
   ) : null;
 
+  const alignItems = alignBottom ? 'flex-end' : 'flex-start';
+
   return (
     <Block
       display="flex"
       flex={1}
       flexDirection={['column', 'row', 'row']}
-      alignItems={['stretch', 'flex-end', 'flex-end']}
+      alignItems={['stretch', alignItems, alignItems]}
       justifyContent="center"
     >
       {rows}
