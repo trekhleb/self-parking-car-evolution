@@ -11,7 +11,6 @@ type LossHistoryProps = {
 // @see: Nivo docs: https://nivo.rocks/line
 function LossHistory(props: LossHistoryProps) {
   const {history} = props;
-  // const history: number[] = new Array(100).fill(null).map(() => Math.random() * 10);
 
   const emptyStateData: [number] = [0];
   const chartData: Datum[] = (history.length ? history : emptyStateData).map((loss: number, generationIndex: number): Datum => {

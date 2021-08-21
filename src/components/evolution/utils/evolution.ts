@@ -14,6 +14,7 @@ import { read, remove, write } from '../../../utils/storage';
 
 const GENERATION_STORAGE_KEY = 'generation';
 const GENERATION_INDEX_STORAGE_KEY = 'generation-index';
+const LOSS_HISTORY_INDEX_STORAGE_KEY = 'loss-history';
 
 const generateLicencePlate = (
   generationIndex: number | null,
@@ -121,28 +122,36 @@ export const genomeStringToGenome = (genomeString: string): Genome => {
 type GenerationDataInStorage = {
   generation: Generation | null,
   generationIndex: number | null,
+  lossHistory: number[] | null,
 };
 
 export const loadGenerationFromStorage = (): GenerationDataInStorage => {
   const generationIndex: number | null = read(GENERATION_INDEX_STORAGE_KEY)
   const generation: Generation | null = read(GENERATION_STORAGE_KEY);
+  const lossHistory: number[] | null = read(LOSS_HISTORY_INDEX_STORAGE_KEY);
   return {
     generation,
-    generationIndex
+    generationIndex,
+    lossHistory,
   };
 };
 
 export const saveGenerationToStorage = (data: GenerationDataInStorage): boolean => {
-  const {generation, generationIndex} = data;
-  if (!generation || !generation.length || !generationIndex) {
+  const {generation, generationIndex, lossHistory} = data;
+
+  if (!generation || !generation.length || !generationIndex || !lossHistory) {
     return false;
   }
+
   const keySuccess = write(GENERATION_INDEX_STORAGE_KEY, generationIndex);
   const generationSuccess = write(GENERATION_STORAGE_KEY, generation);
-  return keySuccess && generationSuccess;
+  const lossHistorySuccess = write(LOSS_HISTORY_INDEX_STORAGE_KEY, lossHistory);
+
+  return keySuccess && generationSuccess && lossHistorySuccess;
 };
 
 export const removeGenerationFromStorage = (): void => {
   remove(GENERATION_STORAGE_KEY);
   remove(GENERATION_INDEX_STORAGE_KEY);
+  remove(LOSS_HISTORY_INDEX_STORAGE_KEY);
 };

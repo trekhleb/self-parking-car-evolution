@@ -117,6 +117,7 @@ function EvolutionTabEvolution() {
     setWorldIndex(worldIndex + 1);
     setGenerationIndex(0);
     setCarsBatchIndex(null);
+    removeGenerationFromStorage();
   };
 
   const onCarLossUpdate = (licensePlate: CarLicencePlateType, loss: number) => {
@@ -163,7 +164,6 @@ function EvolutionTabEvolution() {
   };
 
   const onReset = () => {
-    removeGenerationFromStorage();
     onSetDefaultFilterValues();
     onEvolutionRestart();
     enqueue({
@@ -342,6 +342,20 @@ function EvolutionTabEvolution() {
     return null;
   };
 
+  const getLossHistoryFromStorage = (): number[] | null => {
+    const {
+      lossHistory: lossHistoryFromStorage,
+      generation: generationFromStorage,
+    } = loadGenerationFromStorage();
+    if (
+      isValidGenerationFromStorage(generationFromStorage) &&
+      lossHistoryFromStorage
+    ) {
+      return lossHistoryFromStorage;
+    }
+    return null;
+  };
+
   const getGenerationFromStorage = (): Generation | null => {
     const {
       generation: generationFromStorage,
@@ -357,9 +371,12 @@ function EvolutionTabEvolution() {
     let generationStartIndex = 0;
 
     const generationIndexFromStorage = getGenerationIndexFromStorage();
-    if (generationIndexFromStorage) {
-      // generationStartIndex = generationIndexFromStorage;
+    const lossHistoryFromStorage = getLossHistoryFromStorage();
+
+    if (generationIndexFromStorage && lossHistoryFromStorage) {
+      generationStartIndex = generationIndexFromStorage;
       setRestoredFromGenerationIndex(generationIndexFromStorage);
+      setLossHistory(lossHistoryFromStorage);
     }
 
     setGenerationIndex(generationStartIndex);
@@ -409,6 +426,7 @@ function EvolutionTabEvolution() {
       saveGenerationToStorage({
         generation: newGeneration,
         generationIndex,
+        lossHistory,
       });
     } catch (e) {
       // If selection failed for some reason, clone the existing generation and try again.
@@ -491,7 +509,7 @@ function EvolutionTabEvolution() {
 
   // Once generation index is changed we need to create (or mate) a new generation.
   useEffect(() => {
-    if (generationIndex === 0) {
+    if (generationIndex === 0 || generationIndex === restoredFromGenerationIndex) {
       createFirstGeneration();
     } else {
       mateExistingGeneration();

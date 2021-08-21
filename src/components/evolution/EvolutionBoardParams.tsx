@@ -196,6 +196,13 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
         shape={BUTTON_SHAPE.pill}
         onClick={onReset}
         startEnhancer={() => <BiReset size={18} />}
+        overrides={{
+          BaseButton: {
+            props: {
+              title: 'Reset evolution configuration and training progress',
+            },
+          },
+        }}
       >
         Reset
       </Button>
