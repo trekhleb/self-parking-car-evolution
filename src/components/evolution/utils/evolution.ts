@@ -118,13 +118,28 @@ export const genomeStringToGenome = (genomeString: string): Genome => {
     });
 };
 
-export const loadGenerationFromStorage = (): Generation | null => {
-  return read(GENERATION_STORAGE_KEY);
+type GenerationDataInStorage = {
+  generation: Generation | null,
+  generationIndex: number | null,
 };
 
-export const saveGenerationToStorage = (generation: Generation, generationIndex: number): boolean => {
-  write(GENERATION_INDEX_STORAGE_KEY, generationIndex);
-  return write(GENERATION_STORAGE_KEY, generation);
+export const loadGenerationFromStorage = (): GenerationDataInStorage => {
+  const generationIndex: number | null = read(GENERATION_INDEX_STORAGE_KEY)
+  const generation: Generation | null = read(GENERATION_STORAGE_KEY);
+  return {
+    generation,
+    generationIndex
+  };
+};
+
+export const saveGenerationToStorage = (data: GenerationDataInStorage): boolean => {
+  const {generation, generationIndex} = data;
+  if (!generation || !generation.length || !generationIndex) {
+    return false;
+  }
+  const keySuccess = write(GENERATION_INDEX_STORAGE_KEY, generationIndex);
+  const generationSuccess = write(GENERATION_STORAGE_KEY, generation);
+  return keySuccess && generationSuccess;
 };
 
 export const removeGenerationFromStorage = (): void => {

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { Block } from 'baseui/block';
 import { useSnackbar, DURATION } from 'baseui/snackbar';
 import { Check } from 'baseui/icon';
+import { BsUpload } from 'react-icons/all';
 
 import { createGeneration, Generation, Genome, Percentage, Probability, select } from '../../libs/genetic';
 import { CarsLossType, CarsInProgressType } from './PopulationTable';
@@ -47,6 +48,7 @@ function EvolutionTabEvolution() {
   const [generationSize, setGenerationSize] = useState<number>(
     getIntSearchParam(GENERATION_SIZE_URL_PARAM, DEFAULT_GENERATION_SIZE)
   );
+  const [restoredFromGenerationIndex, setRestoredFromGenerationIndex] = useState<number | null>(null);
   const [generationIndex, setGenerationIndex] = useState<number | null>(null);
   const [generation, setGeneration] = useState<Generation>([]);
   const [generationLifetime, setGenerationLifetime] = useState<number>(
@@ -318,9 +320,49 @@ function EvolutionTabEvolution() {
     return carLossToFitness(loss);
   };
 
+  const isValidGenerationFromStorage = (generation: Generation | null): boolean => {
+    return !!(
+      generation &&
+      generation.length === generationSize &&
+      generation[0].length === GENOME_LENGTH
+    );
+  };
+
+  const getGenerationIndexFromStorage = (): number | null => {
+    const {
+      generation: generationFromStorage,
+      generationIndex: generationIndexFromStorage,
+    } = loadGenerationFromStorage();
+    if (
+      isValidGenerationFromStorage(generationFromStorage) &&
+      generationIndexFromStorage
+    ) {
+      return generationIndexFromStorage;
+    }
+    return null;
+  };
+
+  const getGenerationFromStorage = (): Generation | null => {
+    const {
+      generation: generationFromStorage,
+    } = loadGenerationFromStorage();
+    if (isValidGenerationFromStorage(generationFromStorage)) {
+      return generationFromStorage;
+    }
+    return null;
+  };
+
   const startEvolution = () => {
     logger.info('Start evolution');
-    setGenerationIndex(0);
+    let generationStartIndex = 0;
+
+    const generationIndexFromStorage = getGenerationIndexFromStorage();
+    if (generationIndexFromStorage) {
+      // generationStartIndex = generationIndexFromStorage;
+      setRestoredFromGenerationIndex(generationIndexFromStorage);
+    }
+
+    setGenerationIndex(generationStartIndex);
   };
 
   const createFirstGeneration = () => {
@@ -328,18 +370,19 @@ function EvolutionTabEvolution() {
       return;
     }
     logger.info('Create first generation');
-    const newGeneration: Generation = createGeneration({
+    let firstGeneration: Generation = createGeneration({
       generationSize,
       genomeLength: GENOME_LENGTH,
     });
-    let firstGeneration: Generation = newGeneration;
 
-    const generationFromStorage: Generation | null = loadGenerationFromStorage();
-    if (generationFromStorage && generationFromStorage.length === generationSize) {
+    const generationFromStorage: Generation | null = getGenerationFromStorage();
+    const generationIndexFromStorage: number | null = getGenerationIndexFromStorage();
+    if (generationFromStorage && generationIndexFromStorage) {
       firstGeneration = generationFromStorage;
       enqueue({
-        message: 'Generation has been restored from the saved checkpoint. To start from scratch, press Reset button.',
-        startEnhancer: ({size}) => <Check size={size} />,
+        message:
+          `Generation #${generationIndexFromStorage} has been restored from the saved checkpoint. To start from scratch, press the Reset button.`,
+        startEnhancer: ({size}) => <BsUpload size={size} />,
       }, DURATION.medium);
     }
 
@@ -363,7 +406,10 @@ function EvolutionTabEvolution() {
         },
       );
       setGeneration(newGeneration);
-      saveGenerationToStorage(newGeneration, generationIndex);
+      saveGenerationToStorage({
+        generation: newGeneration,
+        generationIndex,
+      });
     } catch (e) {
       // If selection failed for some reason, clone the existing generation and try again.
       setGeneration([...generation]);
