@@ -108,7 +108,7 @@ function World(props: WorldProps) {
             gravity={[0, -10, 0]}
             iterations={10}
             defaultContactMaterial={{
-              friction: 0.001,
+              friction: 0.01,
               restitution: 0.01,
               contactEquationRelaxation: 4,
             }}
