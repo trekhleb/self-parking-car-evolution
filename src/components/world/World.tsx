@@ -84,7 +84,7 @@ function World(props: WorldProps) {
       {preLoader}
       <WorldContainer>
         <Canvas
-          camera={{ position: [-10, 10, 0], fov: 50 }}
+          camera={{ position: [-20, 20, 0], fov: 25 }}
           shadows
           key={version}
         >

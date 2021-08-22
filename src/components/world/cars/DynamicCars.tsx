@@ -118,7 +118,7 @@ function DynamicCars(props: DynamicCarsProps) {
       }
     };
 
-    const z = withRandomStartingPoint ? 3 * Math.random() - 2 : 1;
+    const z = withRandomStartingPoint ? 7 + 2 * Math.random() : 7;
     const position = [0, 2, z];
     const angularVelocity = [-0.2, 0, 0];
 
