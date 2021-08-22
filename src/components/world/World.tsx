@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stats, Environment} from '@react-three/drei';
+import { OrbitControls, Stats, Environment, AdaptiveDpr} from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
 import * as THREE from 'three';
 import { styled, withStyle } from 'baseui';
@@ -118,6 +118,9 @@ function World(props: WorldProps) {
             <Environment background={false} preset={'night'} />
             {children}
           </Physics>
+
+          {/* @see: https://docs.pmnd.rs/drei/performance/adaptive-dpr */}
+          <AdaptiveDpr pixelated />
         </Canvas>
       </WorldContainer>
       {joystickController}
