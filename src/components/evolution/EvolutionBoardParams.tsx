@@ -15,9 +15,9 @@ const GENERATION_SIZES = [10, 50, 100, 200, 500, 1000];
 const BATCH_SIZES = [1, 2, 5, 10, 20, 50];
 
 export const DEFAULT_GENERATION_SIZE = GENERATION_SIZES[0];
-export const DEFAULT_BATCH_SIZE = BATCH_SIZES[0];
+export const DEFAULT_BATCH_SIZE = BATCH_SIZES[2];
 export const DEFAULT_MUTATION_PROBABILITY = 0.1;
-export const DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE = 5;
+export const DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE = 20;
 export const DEFAULT_GENERATION_LIFETIME = 20;
 export const TRAINED_CAR_GENERATION_LIFETIME = 20;
 
@@ -172,7 +172,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
   const longLivingChampionsChanger = (
     <FormControl
       label={() => 'Long-living champions, %'}
-      caption={() => `${longLivingChampionsCount} best cars will be copied to next generation`}
+      caption={() => `${longLivingChampionsCount} best cars will be copied to the next generation`}
     >
       <Slider
         step={1}
