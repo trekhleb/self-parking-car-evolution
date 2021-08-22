@@ -9,7 +9,7 @@ import { Block } from 'baseui/block';
 
 import CarJoystickController from './controllers/CarJoystickController';
 import CarKeyboardController from './controllers/CarKeyboardController';
-import { WORLD_CONTAINER_HEIGHT } from './constants/world';
+import { WIDER_CAMERA_SCREEN_MAX_WIDTH, WORLD_CONTAINER_HEIGHT } from './constants/world';
 import FadeIn from '../shared/FadeIn';
 import { getSearchParam } from '../../utils/url';
 
@@ -79,6 +79,8 @@ function World(props: WorldProps) {
     <CarKeyboardController />
   ) : null;
 
+  const cameraFov = window.innerWidth < WIDER_CAMERA_SCREEN_MAX_WIDTH ? 30 : 25;
+
   return (
     <Block position="relative" overflow="hidden" display="block" height={`${WORLD_CONTAINER_HEIGHT}px`}>
       {preLoader}
@@ -86,7 +88,7 @@ function World(props: WorldProps) {
         <Canvas shadows key={version}>
           <PerspectiveCamera
             makeDefault
-            fov={25}
+            fov={cameraFov}
             position={[-20, 20, 0]}
           />
           <OrbitControls />

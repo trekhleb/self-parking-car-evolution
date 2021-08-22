@@ -1,1 +1,2 @@
 export const WORLD_CONTAINER_HEIGHT = 400;
+export const WIDER_CAMERA_SCREEN_MAX_WIDTH = 600;
