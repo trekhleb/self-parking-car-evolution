@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stats, Environment, AdaptiveDpr} from '@react-three/drei';
+import { OrbitControls, Stats, Environment, AdaptiveDpr, PerspectiveCamera } from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
 import * as THREE from 'three';
 import { styled, withStyle } from 'baseui';
@@ -83,14 +83,12 @@ function World(props: WorldProps) {
     <Block position="relative" overflow="hidden" display="block" height={`${WORLD_CONTAINER_HEIGHT}px`}>
       {preLoader}
       <WorldContainer>
-        <Canvas
-          camera={{
-            position: [-20, 20, 0],
-            fov: 25,
-          }}
-          shadows
-          key={version}
-        >
+        <Canvas shadows key={version}>
+          <PerspectiveCamera
+            makeDefault
+            fov={25}
+            position={[-20, 20, 0]}
+          />
           <OrbitControls />
           <color attach="background" args={[worldBackgroundColor]} />
           <hemisphereLight intensity={1} groundColor={new THREE.Color( 0x080820 )} />
