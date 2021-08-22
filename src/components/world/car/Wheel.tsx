@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { NumVec3, NumVec4 } from '../../../types/vectors';
 import { WHEEL_MASS, WHEEL_OBJECT_NAME, WHEEL_WIDTH } from './constants';
 import WheelModel from './WheelModel';
+import { meshBounds } from '@react-three/drei';
 
 type WheelProps = {
   radius: number,
@@ -56,7 +57,7 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
 
   return (
     <mesh ref={ref} name={WHEEL_OBJECT_NAME}>
-      <mesh rotation={rotation}>
+      <mesh rotation={rotation} raycast={meshBounds}>
         <WheelModel
           castShadow={castShadow}
           receiveShadow={receiveShadow}

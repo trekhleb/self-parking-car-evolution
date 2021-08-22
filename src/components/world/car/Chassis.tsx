@@ -2,6 +2,7 @@ import { BoxProps, useBox } from '@react-three/cannon';
 import React, { forwardRef } from 'react';
 import * as THREE from 'three';
 import { GroupProps } from '@react-three/fiber';
+import { meshBounds } from '@react-three/drei';
 
 import { CHASSIS_MASS, CHASSIS_OBJECT_NAME, CHASSIS_SIZE } from './constants';
 import { NumVec3 } from '../../../types/vectors';
@@ -88,7 +89,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
 
   return (
     <group ref={ref} name={CHASSIS_OBJECT_NAME}>
-      <mesh>
+      <mesh raycast={meshBounds}>
         <ChassisModel
           bodyProps={groupProps}
           castShadow={castShadow}
