@@ -40,6 +40,6 @@ export const SENSOR_DISTANCE = 4;
 export const SENSOR_DISTANCE_FALLBACK = SENSOR_DISTANCE;
 
 // Car.
-export const CAR_MAX_STEER_VALUE = 0.5;
+export const CAR_MAX_STEER_VALUE = 0.6;
 export const CAR_MAX_FORCE = 2;
 export const CAR_MAX_BREAK_FORCE = 2;
