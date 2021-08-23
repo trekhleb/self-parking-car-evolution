@@ -40,6 +40,7 @@ import { PARKING_SPOT_POINTS } from '../surroundings/ParkingSpot';
 import { formatLossValue } from '../../evolution/utils/evolution';
 import { RectanglePoints, ThreeRectanglePoints } from '../../../types/vectors';
 import { carLoss as getCarLoss } from '../../../libs/carGenetic';
+import { LOSS_VALUE_BAD_THRESHOLD, LOSS_VALUE_GOOD_THRESHOLD } from '../../evolution/constants/evolution';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
@@ -306,9 +307,9 @@ function Car(props: CarProps) {
 
   let distanceColor = 'black';
   if (carLoss !== null) {
-    if (carLoss <= 1) {
+    if (carLoss <= LOSS_VALUE_GOOD_THRESHOLD) {
       distanceColor = 'limegreen';
-    } else if (carLoss <= 3) {
+    } else if (carLoss <= LOSS_VALUE_BAD_THRESHOLD) {
       distanceColor = 'orange';
     } else {
       distanceColor = 'red';

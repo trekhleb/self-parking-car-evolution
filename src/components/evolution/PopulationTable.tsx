@@ -8,6 +8,7 @@ import { withStyle } from 'baseui';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import { formatLossValue } from './utils/evolution';
 import FadeIn from '../shared/FadeIn';
+import { LOSS_VALUE_BAD_THRESHOLD, LOSS_VALUE_GOOD_THRESHOLD } from './constants/evolution';
 
 export type CarsInProgressType = Record<CarLicencePlateType, boolean>;
 export type CarsLossType = Record<CarLicencePlateType, number | null>;
@@ -77,9 +78,9 @@ function PopulationTable(props: PopulationTableProps) {
       const carLossFormatted: number | null = getCarLoss(carsLoss, car);
       let carLossColor = '';
       if (carLossFormatted !== null) {
-        if (carLossFormatted < 1) {
+        if (carLossFormatted < LOSS_VALUE_GOOD_THRESHOLD) {
           carLossColor = 'limegreen';
-        } else if (carLossFormatted < 2) {
+        } else if (carLossFormatted < LOSS_VALUE_BAD_THRESHOLD) {
           carLossColor = 'orange';
         } else {
           carLossColor = 'red';

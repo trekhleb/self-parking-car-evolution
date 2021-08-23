@@ -1,0 +1,2 @@
+export const LOSS_VALUE_GOOD_THRESHOLD = 1;
+export const LOSS_VALUE_BAD_THRESHOLD = 2;
