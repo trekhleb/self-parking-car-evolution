@@ -28,6 +28,7 @@ type EvolutionAnalyticsProps = {
   onMutationProbabilityChange: (probability: Probability) => void,
   onLongLivingChampionsPercentageChange: (percentage: Percentage) => void,
   lossHistory: number[],
+  avgLossHistory: number[],
   cars: CarsType,
   carsInProgress: CarsInProgressType,
   carsLoss: CarsLossType[],
@@ -59,6 +60,7 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
     onMutationProbabilityChange,
     onLongLivingChampionsPercentageChange,
     lossHistory,
+    avgLossHistory,
     cars,
     carsInProgress,
     carsLoss,
@@ -103,7 +105,10 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
 
   const lossHistoryChart = (
     <Block marginBottom="30px">
-      <LossHistory history={lossHistory} />
+      <LossHistory
+        history={lossHistory}
+        avgHistory={avgLossHistory}
+      />
     </Block>
   );
 

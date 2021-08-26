@@ -6,11 +6,12 @@ import { formatLossValue } from './utils/evolution';
 
 type LossHistoryProps = {
   history: number[],
+  avgHistory: number[],
 };
 
 // @see: Nivo docs: https://nivo.rocks/line
 function LossHistory(props: LossHistoryProps) {
-  const {history} = props;
+  const {history, avgHistory} = props;
 
   const emptyStateData: [number] = [0];
   const chartData: Datum[] = (history.length ? history : emptyStateData).map((loss: number, generationIndex: number): Datum => {

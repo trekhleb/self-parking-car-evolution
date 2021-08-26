@@ -74,8 +74,8 @@ function EvolutionTabEvolution() {
 
   const carsLossRef = useRef<CarsLossType[]>([{}]);
   const [carsLoss, setCarsLoss] = useState<CarsLossType[]>([{}]);
-  const [lossHistory, setLossHistory
-  ] = useState<number[]>([]);
+  const [lossHistory, setLossHistory] = useState<number[]>([]);
+  const [avgLossHistory, setAvgLossHistory] = useState<number[]>([]);
   const genomeLossRef = useRef<GenomeLossType[]>([{}]);
 
   const [mutationProbability, setMutationProbability] = useState<Probability>(
@@ -103,6 +103,7 @@ function EvolutionTabEvolution() {
     carsLossRef.current = [{}];
     genomeLossRef.current = [{}];
     setLossHistory([]);
+    setAvgLossHistory([]);
     setBestGenome(null);
     setMinLoss(null);
     setBestCarLicencePlate(null);
@@ -287,6 +288,8 @@ function EvolutionTabEvolution() {
       return;
     }
     const generationLoss: CarsLossType = carsLossRef.current[generationIndex];
+
+    // Sync min loss history.
     const newLossHistory = [...lossHistory];
     if (generationLoss) {
       newLossHistory[generationIndex] = Object.values(generationLoss).reduce(
@@ -302,6 +305,26 @@ function EvolutionTabEvolution() {
       newLossHistory[generationIndex] = Infinity;
     }
     setLossHistory(newLossHistory);
+
+    // Sync avg loss history.
+    const newAvgLossHistory = [...avgLossHistory];
+    if (generationLoss) {
+      let nonNullLosses = 0;
+      const lossSum = Object.values(generationLoss).reduce(
+        (sum: number, currVal: number | null) => {
+          if (currVal === null) {
+            return sum;
+          }
+          nonNullLosses += 1;
+          return sum + currVal;
+        },
+        0
+      );
+      newAvgLossHistory[generationIndex] = nonNullLosses ? lossSum / nonNullLosses : 0;
+    } else {
+      newAvgLossHistory[generationIndex] = Infinity;
+    }
+    setAvgLossHistory(newAvgLossHistory);
   };
 
   const carFitnessFunction = (generationIndex: number) => (genome: Genome): number => {
@@ -356,6 +379,20 @@ function EvolutionTabEvolution() {
     return null;
   };
 
+  const getAvgLossHistoryFromStorage = (): number[] | null => {
+    const {
+      avgLossHistory: avgLossHistoryFromStorage,
+      generation: generationFromStorage,
+    } = loadGenerationFromStorage();
+    if (
+      isValidGenerationFromStorage(generationFromStorage) &&
+      avgLossHistoryFromStorage
+    ) {
+      return avgLossHistoryFromStorage;
+    }
+    return null;
+  };
+
   const getGenerationFromStorage = (): Generation | null => {
     const {
       generation: generationFromStorage,
@@ -372,11 +409,13 @@ function EvolutionTabEvolution() {
 
     const generationIndexFromStorage = getGenerationIndexFromStorage();
     const lossHistoryFromStorage = getLossHistoryFromStorage();
+    const avgLossHistoryFromStorage = getAvgLossHistoryFromStorage();
 
-    if (generationIndexFromStorage && lossHistoryFromStorage) {
+    if (generationIndexFromStorage && lossHistoryFromStorage && avgLossHistoryFromStorage) {
       generationStartIndex = generationIndexFromStorage;
       setRestoredFromGenerationIndex(generationIndexFromStorage);
       setLossHistory(lossHistoryFromStorage);
+      setAvgLossHistory(avgLossHistoryFromStorage);
     }
 
     setGenerationIndex(generationStartIndex);
@@ -427,6 +466,7 @@ function EvolutionTabEvolution() {
         generation: newGeneration,
         generationIndex,
         lossHistory,
+        avgLossHistory,
       });
     } catch (e) {
       // If selection failed for some reason, clone the existing generation and try again.
@@ -562,6 +602,7 @@ function EvolutionTabEvolution() {
         onLongLivingChampionsPercentageChange={onLongLivingChampionsPercentageChange}
         onReset={onReset}
         lossHistory={lossHistory}
+        avgLossHistory={avgLossHistory}
         cars={cars}
         carsInProgress={carsInProgress}
         carsLoss={carsLoss}

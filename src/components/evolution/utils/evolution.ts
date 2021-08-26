@@ -15,6 +15,7 @@ import { read, remove, write } from '../../../utils/storage';
 const GENERATION_STORAGE_KEY = 'generation';
 const GENERATION_INDEX_STORAGE_KEY = 'generation-index';
 const LOSS_HISTORY_INDEX_STORAGE_KEY = 'loss-history';
+const AVG_LOSS_HISTORY_INDEX_STORAGE_KEY = 'avg-loss-history';
 
 const generateLicencePlate = (
   generationIndex: number | null,
@@ -123,35 +124,45 @@ type GenerationDataInStorage = {
   generation: Generation | null,
   generationIndex: number | null,
   lossHistory: number[] | null,
+  avgLossHistory: number[] | null,
 };
 
 export const loadGenerationFromStorage = (): GenerationDataInStorage => {
   const generationIndex: number | null = read(GENERATION_INDEX_STORAGE_KEY)
   const generation: Generation | null = read(GENERATION_STORAGE_KEY);
   const lossHistory: number[] | null = read(LOSS_HISTORY_INDEX_STORAGE_KEY);
+  const avgLossHistory: number[] | null = read(AVG_LOSS_HISTORY_INDEX_STORAGE_KEY);
   return {
     generation,
     generationIndex,
     lossHistory,
+    avgLossHistory,
   };
 };
 
 export const saveGenerationToStorage = (data: GenerationDataInStorage): boolean => {
-  const {generation, generationIndex, lossHistory} = data;
+  const {
+    generation,
+    generationIndex,
+    lossHistory,
+    avgLossHistory,
+  } = data;
 
-  if (!generation || !generation.length || !generationIndex || !lossHistory) {
+  if (!generation || !generation.length || !generationIndex || !lossHistory || !avgLossHistory) {
     return false;
   }
 
   const keySuccess = write(GENERATION_INDEX_STORAGE_KEY, generationIndex);
   const generationSuccess = write(GENERATION_STORAGE_KEY, generation);
   const lossHistorySuccess = write(LOSS_HISTORY_INDEX_STORAGE_KEY, lossHistory);
+  const avgLossHistorySuccess = write(AVG_LOSS_HISTORY_INDEX_STORAGE_KEY, avgLossHistory);
 
-  return keySuccess && generationSuccess && lossHistorySuccess;
+  return keySuccess && generationSuccess && lossHistorySuccess && avgLossHistorySuccess;
 };
 
 export const removeGenerationFromStorage = (): void => {
   remove(GENERATION_STORAGE_KEY);
   remove(GENERATION_INDEX_STORAGE_KEY);
   remove(LOSS_HISTORY_INDEX_STORAGE_KEY);
+  remove(AVG_LOSS_HISTORY_INDEX_STORAGE_KEY);
 };
