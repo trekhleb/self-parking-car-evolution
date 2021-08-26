@@ -1,5 +1,5 @@
 import React from 'react';
-import { meshBounds, useGLTF } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
 
 import { ModelData } from '../types/models';
@@ -52,21 +52,18 @@ function WheelModel(props: WheelModelProps) {
   return (
     <group {...groupProps}>
       <mesh
-        raycast={meshBounds}
         geometry={tire}
         material={tireMaterial}
         castShadow={castShadow}
         receiveShadow={receiveShadow}
       />
       <mesh
-        raycast={meshBounds}
         geometry={disc}
         material={discMaterial}
         castShadow={castShadow}
         receiveShadow={receiveShadow}
       />
       <mesh
-        raycast={meshBounds}
         geometry={cap}
         material={capMaterial}
         castShadow={castShadow}
