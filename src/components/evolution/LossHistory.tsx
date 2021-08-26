@@ -40,15 +40,18 @@ function LossHistory(props: LossHistoryProps) {
 
   const chartData: Serie[] = [];
 
+  const minLossSeriesId = 'minLoss';
+  const avgLossSeriesId = 'avsLoss';
+
   chartData.push({
-    id: 'minLoss',
+    id: minLossSeriesId,
     data: historyData,
     color: 'black',
   });
 
   if (showAvgHistory) {
     chartData.push({
-      id: 'avgLoss',
+      id: avgLossSeriesId,
       data: avgHistoryData,
       color: '#AAAAAA',
     });
@@ -88,7 +91,7 @@ function LossHistory(props: LossHistoryProps) {
         return datum.color || 'black';
       }}
       tooltip={({point}: {point: Point}) => {
-        const {data} = point;
+        const {data, serieId} = point;
         return (
           <Block $style={{
             backgroundColor: 'white',
@@ -103,7 +106,7 @@ function LossHistory(props: LossHistoryProps) {
             </Block>
             <Block>
               <small>
-                Loss: <b>{data.yFormatted}</b>
+                {serieId === minLossSeriesId ? 'Min Loss' : 'Avg Loss'}: <b>{data.yFormatted}</b>
               </small>
             </Block>
           </Block>
