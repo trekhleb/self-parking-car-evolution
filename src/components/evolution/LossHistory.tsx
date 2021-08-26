@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { Block } from 'baseui/block';
-import { Datum, Point, ResponsiveLine } from '@nivo/line';
+import { Datum, Point, ResponsiveLine, Serie } from '@nivo/line';
 
 import { formatLossValue } from './utils/evolution';
 
@@ -13,20 +14,54 @@ type LossHistoryProps = {
 function LossHistory(props: LossHistoryProps) {
   const {history, avgHistory} = props;
 
-  const emptyStateData: [number] = [0];
-  const chartData: Datum[] = (history.length ? history : emptyStateData).map((loss: number, generationIndex: number): Datum => {
-    const miss = loss === Infinity ? null : formatLossValue(loss);
-    return {
-      x: generationIndex,
-      y: miss,
-    };
+  const [showAvgHistory] = useState<boolean>(true);
+
+  const emptyStateHistoryData: [number] = [0];
+  const historyData: Datum[] = (history.length ? history : emptyStateHistoryData).map(
+    (loss: number, generationIndex: number): Datum => {
+      const miss = loss === Infinity ? null : formatLossValue(loss);
+      return {
+        x: generationIndex,
+        y: miss,
+      };
+    }
+  );
+
+  const emptyStateAvgHistoryData: [number] = [0];
+  const avgHistoryData: Datum[] = (avgHistory.length ? avgHistory : emptyStateAvgHistoryData).map(
+    (loss: number, generationIndex: number): Datum => {
+      const miss = loss === Infinity ? null : formatLossValue(loss);
+      return {
+        x: generationIndex,
+        y: miss,
+      };
+    }
+  );
+
+  const chartData: Serie[] = [];
+
+  chartData.push({
+    id: 'minLoss',
+    data: historyData,
+    color: 'black',
   });
+
+  if (showAvgHistory) {
+    chartData.push({
+      id: 'avgLoss',
+      data: avgHistoryData,
+      color: '#AAAAAA',
+    });
+  }
 
   const chart = (
     <ResponsiveLine
-      data={[{id: 'miss', data: chartData}]}
+      data={chartData}
       margin={{ top: 3, right: 10, bottom: 42, left: 50 }}
-      xScale={history.length <= 20 ? { type: 'point' } : { type: 'linear', min: 0, max: 'auto' }}
+      xScale={history.length <= 20
+        ? { type: 'point' }
+        : { type: 'linear', min: 0, max: 'auto' }
+      }
       yScale={{ type: 'linear', min: 0, max: 'auto' }}
       yFormat=" >-.2f"
       curve={'monotoneX'}
@@ -36,18 +71,22 @@ function LossHistory(props: LossHistoryProps) {
         legendPosition: 'middle',
       }}
       axisLeft={{
-        legend: 'Min Loss',
+        legend: 'Loss',
         legendOffset: -40,
         legendPosition: 'middle',
       }}
       pointSize={6}
-      pointColor={'black'}
+      pointColor={(datum: Datum) => {
+        return datum.color || 'black';
+      }}
       pointBorderWidth={1}
       pointBorderColor={'white'}
       useMesh={true}
       enableCrosshair={true}
       enableSlices={false}
-      colors={'black'}
+      colors={(datum: Datum) => {
+        return datum.color || 'black';
+      }}
       tooltip={({point}: {point: Point}) => {
         const {data} = point;
         return (
@@ -64,7 +103,7 @@ function LossHistory(props: LossHistoryProps) {
             </Block>
             <Block>
               <small>
-                Target Miss: <b>{data.yFormatted}</b>
+                Loss: <b>{data.yFormatted}</b>
               </small>
             </Block>
           </Block>
