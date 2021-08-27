@@ -40,8 +40,8 @@ function LossHistory(props: LossHistoryProps) {
 
   const chartData: Serie[] = [];
 
-  const minLossSeriesId = 'minLoss';
-  const avgLossSeriesId = 'avsLoss';
+  const minLossSeriesId = 'Min Loss';
+  const avgLossSeriesId = 'Avg Loss';
 
   chartData.push({
     id: minLossSeriesId,
@@ -112,6 +112,23 @@ function LossHistory(props: LossHistoryProps) {
           </Block>
         );
       }}
+      legends={[
+        {
+          anchor: 'bottom-left',
+          direction: 'column',
+          justify: false,
+          translateX: 10,
+          translateY: -3,
+          itemsSpacing: 0,
+          itemDirection: 'left-to-right',
+          itemWidth: 80,
+          itemHeight: 20,
+          itemOpacity: 1,
+          symbolSize: 8,
+          symbolShape: 'circle',
+          symbolBorderColor: 'rgba(0, 0, 0, .5)',
+        }
+      ]}
     />
   );
 
