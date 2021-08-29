@@ -12,6 +12,7 @@ import { linearPolynomial } from '../math/polynomial';
 import { precisionConfigs } from '../math/floats';
 
 type TestCase = {
+  only?: boolean,
   in: {
     targetPolynomial: number[],
     epochs: number,
@@ -46,11 +47,33 @@ const testCases: TestCase[] = [
       expectedMinFitness: undefined,
     },
   },
+  {
+    in: {
+      epochs: 100,
+      generationSize: 100,
+      mutationProbability: 0,
+      longLivingChampionsPercentage: 2,
+      targetPolynomial: [0.0042],
+    },
+    out: {
+      expectedMaxCoefficientsDifference: 0.0001,
+      expectedMaxAvgDistance: 0.000001,
+      expectedMinFitness: undefined,
+    },
+  },
 ];
 
 describe('genetic', () => {
-  testCases.forEach((testCase: TestCase) => {
+  let justOneTest = false;
+
+  testCases.forEach((testCase: TestCase, testIndex: number) => {
+    const { only = false } = testCase;
+    justOneTest = justOneTest || only;
+  });
+
+  testCases.forEach((testCase: TestCase, testIndex: number) => {
     const {
+      only = false,
       in: {
         epochs,
         generationSize,
@@ -74,67 +97,69 @@ describe('genetic', () => {
       return carLossToFitness(avgDelta);
     };
 
-    it(`should approximate the polynomial: coefficients - ${coefficientsNum}, epochs - ${epochs}, generation size - ${generationSize}, mutation - ${mutationProbability}`, () => {
-      // Create the first generation.
-      const firstGeneration = createGeneration({
-        generationSize,
-        genomeLength,
-      });
-
-      // Let generations live and mate for several epochs.
-      let epoch = 0;
-      let latestGeneration: Generation = firstGeneration;
-
-      while (epoch < epochs) {
-        epoch += 1;
-        latestGeneration = select(
-          latestGeneration,
-          fitness,
-          {
-            mutationProbability,
-            longLivingChampionsPercentage,
-          },
-        );
-      }
-
-      // We may take the first individuum since they are sorted
-      // by fitness value from best to worst.
-      const bestGenome = latestGeneration[0];
-      const genomePolynomial: number[] = genomeToNumbers(bestGenome, precisionConfigs.half.totalBitsCount);
-
-      // Check if polynomial coefficients are OK.
-      if (expectedMaxCoefficientsDifference !== undefined) {
-        targetPolynomial.forEach((targetCoefficient: number, i: number) => {
-          const geneticCoefficient = genomePolynomial[i];
-          const coefficientDifference = Math.abs(geneticCoefficient - targetCoefficient);
-          try {
-            expect(expectedMaxCoefficientsDifference).toBeGreaterThanOrEqual(coefficientDifference);
-          } catch(e) {
-            throw new Error(`Expect coefficient ${geneticCoefficient} to be close to coefficient ${targetCoefficient} with less than ${expectedMaxCoefficientsDifference} difference`);
-          }
+    if (!justOneTest || only) {
+      it(`#${testIndex + 1}: should approximate the polynomial: coefficients - ${coefficientsNum}, epochs - ${epochs}, generation size - ${generationSize}, mutation - ${mutationProbability}, champions - ${longLivingChampionsPercentage}`, () => {
+        // Create the first generation.
+        const firstGeneration = createGeneration({
+          generationSize,
+          genomeLength,
         });
-      }
 
-      // Check if polynomial value is OK.
-      if (expectedMaxAvgDistance !== undefined) {
-        const avgDistance = avgPolynomialsDelta(genomePolynomial, targetPolynomial);
-        try {
-          expect(expectedMaxAvgDistance).toBeGreaterThanOrEqual(avgDistance);
-        } catch(e) {
-          throw new Error(`Expect the average distance of ${avgDistance} to be less than ${expectedMaxAvgDistance}`);
-        }
-      }
+        // Let generations live and mate for several epochs.
+        let epoch = 0;
+        let latestGeneration: Generation = firstGeneration;
 
-      // Check if fitness value is OK.
-      if (expectedMinFitness !== undefined) {
-        const genomeFitness = fitness(bestGenome);
-        try {
-          expect(expectedMinFitness).toBeLessThanOrEqual(genomeFitness);
-        } catch(e) {
-          throw new Error(`Expect the fitness value of ${genomeFitness} to be greater than ${expectedMinFitness}`);
+        while (epoch < epochs) {
+          epoch += 1;
+          latestGeneration = select(
+            latestGeneration,
+            fitness,
+            {
+              mutationProbability,
+              longLivingChampionsPercentage,
+            },
+          );
         }
-      }
-    });
+
+        // We may take the first individuum since they are sorted
+        // by fitness value from best to worst.
+        const bestGenome = latestGeneration[0];
+        const genomePolynomial: number[] = genomeToNumbers(bestGenome, precisionConfigs.half.totalBitsCount);
+
+        // Check if polynomial coefficients are OK.
+        if (expectedMaxCoefficientsDifference !== undefined) {
+          targetPolynomial.forEach((targetCoefficient: number, i: number) => {
+            const geneticCoefficient = genomePolynomial[i];
+            const coefficientDifference = Math.abs(geneticCoefficient - targetCoefficient);
+            try {
+              expect(expectedMaxCoefficientsDifference).toBeGreaterThanOrEqual(coefficientDifference);
+            } catch(e) {
+              throw new Error(`Expect coefficient ${geneticCoefficient} to be close to coefficient ${targetCoefficient} with less than ${expectedMaxCoefficientsDifference} difference`);
+            }
+          });
+        }
+
+        // Check if polynomial value is OK.
+        if (expectedMaxAvgDistance !== undefined) {
+          const avgDistance = avgPolynomialsDelta(genomePolynomial, targetPolynomial);
+          try {
+            expect(expectedMaxAvgDistance).toBeGreaterThanOrEqual(avgDistance);
+          } catch(e) {
+            throw new Error(`Expect the average distance of ${avgDistance} to be less than ${expectedMaxAvgDistance}`);
+          }
+        }
+
+        // Check if fitness value is OK.
+        if (expectedMinFitness !== undefined) {
+          const genomeFitness = fitness(bestGenome);
+          try {
+            expect(expectedMinFitness).toBeLessThanOrEqual(genomeFitness);
+          } catch(e) {
+            throw new Error(`Expect the fitness value of ${genomeFitness} to be greater than ${expectedMinFitness}`);
+          }
+        }
+      });
+    }
   });
 });
 
