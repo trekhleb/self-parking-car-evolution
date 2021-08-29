@@ -77,8 +77,8 @@ export const decodeGenome = (genome: Genome): DecodedGenome => {
     ENGINE_FORMULA_GENES_NUM + WHEELS_FORMULA_GENES_NUM,
   );
 
-  const engineFormulaCoefficients: FormulaCoefficients = decodeNumbers(engineGenes);
-  const wheelsFormulaCoefficients: FormulaCoefficients = decodeNumbers(wheelsGenes);
+  const engineFormulaCoefficients: FormulaCoefficients = genomeToNumbers(engineGenes, GENES_PER_NUMBER);
+  const wheelsFormulaCoefficients: FormulaCoefficients = genomeToNumbers(wheelsGenes, GENES_PER_NUMBER);
 
   return {
     engineFormulaCoefficients,
@@ -86,13 +86,13 @@ export const decodeGenome = (genome: Genome): DecodedGenome => {
   };
 };
 
-const decodeNumbers = (genes: Gene[]): number[] => {
-  if (genes.length % GENES_PER_NUMBER !== 0) {
+export const genomeToNumbers = (genome: Genome, genesPerNumber: number): number[] => {
+  if (genome.length % genesPerNumber !== 0) {
     throw new Error('Wrong number of genes in the numbers genome');
   }
   const numbers: number[] = [];
-  for (let numberIndex = 0; numberIndex < genes.length; numberIndex += GENES_PER_NUMBER) {
-    const number: number = bitsToFloat16(genes.slice(numberIndex, numberIndex + GENES_PER_NUMBER));
+  for (let numberIndex = 0; numberIndex < genome.length; numberIndex += genesPerNumber) {
+    const number: number = bitsToFloat16(genome.slice(numberIndex, numberIndex + genesPerNumber));
     numbers.push(number);
   }
   return numbers;
