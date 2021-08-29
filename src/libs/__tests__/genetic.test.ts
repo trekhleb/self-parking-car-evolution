@@ -11,6 +11,8 @@ import { carLossToFitness, genomeToNumbers } from '../carGenetic';
 import { linearPolynomial } from '../math/polynomial';
 import { precisionConfigs } from '../math/floats';
 
+// Tests might be flaky because of a lot of Math.random() usage.
+
 type TestCase = {
   only?: boolean,
   in: {
