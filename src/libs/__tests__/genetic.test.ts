@@ -34,9 +34,9 @@ type TestCase = {
 const testCases: TestCase[] = [
   {
     in: {
-      epochs: 50,
+      epochs: 100,
       generationSize: 100,
-      mutationProbability: 0.2,
+      mutationProbability: 0,
       longLivingChampionsPercentage: 2,
       targetPolynomial: [42],
     },
