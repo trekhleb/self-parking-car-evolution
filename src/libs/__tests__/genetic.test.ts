@@ -34,15 +34,15 @@ type TestCase = {
 const testCases: TestCase[] = [
   {
     in: {
-      epochs: 20,
-      generationSize: 50,
+      epochs: 50,
+      generationSize: 100,
       mutationProbability: 0.2,
       longLivingChampionsPercentage: 2,
       targetPolynomial: [42],
     },
     out: {
-      expectedMaxCoefficientsDifference: 1,
-      expectedMaxAvgDistance: 0.2,
+      expectedMaxCoefficientsDifference: 0.5,
+      expectedMaxAvgDistance: 0.1,
       expectedMinFitness: 0.1,
     },
   },
