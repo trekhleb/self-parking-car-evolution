@@ -1,3 +1,4 @@
+// Tests might be flaky because of a lot of Math.random() usage under the hood.
 import {
   createGeneration,
   FitnessFunction,
@@ -10,8 +11,6 @@ import {
 import { carLossToFitness, genomeToNumbers } from '../carGenetic';
 import { linearPolynomial } from '../math/polynomial';
 import { precisionConfigs } from '../math/floats';
-
-// Tests might be flaky because of a lot of Math.random() usage.
 
 type TestCase = {
   only?: boolean,
@@ -46,7 +45,7 @@ const testCases: TestCase[] = [
     out: {
       expectedMaxCoefficientsDifference: 0.5,
       expectedMaxAvgDistance: 0.1,
-      expectedMinFitness: undefined,
+      expectedMinFitness: 0.95,
     },
   },
   {
@@ -59,8 +58,8 @@ const testCases: TestCase[] = [
     },
     out: {
       expectedMaxCoefficientsDifference: 0.0001,
-      expectedMaxAvgDistance: 0.000001,
-      expectedMinFitness: undefined,
+      expectedMaxAvgDistance: 0.0001,
+      expectedMinFitness: 0.95,
     },
   },
 ];
