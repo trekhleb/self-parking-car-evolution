@@ -22,12 +22,12 @@ type TestCase = {
   out: {
     // How big might be the average (for 10 points in space) distance between
     // target polynomial value and predicted (genetic) polynomial value.
-    expectedMaxAvgDistance: number,
+    expectedMaxAvgDistance?: number,
     // How big might be the absolute difference between target polynomial
     // coefficient and predicted (genetic) polynomial coefficients.
-    expectedMaxCoefficientsDifference: number,
+    expectedMaxCoefficientsDifference?: number,
     // What maximum fitness function value is expected.
-    expectedMinFitness: number,
+    expectedMinFitness?: number,
   },
 };
 
@@ -43,7 +43,7 @@ const testCases: TestCase[] = [
     out: {
       expectedMaxCoefficientsDifference: 0.5,
       expectedMaxAvgDistance: 0.1,
-      expectedMinFitness: 0.1,
+      expectedMinFitness: undefined,
     },
   },
 ];
@@ -103,30 +103,36 @@ describe('genetic', () => {
       const genomePolynomial: number[] = genomeToNumbers(bestGenome, precisionConfigs.half.totalBitsCount);
 
       // Check if polynomial coefficients are OK.
-      targetPolynomial.forEach((targetCoefficient: number, i: number) => {
-        const geneticCoefficient = genomePolynomial[i];
-        const coefficientDifference = Math.abs(geneticCoefficient - targetCoefficient);
-        try {
-          expect(expectedMaxCoefficientsDifference).toBeGreaterThanOrEqual(coefficientDifference);
-        } catch(e) {
-          throw new Error(`Expect coefficient ${geneticCoefficient} to be close to coefficient ${targetCoefficient} with less than ${expectedMaxCoefficientsDifference} difference`);
-        }
-      });
+      if (expectedMaxCoefficientsDifference !== undefined) {
+        targetPolynomial.forEach((targetCoefficient: number, i: number) => {
+          const geneticCoefficient = genomePolynomial[i];
+          const coefficientDifference = Math.abs(geneticCoefficient - targetCoefficient);
+          try {
+            expect(expectedMaxCoefficientsDifference).toBeGreaterThanOrEqual(coefficientDifference);
+          } catch(e) {
+            throw new Error(`Expect coefficient ${geneticCoefficient} to be close to coefficient ${targetCoefficient} with less than ${expectedMaxCoefficientsDifference} difference`);
+          }
+        });
+      }
 
       // Check if polynomial value is OK.
-      const avgDistance = avgPolynomialsDelta(genomePolynomial, targetPolynomial);
-      try {
-        expect(expectedMaxAvgDistance).toBeGreaterThanOrEqual(avgDistance);
-      } catch(e) {
-        throw new Error(`Expect the average distance of ${avgDistance} to be less than ${expectedMaxAvgDistance}`);
+      if (expectedMaxAvgDistance !== undefined) {
+        const avgDistance = avgPolynomialsDelta(genomePolynomial, targetPolynomial);
+        try {
+          expect(expectedMaxAvgDistance).toBeGreaterThanOrEqual(avgDistance);
+        } catch(e) {
+          throw new Error(`Expect the average distance of ${avgDistance} to be less than ${expectedMaxAvgDistance}`);
+        }
       }
 
       // Check if fitness value is OK.
-      const genomeFitness = fitness(bestGenome);
-      try {
-        expect(expectedMinFitness).toBeLessThanOrEqual(genomeFitness);
-      } catch(e) {
-        throw new Error(`Expect the fitness value of ${genomeFitness} to be greater than ${expectedMinFitness}`);
+      if (expectedMinFitness !== undefined) {
+        const genomeFitness = fitness(bestGenome);
+        try {
+          expect(expectedMinFitness).toBeLessThanOrEqual(genomeFitness);
+        } catch(e) {
+          throw new Error(`Expect the fitness value of ${genomeFitness} to be greater than ${expectedMinFitness}`);
+        }
       }
     });
   });
