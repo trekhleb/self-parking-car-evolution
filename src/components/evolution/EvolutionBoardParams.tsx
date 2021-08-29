@@ -135,7 +135,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
       caption={() => 'Time the cars have for parking'}
     >
       <Slider
-        step={5}
+        step={1}
         marks={false}
         persistentThumb
         min={10}
