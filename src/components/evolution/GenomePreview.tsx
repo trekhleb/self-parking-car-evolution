@@ -10,6 +10,7 @@ import { CarLicencePlateType } from '../world/types/car';
 import { FormControl } from 'baseui/form-control';
 import { formatLossValue } from './utils/evolution';
 import { CAR_SENSORS_NUM, carLossToFitness, decodeGenome, FormulaCoefficients } from '../../libs/carGenetic';
+import { FITNESS_ALPHA } from './constants/evolution';
 
 type GenomePreviewProps = {
   genome: Genome | null,
@@ -98,7 +99,7 @@ function GenomePreview(props: GenomePreviewProps) {
       )}
       {loss && (
         <Block>
-          Fitness: <b>{formatLossValue(carLossToFitness(loss))}</b>
+          Fitness: <b>{formatLossValue(carLossToFitness(loss, FITNESS_ALPHA))}</b>
         </Block>
       )}
     </Block>

@@ -11,6 +11,7 @@ import {
 import { carLossToFitness, genomeToNumbers } from '../carGenetic';
 import { linearPolynomial } from '../math/polynomial';
 import { precisionConfigs } from '../math/floats';
+import { FITNESS_ALPHA } from '../../components/evolution/constants/evolution';
 
 type TestCase = {
   only?: boolean,
@@ -24,12 +25,12 @@ type TestCase = {
   out: {
     // How big might be the average (for 10 points in space) distance between
     // target polynomial value and predicted (genetic) polynomial value.
-    expectedMaxAvgDistance?: number,
+    maxAvgPolynomialResultsDistance?: number,
     // How big might be the absolute difference between target polynomial
     // coefficient and predicted (genetic) polynomial coefficients.
-    expectedMaxCoefficientsDifference?: number,
+    maxCoefficientsDifference?: number,
     // What maximum fitness function value is expected.
-    expectedMinFitness?: number,
+    minFitness?: number,
   },
 };
 
@@ -43,23 +44,85 @@ const testCases: TestCase[] = [
       targetPolynomial: [42],
     },
     out: {
-      expectedMaxCoefficientsDifference: 0.5,
-      expectedMaxAvgDistance: 0.1,
-      expectedMinFitness: 0.95,
+      maxCoefficientsDifference: 0.5,
+      maxAvgPolynomialResultsDistance: 0.1,
+      minFitness: 0.95,
     },
   },
   {
     in: {
-      epochs: 100,
+      epochs: 200,
       generationSize: 100,
       mutationProbability: 0,
       longLivingChampionsPercentage: 2,
       targetPolynomial: [0.0042],
     },
     out: {
-      expectedMaxCoefficientsDifference: 0.0001,
-      expectedMaxAvgDistance: 0.0001,
-      expectedMinFitness: 0.95,
+      // maxCoefficientsDifference: 0.0001,
+      maxAvgPolynomialResultsDistance: 0.01,
+      minFitness: 0.95,
+    },
+  },
+  {
+    in: {
+      epochs: 300,
+      generationSize: 200,
+      mutationProbability: 0.2,
+      longLivingChampionsPercentage: 2,
+      targetPolynomial: [42, -3],
+    },
+    out: {
+      maxCoefficientsDifference: 0.5,
+      maxAvgPolynomialResultsDistance: 0.1,
+      minFitness: 0.95,
+    },
+  },
+  {
+    in: {
+      epochs: 300,
+      generationSize: 300,
+      mutationProbability: 0.2,
+      longLivingChampionsPercentage: 2,
+      targetPolynomial: [-0.15, 142],
+    },
+    out: {
+      // maxCoefficientsDifference: 1,
+      // maxAvgPolynomialResultsDistance: 0.1,
+      minFitness: 0.5,
+    },
+  },
+  {
+    in: {
+      epochs: 300,
+      generationSize: 1000,
+      mutationProbability: 0.3,
+      longLivingChampionsPercentage: 2,
+      targetPolynomial: [
+        504, 0.06, -496, 0, -504, 0.008, -0.014, 0.007,
+      ],
+    },
+    out: {
+      // maxCoefficientsDifference: 0.5,
+      // maxAvgPolynomialResultsDistance: 0.1,
+      minFitness: 0.95,
+    },
+  },
+  {
+    only: true,
+    in: {
+      epochs: 300,
+      generationSize: 500,
+      mutationProbability: 0.3,
+      longLivingChampionsPercentage: 2,
+      targetPolynomial: [
+        42.4, -3, 0.03, 120.05, 30, -0.01, 0, 170, 362,
+        0.01, -10, -396, 0.01, -34.5, -287.5, 0.386, -440, 0,
+      ],
+    },
+    out: {
+      // maxCoefficientsDifference: 0.5,
+      // maxAvgPolynomialResultsDistance: 0.1,
+      minFitness: 0.9,
     },
   },
 ];
@@ -83,19 +146,19 @@ describe('genetic', () => {
         longLivingChampionsPercentage,
       },
       out: {
-        expectedMaxAvgDistance,
-        expectedMaxCoefficientsDifference,
-        expectedMinFitness,
+        maxAvgPolynomialResultsDistance,
+        maxCoefficientsDifference,
+        minFitness,
       },
     } = testCase;
 
     const coefficientsNum: number = targetPolynomial.length;
-    const genomeLength: number = coefficientsNum * precisionConfigs.half.totalBitsCount;
+    const genomeLength: number = coefficientsNum * precisionConfigs.custom.totalBitsCount;
 
     const fitness: FitnessFunction = (genome: Genome): number => {
-      const genomePolynomial: number[] = genomeToNumbers(genome, precisionConfigs.half.totalBitsCount);
+      const genomePolynomial: number[] = genomeToNumbers(genome, precisionConfigs.custom.totalBitsCount);
       const avgDelta = avgPolynomialsDelta(genomePolynomial, targetPolynomial);
-      return carLossToFitness(avgDelta);
+      return carLossToFitness(avgDelta, FITNESS_ALPHA);
     };
 
     if (!justOneTest || only) {
@@ -125,38 +188,49 @@ describe('genetic', () => {
         // We may take the first individuum since they are sorted
         // by fitness value from best to worst.
         const bestGenome = latestGeneration[0];
-        const genomePolynomial: number[] = genomeToNumbers(bestGenome, precisionConfigs.half.totalBitsCount);
+        const genomePolynomial: number[] = genomeToNumbers(bestGenome, precisionConfigs.custom.totalBitsCount);
 
         // Check if polynomial coefficients are OK.
-        if (expectedMaxCoefficientsDifference !== undefined) {
+        if (maxCoefficientsDifference !== undefined) {
+          const failedCoefficientsChecks: number[][] = [];
           targetPolynomial.forEach((targetCoefficient: number, i: number) => {
             const geneticCoefficient = genomePolynomial[i];
             const coefficientDifference = Math.abs(geneticCoefficient - targetCoefficient);
             try {
-              expect(expectedMaxCoefficientsDifference).toBeGreaterThanOrEqual(coefficientDifference);
+              expect(maxCoefficientsDifference).toBeGreaterThanOrEqual(coefficientDifference);
             } catch(e) {
-              throw new Error(`Expect coefficient ${geneticCoefficient} to be close to coefficient ${targetCoefficient} with less than ${expectedMaxCoefficientsDifference} difference`);
+              failedCoefficientsChecks.push([i, geneticCoefficient, targetCoefficient]);
             }
           });
+          if (failedCoefficientsChecks.length) {
+            let errorMessage = `Expect coefficients to be close (< ${maxCoefficientsDifference}):`;
+            failedCoefficientsChecks.forEach((failedCheck: number[]) => {
+              const coefficientIndex = failedCheck[0];
+              const geneticCoefficient = failedCheck[1];
+              const targetCoefficient = failedCheck[2];
+              errorMessage += `\n  • #${coefficientIndex}: ${geneticCoefficient} → ${targetCoefficient}`;
+            });
+            throw new Error(errorMessage);
+          }
         }
 
         // Check if polynomial value is OK.
-        if (expectedMaxAvgDistance !== undefined) {
+        if (maxAvgPolynomialResultsDistance !== undefined) {
           const avgDistance = avgPolynomialsDelta(genomePolynomial, targetPolynomial);
           try {
-            expect(expectedMaxAvgDistance).toBeGreaterThanOrEqual(avgDistance);
+            expect(maxAvgPolynomialResultsDistance).toBeGreaterThanOrEqual(avgDistance);
           } catch(e) {
-            throw new Error(`Expect the average distance of ${avgDistance} to be less than ${expectedMaxAvgDistance}`);
+            throw new Error(`Expect avg polynomial results to be close (< ${maxAvgPolynomialResultsDistance}): ${avgDistance} ≤ ${maxAvgPolynomialResultsDistance}`);
           }
         }
 
         // Check if fitness value is OK.
-        if (expectedMinFitness !== undefined) {
+        if (minFitness !== undefined) {
           const genomeFitness = fitness(bestGenome);
           try {
-            expect(expectedMinFitness).toBeLessThanOrEqual(genomeFitness);
+            expect(minFitness).toBeLessThanOrEqual(genomeFitness);
           } catch(e) {
-            throw new Error(`Expect the fitness value of ${genomeFitness} to be greater than ${expectedMinFitness}`);
+            throw new Error(`Expect the fitness value of ${genomeFitness} to be greater than ${minFitness}`);
           }
         }
       });

@@ -28,6 +28,7 @@ import EvolutionAnalytics from './EvolutionAnalytics';
 import { loggerBuilder } from '../../utils/logger';
 import ParkingAutomatic from '../world/parkings/ParkingAutomatic';
 import World from '../world/World';
+import { FITNESS_ALPHA } from './constants/evolution';
 
 const GENERATION_SIZE_URL_PARAM = 'generation';
 const GROUP_SIZE_URL_PARAM = 'group';
@@ -310,7 +311,27 @@ function EvolutionTabEvolution() {
     const newAvgLossHistory = [...avgLossHistory];
     if (generationLoss) {
       let nonNullLosses = 0;
-      const lossSum = Object.values(generationLoss).reduce(
+
+      const ascSortedGenerationLoss = Object.values<number | null>(generationLoss)
+        .sort((a: number | null, b: number | null): number => {
+          const aTuned: number = a === null ? Infinity : a;
+          const bTuned: number = b === null ? Infinity : b;
+          if (aTuned < bTuned) {
+            return -1;
+          }
+          if (aTuned > bTuned) {
+            return 1;
+          }
+          return 0;
+        }
+      );
+
+      const p95GenerationLoss = ascSortedGenerationLoss.slice(
+        0,
+        Math.ceil(ascSortedGenerationLoss.length * 0.95),
+      );
+
+      const lossSum = p95GenerationLoss.reduce(
         (sum: number, currVal: number | null) => {
           if (currVal === null) {
             return sum;
@@ -340,7 +361,7 @@ function EvolutionTabEvolution() {
     if (typeof loss !== 'number') {
       throw new Error('Loss value is not a number');
     }
-    return carLossToFitness(loss);
+    return carLossToFitness(loss, FITNESS_ALPHA);
   };
 
   const isValidGenerationFromStorage = (generation: Generation | null): boolean => {

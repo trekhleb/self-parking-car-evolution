@@ -1,5 +1,6 @@
 import { NumVec3 } from '../../../types/vectors';
 import { getModelPath } from '../utils/models';
+import { CAR_SENSORS_NUM } from '../../../libs/carGenetic';
 
 // Wheels.
 export const WHEEL_OBJECT_NAME = 'wheel';
@@ -34,7 +35,7 @@ export const CHASSIS_MODEL_PATH = getModelPath('beetle.glb');
 export const CHASSIS_RELATIVE_POSITION: NumVec3 = [0, -0.6, 0];
 
 // Sensors.
-export const SENSORS_NUM = 16;
+export const SENSORS_NUM = CAR_SENSORS_NUM;
 export const SENSOR_HEIGHT = -0.15;
 export const SENSOR_DISTANCE = 4;
 export const SENSOR_DISTANCE_FALLBACK = SENSOR_DISTANCE;

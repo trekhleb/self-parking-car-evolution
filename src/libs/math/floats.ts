@@ -10,6 +10,7 @@ export type PrecisionConfig = {
 };
 
 export type PrecisionConfigs = {
+  custom: PrecisionConfig,
   half: PrecisionConfig,
   single: PrecisionConfig,
   double: PrecisionConfig,
@@ -25,6 +26,13 @@ export type PrecisionConfigs = {
   @see: https://trekhleb.dev/blog/2021/binary-floating-point/
  */
 export const precisionConfigs: PrecisionConfigs = {
+  // Custom-made 10-bits precision for faster evolution progress.
+  custom: {
+    signBitsCount: 1,
+    exponentBitsCount: 4,
+    fractionBitsCount: 5,
+    totalBitsCount: 10,
+  },
   // @see: https://en.wikipedia.org/wiki/Half-precision_floating-point_format
   half: {
     signBitsCount: 1,
@@ -84,4 +92,9 @@ function bitsToFloat(bits: Bits, precisionConfig: PrecisionConfig): number {
 // Converts the 16-bit binary representation of the floating point number to decimal float number.
 export function bitsToFloat16(bits: Bits): number {
   return bitsToFloat(bits, precisionConfigs.half);
+}
+
+// Converts the 8-bit binary representation of the floating point number to decimal float number.
+export function bitsToFloat10(bits: Bits): number {
+  return bitsToFloat(bits, precisionConfigs.custom);
 }

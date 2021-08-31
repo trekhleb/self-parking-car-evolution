@@ -41,7 +41,7 @@ function LossHistory(props: LossHistoryProps) {
   const chartData: Serie[] = [];
 
   const minLossSeriesId = 'Min Loss';
-  const avgLossSeriesId = 'Avg Loss';
+  const avgLossSeriesId = 'P95 Avg Loss';
 
   chartData.push({
     id: minLossSeriesId,

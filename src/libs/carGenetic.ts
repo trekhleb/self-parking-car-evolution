@@ -1,18 +1,18 @@
 import { RectanglePoints } from '../types/vectors';
 import { Gene, Genome } from './genetic';
-import { bitsToFloat16, precisionConfigs } from './math/floats';
+import { bitsToFloat10, precisionConfigs } from './math/floats';
 import { linearPolynomial } from './math/polynomial';
 import { sigmoid, sigmoidToCategories } from './math/sigmoid';
 import { euclideanDistance } from './math/geometry';
 
 // Car has 16 distance sensors.
-export const CAR_SENSORS_NUM = 16;
+export const CAR_SENSORS_NUM = 8;
 
 // Additional formula coefficient that is not connected to a sensor.
 export const BIAS_UNITS = 1;
 
 // How many genes we need to encode each numeric parameter for the formulas.
-export const GENES_PER_NUMBER = precisionConfigs.half.totalBitsCount;
+export const GENES_PER_NUMBER = precisionConfigs.custom.totalBitsCount;
 
 // Based on 16 distance sensors we need to provide two formulas that would define car's behaviour:
 // 1. Engine formula (input: 16 sensors; output: -1 (backward), 0 (neutral), +1 (forward))
@@ -55,8 +55,8 @@ export const carLoss = (params: LossParams): number => {
   return (flDistance + frDistance + brDistance + blDistance) / 4;
 };
 
-export const carLossToFitness = (loss: number): number => {
-  return 1 / (loss + 1);
+export const carLossToFitness = (loss: number, alpha: number = 1): number => {
+  return 1 / (alpha * loss + 1);
 };
 
 type SensorValues = number[];
@@ -92,7 +92,7 @@ export const genomeToNumbers = (genome: Genome, genesPerNumber: number): number[
   }
   const numbers: number[] = [];
   for (let numberIndex = 0; numberIndex < genome.length; numberIndex += genesPerNumber) {
-    const number: number = bitsToFloat16(genome.slice(numberIndex, numberIndex + genesPerNumber));
+    const number: number = bitsToFloat10(genome.slice(numberIndex, numberIndex + genesPerNumber));
     numbers.push(number);
   }
   return numbers;
