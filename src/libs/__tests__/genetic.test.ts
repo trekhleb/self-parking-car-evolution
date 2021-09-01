@@ -11,7 +11,6 @@ import {
 import { carLossToFitness, genomeToNumbers } from '../carGenetic';
 import { linearPolynomial } from '../math/polynomial';
 import { precisionConfigs } from '../math/floats';
-import { FITNESS_ALPHA } from '../../components/evolution/constants/evolution';
 
 type TestCase = {
   only?: boolean,
@@ -158,7 +157,7 @@ describe('genetic', () => {
     const fitness: FitnessFunction = (genome: Genome): number => {
       const genomePolynomial: number[] = genomeToNumbers(genome, precisionConfigs.custom.totalBitsCount);
       const avgDelta = avgPolynomialsDelta(genomePolynomial, targetPolynomial);
-      return carLossToFitness(avgDelta, FITNESS_ALPHA);
+      return carLossToFitness(avgDelta, 0.00001);
     };
 
     if (!justOneTest || only) {
