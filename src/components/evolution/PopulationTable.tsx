@@ -8,7 +8,8 @@ import { withStyle } from 'baseui';
 import { CarLicencePlateType, CarsType, CarType } from '../world/types/car';
 import { formatLossValue } from './utils/evolution';
 import FadeIn from '../shared/FadeIn';
-import { LOSS_VALUE_BAD_THRESHOLD, LOSS_VALUE_GOOD_THRESHOLD } from './constants/evolution';
+import { FITNESS_ALPHA, LOSS_VALUE_BAD_THRESHOLD, LOSS_VALUE_GOOD_THRESHOLD } from './constants/evolution';
+import { carLossToFitness } from '../../libs/carGenetic';
 
 export type CarsInProgressType = Record<CarLicencePlateType, boolean>;
 export type CarsLossType = Record<CarLicencePlateType, number | null>;
@@ -38,6 +39,7 @@ function PopulationTable(props: PopulationTableProps) {
   const columns = [
     'Licence Plate',
     'Loss',
+    'Fitness',
   ];
 
   const rowsData: React.ReactNode[][] = carsArray
@@ -96,9 +98,21 @@ function PopulationTable(props: PopulationTableProps) {
         </Block>
       );
 
+      const fitnessValue: number | null = getCarFitness(carsLoss, car);
+      const fitnessCell = carsInProgress[car.licencePlate] ? (
+        <FadeIn>
+          <CellSpinner />
+        </FadeIn>
+      ) : (
+        <Block color={carLossColor}>
+          {fitnessValue}
+        </Block>
+      );
+
       return [
         licencePlateCell,
         lossCell,
+        fitnessCell,
       ];
     });
 
@@ -130,6 +144,12 @@ function PopulationTable(props: PopulationTableProps) {
 function getCarLoss(carsLoss: CarsLossType, car: CarType): number | null {
   return carsLoss.hasOwnProperty(car.licencePlate) && typeof carsLoss[car.licencePlate] === 'number'
     ? formatLossValue(carsLoss[car.licencePlate])
+    : null;
+}
+
+function getCarFitness(carsLoss: CarsLossType, car: CarType): number | null {
+  return carsLoss.hasOwnProperty(car.licencePlate) && typeof carsLoss[car.licencePlate] === 'number'
+    ? formatLossValue(carLossToFitness(carsLoss[car.licencePlate] || 0, FITNESS_ALPHA))
     : null;
 }
 
