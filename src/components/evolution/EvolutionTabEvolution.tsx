@@ -19,7 +19,8 @@ import {
 import { carLossToFitness, GENOME_LENGTH } from '../../libs/carGenetic';
 import {
   generateWorldVersion,
-  generationToCars, loadGenerationFromStorage,
+  generationToCars,
+  loadGenerationFromStorage,
   removeGenerationFromStorage,
   saveGenerationToStorage
 } from './utils/evolution';
