@@ -421,6 +421,9 @@ function EvolutionTabEvolution() {
     if (isValidGenerationFromStorage(generationFromStorage)) {
       return generationFromStorage;
     }
+    if (generationFromStorage) {
+      logger.warn('Generation from storage is invalid');
+    }
     return null;
   };
 
