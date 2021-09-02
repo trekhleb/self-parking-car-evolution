@@ -422,7 +422,13 @@ function EvolutionTabEvolution() {
       return generationFromStorage;
     }
     if (generationFromStorage) {
-      logger.warn('Generation from storage is invalid');
+      try {
+        const debugGenerationSize = generationFromStorage.length;
+        const debugGenomeLength = generationFromStorage[0].length;
+        logger.warn(`Generation from storage is invalid: generation size ${debugGenerationSize}, genome length ${debugGenomeLength}`);
+      } catch (err) {
+        logger.warn('Generation from storage is invalid');
+      }
     }
     return null;
   };
