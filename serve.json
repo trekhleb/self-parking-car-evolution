@@ -1,0 +1,17 @@
+{
+  "public": "build",
+  "rewrites": [
+    {
+      "source": "/self-parking-car-evolution/favicon.ico",
+      "destination": "/favicon.ico"
+    },
+    {
+      "source": "/self-parking-car-evolution/models",
+      "destination": "/models"
+    },
+    {
+      "source": "/self-parking-car-evolution/static/:resource_type/:resource",
+      "destination": "/static/:resource_type/:resource"
+    }
+  ]
+}
