@@ -149,7 +149,12 @@ export function select(
     const [firstChild, secondChild] = mate(father, mother, mutationProbability);
 
     newGeneration.push(firstChild);
-    newGeneration.push(secondChild);
+
+    // Depending on the number of long-living champions it is possible that
+    // there will be the place for only one child, sorry.
+    if (newGeneration.length < generation.length) {
+      newGeneration.push(secondChild);
+    }
   }
 
   return newGeneration;

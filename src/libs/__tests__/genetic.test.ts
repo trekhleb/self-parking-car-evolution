@@ -92,16 +92,16 @@ const testCases: TestCase[] = [
   },
   {
     in: {
-      epochs: 300,
-      generationSize: 1000,
+      epochs: 1000,
+      generationSize: 500,
       mutationProbability: 0.3,
-      longLivingChampionsPercentage: 2,
+      longLivingChampionsPercentage: 3,
       targetPolynomial: [
         504, 0.06, -496, 0, -504, 0.008, -0.014, 0.007,
       ],
     },
     out: {
-      // maxCoefficientsDifference: 0.5,
+      maxCoefficientsDifference: 10,
       // maxAvgPolynomialResultsDistance: 0.1,
       minFitness: 0.95,
     },
@@ -109,17 +109,17 @@ const testCases: TestCase[] = [
   {
     only: true,
     in: {
-      epochs: 300,
-      generationSize: 500,
-      mutationProbability: 0.3,
-      longLivingChampionsPercentage: 2,
+      epochs: 1000,
+      generationSize: 1000,
+      mutationProbability: 0.2,
+      longLivingChampionsPercentage: 6,
       targetPolynomial: [
         42.4, -3, 0.03, 120.05, 30, -0.01, 0, 170, 362,
         0.01, -10, -396, 0.01, -34.5, -287.5, 0.386, -440, 0,
       ],
     },
     out: {
-      // maxCoefficientsDifference: 0.5,
+      maxCoefficientsDifference: 0.01,
       // maxAvgPolynomialResultsDistance: 0.1,
       minFitness: 0.9,
     },
@@ -127,6 +127,26 @@ const testCases: TestCase[] = [
 ];
 
 describe('genetic', () => {
+  it('should create a new generation of correct length', () => {
+    const gen01 = createGeneration({
+      generationSize: 500,
+      genomeLength: 10,
+    });
+
+    expect(gen01.length).toBe(500);
+
+    const gen02 = select(
+      gen01,
+      () => Math.random(),
+      {
+        mutationProbability: 0.3,
+        longLivingChampionsPercentage: 3,
+      },
+    );
+
+    expect(gen02.length).toBe(500);
+  });
+
   let justOneTest = false;
 
   testCases.forEach((testCase: TestCase, testIndex: number) => {
