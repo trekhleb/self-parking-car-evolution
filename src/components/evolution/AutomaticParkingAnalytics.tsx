@@ -25,7 +25,7 @@ function AutomaticParkingAnalytics(props: AutomaticParkingAnalyticsProps) {
   } = props;
 
   const timingDetails = (
-    <Block marginBottom="30px" marginTop="30px">
+    <Block marginBottom="20px" marginTop="20px">
       <EvolutionTiming
         batchIndex={carsBatchIndex}
         batchVersion={batchVersion}

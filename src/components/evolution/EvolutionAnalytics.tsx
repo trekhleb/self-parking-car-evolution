@@ -73,7 +73,7 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
   } = props;
 
   const timingDetails = (
-    <Block marginBottom="30px" marginTop="30px">
+    <Block marginBottom="30px" marginTop="20px">
       <EvolutionTiming
         generationIndex={generationIndex}
         batchIndex={carsBatchIndex}

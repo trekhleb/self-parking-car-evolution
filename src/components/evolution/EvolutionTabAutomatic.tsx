@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Block } from 'baseui/block';
 import { useSnackbar, DURATION } from 'baseui/snackbar';
 import { Check } from 'baseui/icon';
+import { Notification } from 'baseui/notification';
 
 import { Generation, Genome } from '../../libs/genetic';
 import { CarLicencePlateType, CarType } from '../world/types/car';
@@ -115,6 +116,12 @@ function EvolutionTabAutomatic() {
           withLabels
         />
       </World>
+      <Block marginTop="20px">
+        <Notification overrides={{Body: {style: {width: 'auto'}}}}>
+          See the trained self-parking car in action<br/><br/>
+          <small>You may also update genome values to see how it affects car's behavior</small>
+        </Notification>
+      </Block>
       <AutomaticParkingAnalytics
         bestGenome={bestTrainedGeneration[0]}
         minLoss={bestTrainedCarLoss}

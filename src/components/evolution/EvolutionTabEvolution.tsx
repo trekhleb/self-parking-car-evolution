@@ -30,6 +30,7 @@ import { loggerBuilder } from '../../utils/logger';
 import ParkingAutomatic from '../world/parkings/ParkingAutomatic';
 import World from '../world/World';
 import { FITNESS_ALPHA } from './constants/evolution';
+import { Notification } from 'baseui/notification';
 
 const GENERATION_SIZE_URL_PARAM = 'generation';
 const GROUP_SIZE_URL_PARAM = 'group';
@@ -614,6 +615,12 @@ function EvolutionTabEvolution() {
           withLabels
         />
       </World>
+      <Block marginTop="20px">
+        <Notification overrides={{Body: {style: {width: 'auto'}}}}>
+          Train the car to do self-parking using Genetic Algorithm <br/><br/>
+          <small>You may need some patience</small>
+        </Notification>
+      </Block>
       <EvolutionAnalytics
         mutationProbability={mutationProbability}
         onMutationProbabilityChange={onMutationProbabilityChange}

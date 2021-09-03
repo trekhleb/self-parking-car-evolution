@@ -64,12 +64,7 @@ function EvolutionTabs() {
     >
       <Tab
         key={TAB_KEYS.evolution}
-        title={(
-          <Row>
-            <Block marginRight="7px">Parking Evolution</Block>
-            <Hint hint="Using the Genetic Algorithm to train the car to do self-parking" />
-          </Row>
-        )}
+        title="Parking Evolution"
       >
         <ErrorBoundary>
           <EvolutionTabEvolution />
@@ -78,12 +73,7 @@ function EvolutionTabs() {
 
       <Tab
         key={TAB_KEYS.automatic}
-        title={(
-          <Row>
-            <Block marginRight="7px">Automatic Parking</Block>
-            <Hint hint="See trained self-parking car in action" />
-          </Row>
-        )}
+        title="Automatic Parking"
       >
         <ErrorBoundary>
           <EvolutionTabAutomatic />
@@ -92,12 +82,7 @@ function EvolutionTabs() {
 
       <Tab
         key={TAB_KEYS.manual}
-        title={(
-          <Row>
-            <Block marginRight="7px">Manual Parking</Block>
-            <Hint hint="Try to park the car by yourself" />
-          </Row>
-        )}
+        title="Manual Parking"
       >
         <ErrorBoundary>
           <EvolutionTabManual />
