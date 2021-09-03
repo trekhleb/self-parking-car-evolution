@@ -6,8 +6,8 @@
       "destination": "/favicon.ico"
     },
     {
-      "source": "/self-parking-car-evolution/models",
-      "destination": "/models"
+      "source": "/self-parking-car-evolution/models/:model_name",
+      "destination": "/models/:model_name"
     },
     {
       "source": "/self-parking-car-evolution/static/:resource_type/:resource",
