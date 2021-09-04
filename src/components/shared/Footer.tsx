@@ -26,7 +26,7 @@ function Footer() {
       />
       <IconLink
         url={ARTICLE_LINK}
-        title="How it works"
+        title="How the algorithm works"
         Icon={RiFilePaper2Fill}
       />
     </Block>

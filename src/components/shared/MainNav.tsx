@@ -18,7 +18,7 @@ function MainNav() {
   return (
     <nav style={{ display: 'flex', marginBottom: '20px' }}>
       <StyledLink href={ARTICLE_LINK} style={linkStyle}>
-        <RiFilePaper2Fill style={iconStyle} /> How it woks
+        <RiFilePaper2Fill style={iconStyle} /> How it works
       </StyledLink>
       <StyledLink href={GITHUB_LINK} style={linkStyle}>
         <SiGithub style={iconStyle} /> Source-code

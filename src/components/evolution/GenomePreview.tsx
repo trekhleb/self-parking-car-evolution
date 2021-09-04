@@ -192,7 +192,7 @@ function GenomePreview(props: GenomePreviewProps) {
           Input: {
             style: {
               ...commonGenomeStyles,
-              height: '200px',
+              height: '120px',
             },
           },
         }}
