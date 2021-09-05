@@ -29,6 +29,8 @@ function EvolutionTabAutomatic() {
     bestTrainedCarLossRef.current = loss;
   };
 
+  const [performanceBoost] = useState<boolean>(false);
+
   const [bestTrainedCarLoss, setBestTrainedCarLoss] = useState<number | null>(null);
   const [bestTrainedCarCycleIndex, setBestTrainedCarCycleIndex] = useState<number>(0);
   const [bestTrainedGeneration, setBestTrainedGeneration] = useState<Generation>(bestDefaultTrainedGeneration);
@@ -109,8 +111,12 @@ function EvolutionTabAutomatic() {
 
   return (
     <Block>
-      <World version={automaticWorldVersion}>
+      <World
+        version={automaticWorldVersion}
+        performanceBoost={performanceBoost}
+      >
         <ParkingAutomatic
+          performanceBoost={performanceBoost}
           cars={bestTrainedCars}
           withVisibleSensors
           withLabels

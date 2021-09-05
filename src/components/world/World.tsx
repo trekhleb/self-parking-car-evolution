@@ -18,6 +18,7 @@ type WorldProps = {
   withJoystickControl?: boolean,
   withKeyboardControl?: boolean,
   version?: string,
+  performanceBoost?: boolean, 
 };
 
 const worldBackgroundColor = 'lightblue';
@@ -40,6 +41,7 @@ function World(props: WorldProps) {
     withJoystickControl = false,
     withKeyboardControl = false,
     version = '0',
+    performanceBoost = false,
   } = props;
 
   const [withStat] = useState<boolean>(!!getSearchParam(STAT_SEARCH_PARAM_NAME));
@@ -81,6 +83,10 @@ function World(props: WorldProps) {
 
   const cameraFov = window.innerWidth < WIDER_CAMERA_SCREEN_MAX_WIDTH ? 30 : 25;
 
+  const environment = performanceBoost ? null : (
+    <Environment background={false} preset={'night'} />
+  );
+
   return (
     <Block position="relative" overflow="hidden" display="block" height={`${WORLD_CONTAINER_HEIGHT}px`}>
       {preLoader}
@@ -115,7 +121,7 @@ function World(props: WorldProps) {
             broadphase="SAP"
             allowSleep
           >
-            <Environment background={false} preset={'night'} />
+            {environment}
             {children}
           </Physics>
 

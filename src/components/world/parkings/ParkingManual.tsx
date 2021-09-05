@@ -15,10 +15,15 @@ const COLLISION_MASK_STATIC_OBJECTS = COLLISION_GROUP_ACTIVE_CARS // It can only
 type ParkingManualProps = {
   withLabels?: boolean,
   withSensors?: boolean,
+  performanceBoost?: boolean,
 };
 
 function ParkingManual(props: ParkingManualProps) {
-  const { withLabels = false, withSensors = false} = props;
+  const {
+    withLabels = false,
+    withSensors = false,
+    performanceBoost = false,
+  } = props;
 
   return (
     <>
@@ -34,6 +39,7 @@ function ParkingManual(props: ParkingManualProps) {
         collisionFilterMask={COLLISION_MASK_ACTIVE_CARS}
         withSensors={withSensors}
         withLabels={withLabels}
+        performanceBoost={performanceBoost}
         controllable
         visibleSensors
       />
@@ -43,6 +49,7 @@ function ParkingManual(props: ParkingManualProps) {
         skipCells={[[0, 2]]}
         collisionFilterGroup={COLLISION_GROUP_STATIC_OBJECTS}
         collisionFilterMask={COLLISION_MASK_STATIC_OBJECTS}
+        performanceBoost={performanceBoost}
       />
     </>
   );

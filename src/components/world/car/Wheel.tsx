@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { NumVec3, NumVec4 } from '../../../types/vectors';
 import { WHEEL_MASS, WHEEL_OBJECT_NAME, WHEEL_WIDTH } from './constants';
 import WheelModel from './WheelModel';
+import WheelModelSimple from './WheelModelSimple';
 
 type WheelProps = {
   radius: number,
@@ -20,6 +21,7 @@ type WheelProps = {
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   bodyProps?: CylinderProps,
+  performanceBoost: boolean,
 }
 
 const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) => {
@@ -35,6 +37,7 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
     wireframe = false,
     bodyProps = {},
     baseColor,
+    performanceBoost
   } = props;
 
   const wheelSize: NumVec4 = [radius, radius, width, segments];
@@ -54,16 +57,28 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
     ref,
   )
 
+  const wheelModel = performanceBoost ? (
+    <WheelModelSimple
+      castShadow={castShadow}
+      receiveShadow={receiveShadow}
+      styled={styled}
+      wireframe={wireframe}
+      baseColor={baseColor}
+    />
+  ) : (
+    <WheelModel
+      castShadow={castShadow}
+      receiveShadow={receiveShadow}
+      styled={styled}
+      wireframe={wireframe}
+      baseColor={baseColor}
+    />
+  );
+
   return (
     <mesh ref={ref} name={WHEEL_OBJECT_NAME}>
       <mesh rotation={rotation}>
-        <WheelModel
-          castShadow={castShadow}
-          receiveShadow={receiveShadow}
-          styled={styled}
-          wireframe={wireframe}
-          baseColor={baseColor}
-        />
+        {wheelModel}
       </mesh>
     </mesh>
   )

@@ -9,10 +9,12 @@ function EvolutionTabManual() {
   return (
     <Block>
       <World
+        performanceBoost={false}
         withJoystickControl
         withKeyboardControl
       >
         <ParkingManual
+          performanceBoost={false}
           withLabels
           withSensors
         />

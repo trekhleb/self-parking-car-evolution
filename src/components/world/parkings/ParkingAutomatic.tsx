@@ -17,6 +17,7 @@ type ParkingAutomaticProps = {
   cars: CarType[],
   withVisibleSensors?: boolean,
   withLabels?: boolean,
+  performanceBoost?: boolean,
 };
 
 function ParkingAutomatic(props: ParkingAutomaticProps) {
@@ -24,6 +25,7 @@ function ParkingAutomatic(props: ParkingAutomaticProps) {
     cars,
     withVisibleSensors = false,
     withLabels = false,
+    performanceBoost = false,
   } = props;
 
   return (
@@ -43,6 +45,7 @@ function ParkingAutomatic(props: ParkingAutomaticProps) {
         visibleSensors={withVisibleSensors}
         withLabels={withLabels}
         withRandomColors={false}
+        performanceBoost={performanceBoost}
       />
       <StaticCars
         rows={2}
@@ -50,6 +53,7 @@ function ParkingAutomatic(props: ParkingAutomaticProps) {
         skipCells={[[0, 2]]}
         collisionFilterGroup={COLLISION_GROUP_STATIC_OBJECTS}
         collisionFilterMask={COLLISION_MASK_STATIC_OBJECTS}
+        performanceBoost={performanceBoost}
       />
     </>
   );

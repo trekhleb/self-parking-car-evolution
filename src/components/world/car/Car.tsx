@@ -67,6 +67,7 @@ type CarProps = {
   onCarReady?: (args: OnCarReadyArgs) => void,
   onCarDestroy?: () => void,
   car?: CarType,
+  performanceBoost?: boolean,
 }
 
 const flWheelIndex = 0;
@@ -94,6 +95,7 @@ function Car(props: CarProps) {
     onSensors = () => {},
     onMove = () => {},
     car = { licencePlate: '', generationIndex: 0, genomeIndex: 0 },
+    performanceBoost = false,
   } = props;
 
   const chassis = useRef<THREE.Object3D | undefined>();
@@ -344,6 +346,7 @@ function Car(props: CarProps) {
         userData={carMetaData}
         collisionFilterGroup={collisionFilterGroup}
         collisionFilterMask={collisionFilterMask}
+        performanceBoost={performanceBoost}
       />
       <Wheel
         ref={flWheel}
@@ -352,6 +355,7 @@ function Car(props: CarProps) {
         styled={styled}
         wireframe={wireframe}
         baseColor={baseColor}
+        performanceBoost={performanceBoost}
         isLeft
       />
       <Wheel
@@ -361,6 +365,7 @@ function Car(props: CarProps) {
         styled={styled}
         wireframe={wireframe}
         baseColor={baseColor}
+        performanceBoost={performanceBoost}
       />
       <Wheel
         ref={blWheel}
@@ -369,6 +374,7 @@ function Car(props: CarProps) {
         styled={styled}
         wireframe={wireframe}
         baseColor={baseColor}
+        performanceBoost={performanceBoost}
         isLeft
       />
       <Wheel
@@ -378,6 +384,7 @@ function Car(props: CarProps) {
         styled={styled}
         wireframe={wireframe}
         baseColor={baseColor}
+        performanceBoost={performanceBoost}
       />
     </group>
   )

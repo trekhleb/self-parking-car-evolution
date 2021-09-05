@@ -14,6 +14,7 @@ type StaticCarsProps = {
   collisionFilterGroup: number,
   collisionFilterMask: number,
   skipCells?: number[][],
+  performanceBoost?: boolean,
 };
 
 function StaticCars(props: StaticCarsProps) {
@@ -23,6 +24,7 @@ function StaticCars(props: StaticCarsProps) {
     collisionFilterGroup,
     collisionFilterMask,
     skipCells = [[]],
+    performanceBoost = false,
   } = props;
 
   const [carBaseColors, setCarBaseColors] = useState<CarBaseColors>({});
@@ -70,6 +72,7 @@ function StaticCars(props: StaticCarsProps) {
         collisionFilterGroup={collisionFilterGroup}
         collisionFilterMask={collisionFilterMask}
         onCollide={onCollide}
+        performanceBoost={performanceBoost}
       />
     );
   });

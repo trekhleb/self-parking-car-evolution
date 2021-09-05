@@ -46,6 +46,8 @@ type GenomeLossType = Record<GenomeKey, number | null>;
 function EvolutionTabEvolution() {
   const {enqueue} = useSnackbar();
 
+  const [performanceBoost] = useState<boolean>(false);
+
   const [worldIndex, setWorldIndex] = useState<number>(0);
 
   const [generationSize, setGenerationSize] = useState<number>(
@@ -500,7 +502,7 @@ function EvolutionTabEvolution() {
         lossHistory,
         avgLossHistory,
       });
-    } catch (e) {
+    } catch (e: any) {
       // If selection failed for some reason, clone the existing generation and try again.
       setGeneration([...generation]);
       const errorMessage = 'The selection for the new generation has failed. Cloning the existing generation to try it next time.';
@@ -608,8 +610,12 @@ function EvolutionTabEvolution() {
 
   return (
     <Block>
-      <World version={batchVersion}>
+      <World
+        version={batchVersion}
+        performanceBoost={performanceBoost}
+      >
         <ParkingAutomatic
+          performanceBoost={performanceBoost}
           cars={carsBatch}
           withVisibleSensors
           withLabels

@@ -24,6 +24,7 @@ type DynamicCarsProps = {
   controllable?: boolean,
   withRandomColors?: boolean,
   withRandomStartingPoint?: boolean,
+  performanceBoost?: boolean,
 };
 
 function DynamicCars(props: DynamicCarsProps) {
@@ -37,6 +38,7 @@ function DynamicCars(props: DynamicCarsProps) {
     controllable = false,
     withRandomColors = false,
     withRandomStartingPoint = false,
+    performanceBoost = false,
   } = props;
   const carsUUIDs = useRef<userCarUUID[]>([]);
   const carsAPIs = useRef<Record<userCarUUID, OnCarReadyArgs>>({});
@@ -123,7 +125,9 @@ function DynamicCars(props: DynamicCarsProps) {
     const angularVelocity = [-0.2, 0, 0];
 
     const styledCar = !withRandomColors;
-    const carColor = withRandomColors ? getRandomColor() : undefined;
+    const carColor = withRandomColors || performanceBoost
+      ? getRandomColor()
+      : undefined;
 
     return (
       <Car
@@ -147,6 +151,7 @@ function DynamicCars(props: DynamicCarsProps) {
         baseColor={carColor}
         car={car}
         withLabel={withLabels}
+        performanceBoost={performanceBoost}
       />
     );
   });

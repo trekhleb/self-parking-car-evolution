@@ -9,6 +9,7 @@ import ChassisModel from './ChassisModel';
 import Sensors from './Sensors';
 import CarLabel from './CarLabel';
 import { SensorValuesType } from '../types/car';
+import ChassisModelSimple from './ChassisModelSimple';
 
 type ChassisProps = {
   sensorsNum: number,
@@ -29,6 +30,7 @@ type ChassisProps = {
   collisionFilterGroup?: number,
   collisionFilterMask?: number,
   onSensors?: (sensors: SensorValuesType) => void,
+  performanceBoost: boolean,
 }
 
 const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref) => {
@@ -51,6 +53,7 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     collisionFilterMask,
     onCollide = () => {},
     onSensors = () => {},
+    performanceBoost,
   } = props;
 
   const boxSize = CHASSIS_SIZE;
@@ -86,17 +89,30 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
     <CarLabel content={label} />
   ) : null;
 
+  const chassisModel = performanceBoost ? (
+    <ChassisModelSimple
+      bodyProps={groupProps}
+      castShadow={castShadow}
+      receiveShadow={receiveShadow}
+      wireframe={wireframe}
+      styled={styled}
+      baseColor={baseColor}
+    />
+  ) : (
+    <ChassisModel
+      bodyProps={groupProps}
+      castShadow={castShadow}
+      receiveShadow={receiveShadow}
+      wireframe={wireframe}
+      styled={styled}
+      baseColor={baseColor}
+    />
+  );
+
   return (
     <group ref={ref} name={CHASSIS_OBJECT_NAME}>
       <mesh>
-        <ChassisModel
-          bodyProps={groupProps}
-          castShadow={castShadow}
-          receiveShadow={receiveShadow}
-          wireframe={wireframe}
-          styled={styled}
-          baseColor={baseColor}
-        />
+        {chassisModel}
       </mesh>
       {sensors}
       {carLabel}
