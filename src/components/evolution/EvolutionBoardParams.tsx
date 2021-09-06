@@ -219,21 +219,23 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
 
   const performanceBooster = (
     <FormControl>
-      <Checkbox
-        checked={performanceBoost}
-        // @ts-ignore
-        onChange={e => onPerformanceBoost(e.target.checked)}
-        labelPlacement={LABEL_PLACEMENT.right}
-      >
-        <Row>
-          <Block marginRight="5px">
-            Boost
-          </Block>
-          <Hint
-            hint="Speed up simulation by simplifying geometry"
-          />
-        </Row>
-      </Checkbox>
+      <Block marginTop="10px">
+        <Checkbox
+          checked={performanceBoost}
+          // @ts-ignore
+          onChange={e => onPerformanceBoost(e.target.checked)}
+          labelPlacement={LABEL_PLACEMENT.right}
+        >
+          <Row>
+            <Block marginRight="5px">
+              <small>Performance boost</small>
+            </Block>
+            <Hint
+              hint="Speed up the simulation by simplifying the geometry"
+            />
+          </Row>
+        </Checkbox>
+      </Block>
     </FormControl>
   );
 
@@ -248,16 +250,16 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
       />
       <FormElementsRow
         nodes={[
-          performanceBooster,
-        ]}
-      />
-      <FormElementsRow
-        nodes={[
           generationSizeSelector,
           batchSizeSelector,
         ]}
         buttons={resetButton}
         alignBottom
+      />
+      <FormElementsRow
+        nodes={[
+          performanceBooster,
+        ]}
       />
     </Block>
   );
