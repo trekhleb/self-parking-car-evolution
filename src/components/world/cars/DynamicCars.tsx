@@ -13,6 +13,7 @@ import {
 } from '../utils/controllers';
 import { getRandomColor } from '../../../utils/colors';
 import { RectanglePoints } from '../../../types/vectors';
+import { CHASSIS_SIMPLIFIED_BASE_COLOR } from '../car/constants';
 
 type DynamicCarsProps = {
   cars: CarType[],
@@ -125,9 +126,11 @@ function DynamicCars(props: DynamicCarsProps) {
     const angularVelocity = [-0.2, 0, 0];
 
     const styledCar = !withRandomColors;
-    const carColor = withRandomColors || performanceBoost
+    const carColor = withRandomColors
       ? getRandomColor()
-      : undefined;
+      : performanceBoost
+        ? CHASSIS_SIMPLIFIED_BASE_COLOR
+        : undefined;
 
     return (
       <Car

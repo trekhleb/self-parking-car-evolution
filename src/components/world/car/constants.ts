@@ -26,6 +26,7 @@ export const CHASSIS_HEIGHT = 1;
 export const CHASSIS_SIZE: NumVec3 = [CHASSIS_WIDTH, CHASSIS_HEIGHT, CHASSIS_LENGTH];
 export const CHASSIS_MASS = 3; // kg
 export const CHASSIS_BASE_COLOR = '#FFFFFF';
+export const CHASSIS_SIMPLIFIED_BASE_COLOR = 'orange';
 export const CHASSIS_BASE_TOUCHED_COLOR = '#FF1111';
 export const CHASSIS_FRONT_WHEEL_SHIFT = 1.3;
 export const CHASSIS_BACK_WHEEL_SHIFT = -1.15;
