@@ -18,8 +18,6 @@ function WheelModelSimple(props: WheelModelSimpleProps) {
     castShadow = true,
     receiveShadow = true,
     groupProps = {},
-    styled = true,
-    wireframe = false,
     baseColor: color,
   } = props;
 
@@ -30,12 +28,8 @@ function WheelModelSimple(props: WheelModelSimpleProps) {
     20,
   ];
 
-  const [cylinderRef] = useCylinder(() => ({
-    args: cylinderArgs,
-  }));
-
   return (
-    <mesh ref={cylinderRef} castShadow={castShadow} receiveShadow={receiveShadow} >
+    <mesh castShadow={castShadow} receiveShadow={receiveShadow} >
       <cylinderBufferGeometry args={cylinderArgs} />
       <meshPhysicalMaterial color={color} />
     </mesh>

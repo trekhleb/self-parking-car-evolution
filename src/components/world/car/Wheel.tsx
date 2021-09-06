@@ -61,8 +61,6 @@ const Wheel = forwardRef<THREE.Object3D | undefined, WheelProps>((props, ref) =>
     <WheelModelSimple
       castShadow={castShadow}
       receiveShadow={receiveShadow}
-      styled={styled}
-      wireframe={wireframe}
       baseColor={baseColor}
     />
   ) : (

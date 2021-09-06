@@ -16,8 +16,6 @@ type ChassisModelSimpleProps = {
 function ChassisModelSimple(props: ChassisModelSimpleProps) {
   const {
     bodyProps = {},
-    wireframe = false,
-    styled = true,
     castShadow = true,
     receiveShadow = true,
     baseColor: color,
@@ -29,16 +27,10 @@ function ChassisModelSimple(props: ChassisModelSimpleProps) {
     CHASSIS_LENGTH - 0.2,
   ];
 
-  const [boxRef] = useBox(() => ({
-    args: boxArgs,
-  }));
-
   return (
-    <mesh ref={boxRef} castShadow={castShadow} receiveShadow={receiveShadow} >
-      <boxBufferGeometry
-        // @ts-ignore
-        args={boxArgs}
-      />
+    <mesh castShadow={castShadow} receiveShadow={receiveShadow} >
+      {/* @ts-ignore */}
+      <boxBufferGeometry args={boxArgs} />
       <meshPhysicalMaterial color={color} />
     </mesh>
   );

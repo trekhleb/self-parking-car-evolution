@@ -94,8 +94,6 @@ const Chassis = forwardRef<THREE.Object3D | undefined, ChassisProps>((props, ref
       bodyProps={groupProps}
       castShadow={castShadow}
       receiveShadow={receiveShadow}
-      wireframe={wireframe}
-      styled={styled}
       baseColor={baseColor}
     />
   ) : (

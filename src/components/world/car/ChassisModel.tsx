@@ -1,5 +1,5 @@
 import React from 'react';
-import { meshBounds, useGLTF } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import { GroupProps } from '@react-three/fiber';
 import { MeshBVH } from 'three-mesh-bvh';
 
