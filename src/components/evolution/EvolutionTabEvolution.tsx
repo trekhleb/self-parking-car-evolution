@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Block } from 'baseui/block';
 import { useSnackbar, DURATION } from 'baseui/snackbar';
 import { Check } from 'baseui/icon';
-import { BsUpload } from 'react-icons/all';
+import { BiUpload } from 'react-icons/all';
 import { Notification } from 'baseui/notification';
 
 import { createGeneration, Generation, Genome, Percentage, Probability, select } from '../../libs/genetic';
@@ -38,6 +38,7 @@ import { loggerBuilder } from '../../utils/logger';
 import ParkingAutomatic from '../world/parkings/ParkingAutomatic';
 import World from '../world/World';
 import { FITNESS_ALPHA } from './constants/evolution';
+import EvolutionCheckpointSaver, { EvolutionCheckpoint } from './EvolutionCheckpointSaver';
 
 const GENERATION_SIZE_URL_PARAM = 'generation';
 const GROUP_SIZE_URL_PARAM = 'group';
@@ -214,6 +215,18 @@ function EvolutionTabEvolution() {
   const onGenerationLifetimeChange = (time: number) => {
     setGenerationLifetime(time);
     setSearchParam(GENERATION_LIFETIME_URL_PARAM, `${time}`);
+  };
+
+  const onRestoreFromCheckpoint = (checkpoint: EvolutionCheckpoint) => {};
+
+  const onCheckpointToFile = (): EvolutionCheckpoint => {
+    const checkpoint: EvolutionCheckpoint = {
+      generationIndex,
+      lossHistory,
+      avgLossHistory,
+      generation,
+    };
+    return checkpoint;
   };
 
   const cancelBatchTimer = () => {
@@ -489,7 +502,7 @@ function EvolutionTabEvolution() {
       enqueue({
         message:
           `Generation #${generationIndexFromStorage} has been restored from the saved checkpoint. To start from scratch, press the Reset button.`,
-        startEnhancer: ({size}) => <BsUpload size={size} />,
+        startEnhancer: ({size}) => <BiUpload size={size} />,
       }, DURATION.medium);
     }
 
@@ -676,6 +689,13 @@ function EvolutionTabEvolution() {
         secondBestCarLicencePlate={secondBestCarLicencePlate}
         secondMinLoss={secondMinLoss}
       />
+
+      <Block marginTop="30px">
+        <EvolutionCheckpointSaver
+          onRestoreFromCheckpoint={onRestoreFromCheckpoint}
+          onCheckpointToFile={onCheckpointToFile}
+        />
+      </Block>
     </Block>
   );
 }
