@@ -2,10 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { Block } from 'baseui/block';
 import { OnChangeParams, Select, SIZE as SELECT_SIZE } from 'baseui/select';
 import { FormControl } from 'baseui/form-control';
-import { Button, SIZE as BUTTON_SIZE, SHAPE as BUTTON_SHAPE } from 'baseui/button';
+import { 
+  Button,
+  SIZE as BUTTON_SIZE,
+  SHAPE as BUTTON_SHAPE,
+  KIND as BUTTON_KIND,
+} from 'baseui/button';
 import { Slider } from 'baseui/slider';
 import { BiReset } from 'react-icons/all';
 import { Checkbox, LABEL_PLACEMENT } from 'baseui/checkbox';
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalButton,
+  SIZE,
+  ROLE
+} from 'baseui/modal';
 
 import { Percentage, Probability } from '../../libs/genetic';
 import FormElementsRow from '../shared/FormElementsRow';
@@ -61,12 +75,26 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
   const [mutationProbabilityInternal, setMutationProbabilityInternal] = useState<Probability>(mutationProbability);
   const [generationLifetimeInternal, setGenerationLifetimeInternal] = useState<number>(generationLifetime);
   const [longLivingChampionsPercentageInternal, setLongLivingChampionsPercentageInternal] = useState<Percentage>(longLivingChampionsPercentage);
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setMutationProbabilityInternal(mutationProbability);
     setGenerationLifetimeInternal(generationLifetime);
     setLongLivingChampionsPercentageInternal(longLivingChampionsPercentage);
   }, [mutationProbability, generationLifetime, longLivingChampionsPercentage]);
+
+  const onConfirmationModalOpen = () => {
+    setConfirmationModalOpen(true);
+  };
+
+  const onConfirmationModalClose = () => {
+    setConfirmationModalOpen(false);
+  };
+
+  const onConfirmationModalConfirm = () => {
+    setConfirmationModalOpen(false);
+    onReset();
+  };
 
   const generationSizeCurrentValue = [{
     id: `${generationSize}`,
@@ -202,7 +230,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
       <Button
         size={BUTTON_SIZE.compact}
         shape={BUTTON_SHAPE.pill}
-        onClick={onReset}
+        onClick={onConfirmationModalOpen}
         startEnhancer={() => <BiReset size={18} />}
         overrides={{
           BaseButton: {
@@ -239,6 +267,39 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
     </FormControl>
   );
 
+  const resetConfirmationModal = (
+    <Modal
+      onClose={onConfirmationModalClose}
+      closeable
+      isOpen={confirmationModalOpen}
+      animate
+      autoFocus
+      size={SIZE.default}
+      role={ROLE.dialog}
+    >
+      <ModalHeader>
+        Confirm resetting
+      </ModalHeader>
+      <ModalBody>
+        Resetting will clear the evolution configuration and also the training progress. Is that ok?
+      </ModalBody>
+      <ModalFooter>
+        <ModalButton
+          onClick={onConfirmationModalClose}
+          kind={BUTTON_KIND.tertiary}
+        >
+          Cancel
+        </ModalButton>
+        <ModalButton
+          onClick={onConfirmationModalConfirm}
+          kind={BUTTON_KIND.primary}
+        >
+          Sure! Let's go!
+        </ModalButton>
+      </ModalFooter>
+    </Modal>
+  );
+
   return (
     <Block display="flex" flexDirection="column">
       <FormElementsRow
@@ -261,6 +322,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
           performanceBooster,
         ]}
       />
+      {resetConfirmationModal}
     </Block>
   );
 }
