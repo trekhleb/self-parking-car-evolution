@@ -37,3 +37,11 @@ export const getFloatSearchParam = (name: string, defaultValue: number): number 
   }
   return parseFloat(searchParam);
 };
+
+export const getBooleanSearchParam = (name: string, defaultValue: boolean): boolean => {
+  const searchParam: string | null = getSearchParam(name);
+  if (searchParam === null) {
+    return defaultValue;
+  }
+  return searchParam.toLowerCase() === 'true' ? true : false;
+};

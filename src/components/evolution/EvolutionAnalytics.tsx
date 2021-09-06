@@ -18,6 +18,7 @@ type EvolutionAnalyticsProps = {
   generationSize: number,
   carsBatchSize: number,
   mutationProbability: Probability,
+  performanceBoost: boolean,
   longLivingChampionsPercentage: Percentage,
   generationLifetime: number,
   batchVersion: string,
@@ -27,6 +28,7 @@ type EvolutionAnalyticsProps = {
   onReset: () => void,
   onMutationProbabilityChange: (probability: Probability) => void,
   onLongLivingChampionsPercentageChange: (percentage: Percentage) => void,
+  onPerformanceBoost: (state: boolean) => void,
   lossHistory: number[],
   avgLossHistory: number[],
   cars: CarsType,
@@ -50,6 +52,7 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
     worldIndex,
     generationLifetimeMs,
     generationSize,
+    performanceBoost,
     carsBatchSize,
     generationLifetime,
     batchVersion,
@@ -59,6 +62,7 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
     onReset,
     onMutationProbabilityChange,
     onLongLivingChampionsPercentageChange,
+    onPerformanceBoost,
     lossHistory,
     avgLossHistory,
     cars,
@@ -93,11 +97,13 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
         mutationProbability={mutationProbability}
         generationLifetime={generationLifetime}
         longLivingChampionsPercentage={longLivingChampionsPercentage}
+        performanceBoost={performanceBoost}
         onGenerationSizeChange={onGenerationSizeChange}
         onBatchSizeChange={onBatchSizeChange}
         onGenerationLifetimeChange={onGenerationLifetimeChange}
         onMutationProbabilityChange={onMutationProbabilityChange}
         onLongLivingChampionsPercentageChange={onLongLivingChampionsPercentageChange}
+        onPerformanceBoost={onPerformanceBoost}
         onReset={onReset}
       />
     </Block>

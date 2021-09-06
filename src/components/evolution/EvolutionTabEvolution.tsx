@@ -4,6 +4,7 @@ import { Block } from 'baseui/block';
 import { useSnackbar, DURATION } from 'baseui/snackbar';
 import { Check } from 'baseui/icon';
 import { BsUpload } from 'react-icons/all';
+import { Notification } from 'baseui/notification';
 
 import { createGeneration, Generation, Genome, Percentage, Probability, select } from '../../libs/genetic';
 import { CarsLossType, CarsInProgressType } from './PopulationTable';
@@ -14,6 +15,7 @@ import {
   DEFAULT_GENERATION_SIZE,
   DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE,
   DEFAULT_MUTATION_PROBABILITY,
+  DEFAULT_PERFORMANCE_BOOST,
   SECOND,
 } from './EvolutionBoardParams';
 import { carLossToFitness, GENOME_LENGTH } from '../../libs/carGenetic';
@@ -24,19 +26,25 @@ import {
   removeGenerationFromStorage,
   saveGenerationToStorage
 } from './utils/evolution';
-import { deleteSearchParam, getFloatSearchParam, getIntSearchParam, setSearchParam } from '../../utils/url';
+import { 
+  deleteSearchParam,
+  getBooleanSearchParam,
+  getFloatSearchParam,
+  getIntSearchParam,
+  setSearchParam,
+} from '../../utils/url';
 import EvolutionAnalytics from './EvolutionAnalytics';
 import { loggerBuilder } from '../../utils/logger';
 import ParkingAutomatic from '../world/parkings/ParkingAutomatic';
 import World from '../world/World';
 import { FITNESS_ALPHA } from './constants/evolution';
-import { Notification } from 'baseui/notification';
 
 const GENERATION_SIZE_URL_PARAM = 'generation';
 const GROUP_SIZE_URL_PARAM = 'group';
 const GENERATION_LIFETIME_URL_PARAM = 'lifetime';
 const MUTATION_PROBABILITY_URL_PARAM = 'mutation';
 const LONG_LIVING_CHAMPIONS_URL_PARAM = 'champions';
+const PERFORMANCE_BOOST_URL_PARAM = 'boost';
 
 //  Genome array, concatenated to a string (i.e. '1010011')
 type GenomeKey = string;
@@ -46,7 +54,9 @@ type GenomeLossType = Record<GenomeKey, number | null>;
 function EvolutionTabEvolution() {
   const {enqueue} = useSnackbar();
 
-  const [performanceBoost] = useState<boolean>(false);
+  const [performanceBoost, setPerformanceBoost] = useState<boolean>(
+    getBooleanSearchParam(PERFORMANCE_BOOST_URL_PARAM, DEFAULT_PERFORMANCE_BOOST)
+  );
 
   const [worldIndex, setWorldIndex] = useState<number>(0);
 
@@ -161,12 +171,14 @@ function EvolutionTabEvolution() {
     deleteSearchParam(GENERATION_LIFETIME_URL_PARAM);
     deleteSearchParam(MUTATION_PROBABILITY_URL_PARAM);
     deleteSearchParam(LONG_LIVING_CHAMPIONS_URL_PARAM);
+    deleteSearchParam(PERFORMANCE_BOOST_URL_PARAM);
 
     setGenerationSize(DEFAULT_GENERATION_SIZE);
     setCarsBatchSize(DEFAULT_BATCH_SIZE);
     setGenerationLifetime(DEFAULT_GENERATION_LIFETIME);
     setMutationProbability(DEFAULT_MUTATION_PROBABILITY);
     setLongLivingChampionsPercentage(DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE);
+    setPerformanceBoost(DEFAULT_PERFORMANCE_BOOST);
   };
 
   const onReset = () => {
@@ -186,6 +198,11 @@ function EvolutionTabEvolution() {
   const onLongLivingChampionsPercentageChange = (percentage: Percentage) => {
     setLongLivingChampionsPercentage(percentage);
     setSearchParam(LONG_LIVING_CHAMPIONS_URL_PARAM, `${percentage}`);
+  };
+
+  const onPerformanceBoost = (state: boolean) => {
+    setPerformanceBoost(state);
+    setSearchParam(PERFORMANCE_BOOST_URL_PARAM, `${state ? 'true' : 'false'}`);
   };
 
   const onBatchSizeChange = (size: number) => {
@@ -637,6 +654,7 @@ function EvolutionTabEvolution() {
         worldIndex={worldIndex}
         generationLifetimeMs={generationLifetimeMs}
         generationSize={generationSize}
+        performanceBoost={performanceBoost}
         carsBatchSize={carsBatchSize}
         generationLifetime={generationLifetime}
         batchVersion={batchVersion}
@@ -644,6 +662,7 @@ function EvolutionTabEvolution() {
         onBatchSizeChange={onBatchSizeChange}
         onGenerationLifetimeChange={onGenerationLifetimeChange}
         onLongLivingChampionsPercentageChange={onLongLivingChampionsPercentageChange}
+        onPerformanceBoost={onPerformanceBoost}
         onReset={onReset}
         lossHistory={lossHistory}
         avgLossHistory={avgLossHistory}

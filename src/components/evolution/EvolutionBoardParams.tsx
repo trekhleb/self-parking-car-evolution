@@ -5,15 +5,19 @@ import { FormControl } from 'baseui/form-control';
 import { Button, SIZE as BUTTON_SIZE, SHAPE as BUTTON_SHAPE } from 'baseui/button';
 import { Slider } from 'baseui/slider';
 import { BiReset } from 'react-icons/all';
+import { Checkbox, LABEL_PLACEMENT } from 'baseui/checkbox';
 
 import { Percentage, Probability } from '../../libs/genetic';
 import FormElementsRow from '../shared/FormElementsRow';
+import Hint from '../shared/Hint';
+import Row from '../shared/Row';
 
 export const SECOND = 1000;
 
 const GENERATION_SIZES = [4, 10, 50, 100, 200, 500, 1000, 2000];
 const BATCH_SIZES = [1, 2, 5, 10, 15, 20, 30, 50, 100];
 
+export const DEFAULT_PERFORMANCE_BOOST = false;
 export const DEFAULT_GENERATION_SIZE = GENERATION_SIZES[1];
 export const DEFAULT_BATCH_SIZE = BATCH_SIZES[2];
 export const DEFAULT_MUTATION_PROBABILITY = 0.3;
@@ -27,11 +31,13 @@ type EvolutionBoardParamsProps = {
   mutationProbability: Probability,
   longLivingChampionsPercentage: Percentage,
   generationLifetime: number,
+  performanceBoost: boolean,
   onGenerationSizeChange: (size: number) => void,
   onBatchSizeChange: (size: number) => void,
   onGenerationLifetimeChange: (time: number) => void,
   onMutationProbabilityChange: (probability: Probability) => void,
   onLongLivingChampionsPercentageChange: (percentage: Percentage) => void,
+  onPerformanceBoost: (state: boolean) => void,
   onReset: () => void,
 };
 
@@ -42,11 +48,13 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
     generationLifetime,
     longLivingChampionsPercentage,
     onGenerationSizeChange,
+    performanceBoost,
     onBatchSizeChange,
     onGenerationLifetimeChange,
     mutationProbability,
     onMutationProbabilityChange,
     onLongLivingChampionsPercentageChange,
+    onPerformanceBoost,
     onReset,
   } = props;
 
@@ -209,6 +217,26 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
     </FormControl>
   );
 
+  const performanceBooster = (
+    <FormControl>
+      <Checkbox
+        checked={performanceBoost}
+        // @ts-ignore
+        onChange={e => onPerformanceBoost(e.target.checked)}
+        labelPlacement={LABEL_PLACEMENT.right}
+      >
+        <Row>
+          <Block marginRight="5px">
+            Boost
+          </Block>
+          <Hint
+            hint="Speed up simulation by simplifying geometry"
+          />
+        </Row>
+      </Checkbox>
+    </FormControl>
+  );
+
   return (
     <Block display="flex" flexDirection="column">
       <FormElementsRow
@@ -216,6 +244,11 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
           generationLifetimeChanger,
           mutationProbabilityChanger,
           longLivingChampionsChanger,
+        ]}
+      />
+      <FormElementsRow
+        nodes={[
+          performanceBooster,
         ]}
       />
       <FormElementsRow
