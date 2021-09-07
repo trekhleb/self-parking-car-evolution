@@ -20,6 +20,7 @@ import {
   SIZE,
   ROLE
 } from 'baseui/modal';
+import { Notification, KIND as NOTIFICATION_KIND } from 'baseui/notification';
 
 import { Percentage, Probability } from '../../libs/genetic';
 import FormElementsRow from '../shared/FormElementsRow';
@@ -278,10 +279,17 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
       role={ROLE.dialog}
     >
       <ModalHeader>
-        Confirm resetting
+        Confirm evolution resetting
       </ModalHeader>
       <ModalBody>
-        Resetting will clear the evolution configuration and also the training progress. Is that ok?
+        <Notification
+          kind={NOTIFICATION_KIND.warning}
+          overrides={{
+            Body: {style: {width: 'auto'}},
+          }}
+        >
+          Resetting will clear the evolution configuration and also the training progress
+        </Notification>
       </ModalBody>
       <ModalFooter>
         <ModalButton
@@ -294,7 +302,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
           onClick={onConfirmationModalConfirm}
           kind={BUTTON_KIND.primary}
         >
-          Sure! Let's go!
+          Reset
         </ModalButton>
       </ModalFooter>
     </Modal>
