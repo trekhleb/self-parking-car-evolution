@@ -5,12 +5,19 @@ import { BiDownload, BiUpload } from 'react-icons/all';
 import { saveAs } from 'file-saver';
 
 import Row from '../shared/Row';
-import { Generation } from '../../libs/genetic';
+import { Generation, Percentage, Probability } from '../../libs/genetic';
 
 export type EvolutionCheckpoint = {
-  generationIndex: number | null,
+  dateTime: string,
+  generationIndex: number,
   lossHistory: number[],
   avgLossHistory: number[],
+  performanceBoost: boolean,
+  generationSize: number,
+  generationLifetime: number,
+  carsBatchSize: number,
+  mutationProbability: Probability,
+  longLivingChampionsPercentage: Percentage,
   generation: Generation,
 };
 
@@ -27,20 +34,27 @@ function EvolutionCheckpointSaver(props: EvolutionCheckpointSaverProps) {
 
   const onSaveEvolution = () => {
     const checkpoint: EvolutionCheckpoint = onCheckpointToFile();
-    const jsonIndent = 2;
-    const checkpointString: string = JSON.stringify(checkpoint, null, jsonIndent);
+    const fileName = `evolution-checkpoint--generation-${checkpoint.generationIndex}--size-${checkpoint.generationSize}.json`;
+    const checkpointString: string = JSON.stringify(checkpoint);
     const checkpointBlob = new Blob(
       [checkpointString],
       { type: 'application/json' },
     );
-    saveAs(checkpointBlob, 'test.json');
+    saveAs(checkpointBlob, fileName);
   };
 
   const onRestoreEvolution = () => {
     const checkpoint: EvolutionCheckpoint = {
-      generationIndex: null,
+      dateTime: '',
+      generationIndex: 0,
       lossHistory: [],
       avgLossHistory: [],
+      performanceBoost: false,
+      generationSize: 0,
+      generationLifetime: 0,
+      carsBatchSize: 0,
+      mutationProbability: 0,
+      longLivingChampionsPercentage: 0,
       generation: [],
     };
     onRestoreFromCheckpoint(checkpoint);

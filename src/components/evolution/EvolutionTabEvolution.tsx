@@ -221,9 +221,16 @@ function EvolutionTabEvolution() {
 
   const onCheckpointToFile = (): EvolutionCheckpoint => {
     const checkpoint: EvolutionCheckpoint = {
-      generationIndex,
+      dateTime: (new Date()).toISOString(),
+      generationIndex: generationIndex || 0,
       lossHistory,
       avgLossHistory,
+      performanceBoost,
+      generationSize,
+      generationLifetime,
+      carsBatchSize,
+      mutationProbability,
+      longLivingChampionsPercentage,
       generation,
     };
     return checkpoint;
