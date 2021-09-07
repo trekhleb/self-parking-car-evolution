@@ -12,13 +12,15 @@ import {
 } from './EvolutionBoardParams';
 import { generationToCars } from './utils/evolution';
 import { loggerBuilder } from '../../utils/logger';
-import { FIRST_BEST_GENOME } from './constants/genomes';
+import { BEST_GENOMES } from './constants/genomes';
 import AutomaticParkingAnalytics from './AutomaticParkingAnalytics';
 import World from '../world/World';
 import ParkingAutomatic from '../world/parkings/ParkingAutomatic';
 
+const defaultGenomeIndex = 0;
+
 const bestDefaultTrainedGeneration: Generation = [
-  FIRST_BEST_GENOME,
+  BEST_GENOMES[defaultGenomeIndex],
 ];
 
 function EvolutionTabAutomatic() {
@@ -30,6 +32,8 @@ function EvolutionTabAutomatic() {
   };
 
   const [performanceBoost] = useState<boolean>(false);
+
+  const [selectedGenomeIndex, setSelectedGenomeIndex] = useState<number>(defaultGenomeIndex);
 
   const [bestTrainedCarLoss, setBestTrainedCarLoss] = useState<number | null>(null);
   const [bestTrainedCarCycleIndex, setBestTrainedCarCycleIndex] = useState<number>(0);
@@ -99,6 +103,11 @@ function EvolutionTabAutomatic() {
     }, DURATION.medium);
   };
 
+  const onChangeGenomeIndex = (index: number) => {
+    setSelectedGenomeIndex(index);
+    onBestGenomeEdit(BEST_GENOMES[index]);
+  };
+
   // Start the automatic parking cycles.
   useEffect(() => {
     countDownAutomaticParkingCycleLifetime(onAutomaticCycleLifetimeEnd);
@@ -129,12 +138,15 @@ function EvolutionTabAutomatic() {
         </Notification>
       </Block>
       <AutomaticParkingAnalytics
+        genomes={BEST_GENOMES}
         bestGenome={bestTrainedGeneration[0]}
         minLoss={bestTrainedCarLoss}
         generationLifetimeMs={automaticParkingCycleLifetimeMs}
         batchVersion={automaticWorldVersion}
         carsBatchIndex={bestTrainedCarCycleIndex}
         onBestGenomeEdit={onBestGenomeEdit}
+        selectedGenomeIndex={selectedGenomeIndex}
+        onChangeGenomeIndex={onChangeGenomeIndex}
       />
     </Block>
   );
