@@ -217,7 +217,25 @@ function EvolutionTabEvolution() {
     setSearchParam(GENERATION_LIFETIME_URL_PARAM, `${time}`);
   };
 
-  const onRestoreFromCheckpoint = (checkpoint: EvolutionCheckpoint) => {};
+  const onRestoreFromCheckpoint = (checkpoint: EvolutionCheckpoint) => {
+    cancelBatchTimer();
+    
+    setSearchParam(MUTATION_PROBABILITY_URL_PARAM, `${checkpoint.mutationProbability}`);
+    setSearchParam(LONG_LIVING_CHAMPIONS_URL_PARAM, `${checkpoint.longLivingChampionsPercentage}`);
+    setSearchParam(GENERATION_LIFETIME_URL_PARAM, `${checkpoint.generationLifetime}`);
+    setSearchParam(PERFORMANCE_BOOST_URL_PARAM, `${checkpoint.performanceBoost ? 'true' : 'false'}`);
+    setSearchParam(GENERATION_SIZE_URL_PARAM, `${checkpoint.generationSize}`);
+    setSearchParam(GROUP_SIZE_URL_PARAM, `${checkpoint.carsBatchSize}`);
+
+    saveGenerationToStorage({
+      generation: checkpoint.generation,
+      generationIndex: checkpoint.generationIndex,
+      lossHistory: checkpoint.lossHistory,
+      avgLossHistory: checkpoint.avgLossHistory,
+    });
+
+    document.location.reload();
+  };
 
   const onCheckpointToFile = (): EvolutionCheckpoint => {
     const checkpoint: EvolutionCheckpoint = {
