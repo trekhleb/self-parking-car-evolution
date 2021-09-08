@@ -3,6 +3,7 @@ import { Label3 } from 'baseui/typography';
 import {Tag, VARIANT as TAG_VARIANT} from 'baseui/tag';
 import { Block } from 'baseui/block';
 import {Notification, KIND as NOTIFICATION_KIND} from 'baseui/notification';
+import { VscDebugRestart } from 'react-icons/all';
 
 import Timer from '../shared/Timer';
 
@@ -13,6 +14,7 @@ type EvolutionTimingProps = {
   generationLifetimeMs?: number,
   batchVersion?: string,
   worldVersion?: string,
+  retry?: boolean,
   groupLabel?: string,
   batchLifetimeLabel?: string,
 };
@@ -25,9 +27,19 @@ function EvolutionTiming(props: EvolutionTimingProps) {
     generationLifetimeMs,
     batchVersion,
     worldVersion,
+    retry = false,
     groupLabel = 'Group',
     batchLifetimeLabel = 'Group lifetime',
   } = props;
+
+  const batchesCounter = retry ? (
+    <VscDebugRestart title="Retrying the first group since the loss value increased" />
+  ) : (
+    <>
+      <small>#</small>{(batchIndex || 0) + 1}
+      {totalBatches && (<span> / {totalBatches}</span>)}
+    </>
+  );
 
   const generationInfo = generationIndex !== undefined ? (
     <TimingColumn caption="Generation">
@@ -40,8 +52,7 @@ function EvolutionTiming(props: EvolutionTimingProps) {
   const groupInfo = batchIndex !== undefined ? (
     <TimingColumn caption={groupLabel}>
       <Tag closeable={false} variant={TAG_VARIANT.solid} kind="neutral">
-        <small>#</small>{(batchIndex || 0) + 1}
-        {totalBatches && (<span> / {totalBatches}</span>)}
+        {batchesCounter}
       </Tag>
     </TimingColumn>
   ) : null;
@@ -49,7 +60,7 @@ function EvolutionTiming(props: EvolutionTimingProps) {
   const groupLifetime = generationLifetimeMs !== undefined && batchVersion !== undefined ? (
     <TimingColumn caption={batchLifetimeLabel}>
       <Block padding="3px">
-        <Timer timout={generationLifetimeMs} version={batchVersion} />
+        <Timer timeout={generationLifetimeMs} version={batchVersion} />
       </Block>
     </TimingColumn>
   ) : null;

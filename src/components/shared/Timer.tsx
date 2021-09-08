@@ -7,27 +7,27 @@ import './Timer.css';
 type TimeMs = number;
 
 type TimerProps = {
-  timout?: TimeMs,
+  timeout?: TimeMs,
   interval?: TimeMs,
   version?: string,
 }
 
 function Timer(props: TimerProps) {
-  const {timout = null, interval = 1000, version = ''} = props;
+  const {timeout = null, interval = 1000, version = ''} = props;
 
   const [timePassed, setTimePassed] = useState<number>(0);
   const timePassedRef = useRef<number>(0);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const reversedTime = timout !== null;
+  const reversedTime = timeout !== null;
 
   const onInterval = () => {
     timePassedRef.current += interval;
     setTimePassed(timePassedRef.current);
   };
 
-  const onIntervalCallback = useCallback(onInterval, [timout, interval]);
+  const onIntervalCallback = useCallback(onInterval, [timeout, interval]);
 
   useEffect(() => {
     if (timerRef.current) {
@@ -43,8 +43,8 @@ function Timer(props: TimerProps) {
     };
   }, [onIntervalCallback, interval, version]);
 
-  const formattedTime = timout !== null
-    ? formatTime(timout - timePassed)
+  const formattedTime = timeout !== null
+    ? formatTime(timeout - timePassed)
     : formatTime(timePassed);
 
   return (

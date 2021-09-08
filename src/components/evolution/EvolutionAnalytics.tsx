@@ -19,6 +19,7 @@ type EvolutionAnalyticsProps = {
   carsBatchSize: number,
   mutationProbability: Probability,
   performanceBoost: boolean,
+  needToRetry: boolean,
   longLivingChampionsPercentage: Percentage,
   generationLifetime: number,
   batchVersion: string,
@@ -47,6 +48,7 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
     generationIndex,
     carsBatchIndex,
     totalBatches,
+    needToRetry,
     mutationProbability,
     longLivingChampionsPercentage,
     worldIndex,
@@ -85,6 +87,7 @@ function EvolutionAnalytics(props: EvolutionAnalyticsProps) {
         batchVersion={batchVersion}
         worldVersion={`${worldIndex}`}
         generationLifetimeMs={generationLifetimeMs}
+        retry={needToRetry}
       />
     </Block>
   );

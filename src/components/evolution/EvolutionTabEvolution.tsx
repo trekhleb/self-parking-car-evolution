@@ -37,7 +37,7 @@ import EvolutionAnalytics from './EvolutionAnalytics';
 import { loggerBuilder } from '../../utils/logger';
 import ParkingAutomatic from '../world/parkings/ParkingAutomatic';
 import World from '../world/World';
-import { FITNESS_ALPHA } from './constants/evolution';
+import { BAD_SIMULATION_BATCH_INDEX_CHECK, BAD_SIMULATION_MIN_LOSS_INCREASE_PERCENTAGE, BAD_SIMULATION_RETRIES_ENABLED, BAD_SIMULATION_RETRIES_NUM, FITNESS_ALPHA } from './constants/evolution';
 import EvolutionCheckpointSaver, { EvolutionCheckpoint } from './EvolutionCheckpointSaver';
 
 const GENERATION_SIZE_URL_PARAM = 'generation';
@@ -100,6 +100,8 @@ function EvolutionTabEvolution() {
   const [longLivingChampionsPercentage, setLongLivingChampionsPercentage] = useState<Percentage>(
     getIntSearchParam(LONG_LIVING_CHAMPIONS_URL_PARAM, DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE)
   );
+
+  const [badSimulationRetriesNum, setBadSimulationRetriesNum] = useState<number>(BAD_SIMULATION_RETRIES_NUM);
 
   const logger = loggerBuilder({ context: 'EvolutionTab' });
   const carsBatchesTotal: number = Math.ceil(Object.keys(cars).length / carsBatchSize);
@@ -598,6 +600,13 @@ function EvolutionTabEvolution() {
     setCarsBatch(carsBatch);
   };
 
+  const needToRetry = 
+    BAD_SIMULATION_RETRIES_ENABLED &&
+    carsBatchIndex === BAD_SIMULATION_BATCH_INDEX_CHECK &&
+    badSimulationRetriesNum > 0 &&
+    lossHistory.length > 1 &&
+    lossHistory[lossHistory.length - 1] > (lossHistory[lossHistory.length - 2] * BAD_SIMULATION_MIN_LOSS_INCREASE_PERCENTAGE / 100);
+
   const onBatchLifetimeEnd = () => {
     if (carsBatchIndex === null) {
       return;
@@ -607,7 +616,22 @@ function EvolutionTabEvolution() {
     syncLossHistory();
     const bestLicensePlate = syncBestGenome();
     syncSecondBestGenome(bestLicensePlate);
-    const nextBatchIndex = carsBatchIndex + 1;
+    let nextBatchIndex = carsBatchIndex + 1;
+
+    // Retrying logic
+    if (BAD_SIMULATION_RETRIES_ENABLED && carsBatchIndex) {
+      if (badSimulationRetriesNum === 0) {
+        if (carsBatchIndex > BAD_SIMULATION_BATCH_INDEX_CHECK) {
+          logger.info(`Resetting the simulation retries counter back to #${BAD_SIMULATION_RETRIES_NUM}`);
+          setBadSimulationRetriesNum(BAD_SIMULATION_RETRIES_NUM);
+        }
+      } else if (needToRetry) {
+        logger.info(`Retry needed. Number of retries left: ${badSimulationRetriesNum - 1}`);
+        setBadSimulationRetriesNum(badSimulationRetriesNum - 1);
+        nextBatchIndex = 0;
+      }
+    }
+
     if (nextBatchIndex >= carsBatchesTotal) {
       setCarsBatch([]);
       if (generationIndex !== null) {
@@ -690,6 +714,7 @@ function EvolutionTabEvolution() {
         carsBatchIndex={carsBatchIndex}
         totalBatches={carsBatchesTotal}
         worldIndex={worldIndex}
+        needToRetry={needToRetry}
         generationLifetimeMs={generationLifetimeMs}
         generationSize={generationSize}
         performanceBoost={performanceBoost}
