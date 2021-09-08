@@ -134,7 +134,6 @@ function EvolutionTabEvolution() {
     setWorldIndex(worldIndex + 1);
     setGenerationIndex(0);
     setCarsBatchIndex(null);
-    removeGenerationFromStorage();
   };
 
   const onCarLossUpdate = (licensePlate: CarLicencePlateType, loss: number) => {
@@ -183,6 +182,7 @@ function EvolutionTabEvolution() {
   };
 
   const onReset = () => {
+    removeGenerationFromStorage();
     onSetDefaultFilterValues();
     onEvolutionRestart();
     enqueue({
