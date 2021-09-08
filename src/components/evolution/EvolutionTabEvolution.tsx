@@ -243,14 +243,14 @@ function EvolutionTabEvolution() {
     const checkpoint: EvolutionCheckpoint = {
       dateTime: (new Date()).toISOString(),
       generationIndex: generationIndex || 0,
-      lossHistory,
-      avgLossHistory,
       performanceBoost,
       generationSize,
       generationLifetime,
       carsBatchSize,
       mutationProbability,
       longLivingChampionsPercentage,
+      lossHistory,
+      avgLossHistory,
       generation,
     };
     return checkpoint;

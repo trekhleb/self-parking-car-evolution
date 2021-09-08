@@ -26,6 +26,7 @@ import { Percentage, Probability } from '../../libs/genetic';
 import FormElementsRow from '../shared/FormElementsRow';
 import Hint from '../shared/Hint';
 import Row from '../shared/Row';
+import { GENOME_LENGTH } from '../../libs/carGenetic';
 
 export const SECOND = 1000;
 
@@ -186,20 +187,23 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
     </FormControl>
   );
 
+  const genesToBeMutated = Math.floor(GENOME_LENGTH * mutationProbabilityInternal);
+
   const mutationProbabilityChanger = (
     <FormControl
-      label={() => 'Gene mutation probability'}
-      caption={() => `Every gene will be mutated with ${mutationProbabilityInternal} probability`}
+      label={() => 'Gene mutation probability, %'}
+      caption={() => `≈${genesToBeMutated} car genes will be mutated`}
     >
       <Slider
-        step={0.1}
+        step={1}
         marks={false}
         persistentThumb
         min={0}
-        max={1}
-        value={[mutationProbabilityInternal]}
-        onChange={({ value }) => value && setMutationProbabilityInternal(value[0])}
-        onFinalChange={({value}) => onMutationProbabilityChange(value[0])}
+        max={100}
+        value={[Math.floor(mutationProbabilityInternal * 100)]}
+        onChange={({ value }) => value && setMutationProbabilityInternal(value[0] / 100)}
+        onFinalChange={({value}) => onMutationProbabilityChange(value[0] / 100)}
+        valueToLabel={(value) => `${value}%`}
         overrides={sliderOverrides}
       />
     </FormControl>
