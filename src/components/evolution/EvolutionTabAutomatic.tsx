@@ -31,7 +31,7 @@ function EvolutionTabAutomatic() {
     bestTrainedCarLossRef.current = loss;
   };
 
-  const [performanceBoost] = useState<boolean>(false);
+  const [performanceBoost, setPerformanceBoost] = useState<boolean>(false);
 
   const [selectedGenomeIndex, setSelectedGenomeIndex] = useState<number>(defaultGenomeIndex);
 
@@ -74,6 +74,10 @@ function EvolutionTabAutomatic() {
     logger.info(`Automatic parking cycle started`);
     cancelAutomaticCycleTimer();
     automaticParkingLifetimeTimer.current = setTimeout(onLifetimeEnd, automaticParkingCycleLifetimeMs);
+  };
+
+  const onPerformanceBoost = (state: boolean) => {
+    setPerformanceBoost(state);
   };
 
   const onBestGenomeEdit = (editedGenome: Genome) => {
@@ -133,7 +137,7 @@ function EvolutionTabAutomatic() {
       </World>
       <Block marginTop="20px">
         <Notification overrides={{Body: {style: {width: 'auto'}}}}>
-          See the trained self-parking car in action<br/><br/>
+          See the trained (almost) self-parking car in action<br/><br/>
           <small>You may also update genome values to see how it affects car's behavior</small>
         </Notification>
       </Block>
@@ -145,8 +149,10 @@ function EvolutionTabAutomatic() {
         batchVersion={automaticWorldVersion}
         carsBatchIndex={bestTrainedCarCycleIndex}
         onBestGenomeEdit={onBestGenomeEdit}
+        performanceBoost={performanceBoost}
         selectedGenomeIndex={selectedGenomeIndex}
         onChangeGenomeIndex={onChangeGenomeIndex}
+        onPerformanceBoost={onPerformanceBoost}
       />
     </Block>
   );

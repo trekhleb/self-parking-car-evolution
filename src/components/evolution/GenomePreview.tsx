@@ -212,7 +212,7 @@ function GenomePreview(props: GenomePreviewProps) {
       <Coefficients
         label="Engine formula"
         caption={
-          `Multipliers for ${CAR_SENSORS_NUM} car sensors that define the engine mode (backward, neutral, forward)`
+          `Multipliers for ${CAR_SENSORS_NUM} (+1) car sensors that define the engine mode (backward, neutral, forward)`
         }
         coefficients={engineFormulaCoefficients}
         shortNumbers={shortEngineFormula}
@@ -222,7 +222,7 @@ function GenomePreview(props: GenomePreviewProps) {
       <Coefficients
         label="Wheels formula"
         caption={
-          `Multipliers for ${CAR_SENSORS_NUM} car sensors that define the wheels direction (left, straight, right)`
+          `Multipliers for ${CAR_SENSORS_NUM} (+1) car sensors that define the wheels direction (left, straight, right)`
         }
         coefficients={wheelsFormulaCoefficients}
         shortNumbers={shortWheelsFormula}

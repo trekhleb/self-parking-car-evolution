@@ -6,10 +6,14 @@ import {
   SIZE as BUTTON_GROUP_SIZE,
 } from 'baseui/button-group';
 import { Button } from 'baseui/button';
+import { Checkbox, LABEL_PLACEMENT } from 'baseui/checkbox';
 
 import EvolutionTiming from './EvolutionTiming';
 import BestGenomes from './BestGenomes';
 import { Genome } from '../../libs/genetic';
+import { FormControl } from 'baseui/form-control';
+import Row from '../shared/Row';
+import Hint from '../shared/Hint';
 
 type AutomaticParkingAnalyticsProps = {
   genomes: Genome[],
@@ -18,9 +22,11 @@ type AutomaticParkingAnalyticsProps = {
   bestGenome: Genome | null,
   minLoss: number | null,
   carsBatchIndex: number | null,
+  performanceBoost: boolean,
   selectedGenomeIndex: number,
   onChangeGenomeIndex: (index: number) => void,
   onBestGenomeEdit?: (genome: Genome) => void,
+  onPerformanceBoost: (state: boolean) => void,
 };
 
 function AutomaticParkingAnalytics(props: AutomaticParkingAnalyticsProps) {
@@ -32,7 +38,9 @@ function AutomaticParkingAnalytics(props: AutomaticParkingAnalyticsProps) {
     minLoss,
     carsBatchIndex,
     selectedGenomeIndex,
+    performanceBoost,
     onChangeGenomeIndex,
+    onPerformanceBoost,
     onBestGenomeEdit = (genome: Genome) => {},
   } = props;
 
@@ -55,24 +63,51 @@ function AutomaticParkingAnalytics(props: AutomaticParkingAnalyticsProps) {
   ));
 
   const carsSwitcher = (
-    <ButtonGroup
-      size={BUTTON_GROUP_SIZE.compact}
-      mode={BUTTON_GROUP_MODE.radio}
-      selected={selectedGenomeIndex}
-      onClick={(_event, index) => {
-        onChangeGenomeIndex(index);
-      }}
-    >
-      {carLicencePlates}
-    </ButtonGroup>
+    <Block marginTop="20px" marginBottom="20px">
+      <FormControl
+        label={() => 'Select the pre-trained car genome'}
+      >
+        <ButtonGroup
+          size={BUTTON_GROUP_SIZE.compact}
+          mode={BUTTON_GROUP_MODE.radio}
+          selected={selectedGenomeIndex}
+          onClick={(_event, index) => {
+            onChangeGenomeIndex(index);
+          }}
+        >
+          {carLicencePlates}
+        </ButtonGroup>
+      </FormControl>
+    </Block>
+  );
+
+  const performanceBooster = (
+    <FormControl>
+      <Block>
+        <Checkbox
+          checked={performanceBoost}
+          // @ts-ignore
+          onChange={e => onPerformanceBoost(e.target.checked)}
+          labelPlacement={LABEL_PLACEMENT.right}
+        >
+          <Row>
+            <Block marginRight="5px">
+              <small>Performance boost</small>
+            </Block>
+            <Hint
+              hint="Speed up the simulation by simplifying the geometry"
+            />
+          </Row>
+        </Checkbox>
+      </Block>
+    </FormControl>
   );
 
   return (
     <>
       {timingDetails}
-      <Block marginTop="20px">
-        {carsSwitcher}
-      </Block>
+      {carsSwitcher}
+      {performanceBooster}
       <BestGenomes
         bestGenomePanelTitle="Self-parking car genome"
         bestGenome={bestGenome}
