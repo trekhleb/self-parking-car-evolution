@@ -33,7 +33,9 @@ function EvolutionTiming(props: EvolutionTimingProps) {
   } = props;
 
   const batchesCounter = retry ? (
-    <VscDebugRestart title="Retrying the first group since the loss value increased" />
+    <Block marginBottom="-2px">
+      <VscDebugRestart title="Retrying the first group since the loss value increased" />
+    </Block>
   ) : (
     <>
       <small>#</small>{(batchIndex || 0) + 1}
