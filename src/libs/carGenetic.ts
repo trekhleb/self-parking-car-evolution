@@ -59,11 +59,11 @@ export const carLossToFitness = (loss: number, alpha: number = 1): number => {
   return 1 / (alpha * loss + 1);
 };
 
-type SensorValues = number[];
+export type SensorValues = number[];
 
 export type FormulaCoefficients = number[];
 
-type FormulaResult = -1 | 0 | 1;
+export type FormulaResult = -1 | 0 | 1;
 
 type DecodedGenome = {
   engineFormulaCoefficients: FormulaCoefficients,

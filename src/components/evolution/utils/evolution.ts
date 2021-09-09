@@ -6,11 +6,11 @@ import {
   SensorValuesType, SensorValueType,
   WheelOptionsType
 } from '../../world/types/car';
-import { PARKING_SPOT_POINTS } from '../../world/surroundings/ParkingSpot';
 import { RectanglePoints } from '../../../types/vectors';
 import { CAR_SENSORS_NUM, engineFormula, carLoss, wheelsFormula } from '../../../libs/carGenetic';
 import { SENSOR_DISTANCE_FALLBACK } from '../../world/car/constants';
 import { read, remove, write } from '../../../utils/storage';
+import { PARKING_SPOT_POINTS } from '../../world/constants/parking';
 
 const GENERATION_STORAGE_KEY = 'generation';
 const GENERATION_INDEX_STORAGE_KEY = 'generation-index';

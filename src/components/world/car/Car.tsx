@@ -36,11 +36,11 @@ import {
   WheelInfoOptions,
 } from '../types/car';
 import { ON_MOVE_THROTTLE_TIMEOUT, ON_UPDATE_LABEL_THROTTLE_TIMEOUT } from '../constants/performance';
-import { PARKING_SPOT_POINTS } from '../surroundings/ParkingSpot';
 import { formatLossValue } from '../../evolution/utils/evolution';
 import { RectanglePoints, ThreeRectanglePoints } from '../../../types/vectors';
 import { carLoss as getCarLoss } from '../../../libs/carGenetic';
 import { LOSS_VALUE_BAD_THRESHOLD, LOSS_VALUE_GOOD_THRESHOLD } from '../../evolution/constants/evolution';
+import { PARKING_SPOT_POINTS } from '../constants/parking';
 
 export type OnCarReadyArgs = {
   api: RaycastVehiclePublicApi,
