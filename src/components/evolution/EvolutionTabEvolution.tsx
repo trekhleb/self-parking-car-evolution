@@ -387,12 +387,12 @@ function EvolutionTabEvolution() {
         }
       );
 
-      const p95GenerationLoss = ascSortedGenerationLoss.slice(
+      const P50GenerationLoss = ascSortedGenerationLoss.slice(
         0,
-        Math.ceil(ascSortedGenerationLoss.length * 0.95),
+        Math.ceil(ascSortedGenerationLoss.length * 0.5),
       );
 
-      const lossSum = p95GenerationLoss.reduce(
+      const lossSum = P50GenerationLoss.reduce(
         (sum: number, currVal: number | null) => {
           if (currVal === null) {
             return sum;

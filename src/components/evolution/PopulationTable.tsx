@@ -127,7 +127,7 @@ function PopulationTable(props: PopulationTableProps) {
         overrides={{
           Root: {
             style: {
-              maxHeight: '300px',
+              maxHeight: '343px',
             },
           },
           TableBodyCell: {

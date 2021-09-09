@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Block } from 'baseui/block';
 import { Datum, Point, ResponsiveLine, Serie } from '@nivo/line';
+import { Checkbox } from 'baseui/checkbox';
 
 import { formatLossValue } from './utils/evolution';
 
@@ -14,7 +15,8 @@ type LossHistoryProps = {
 function LossHistory(props: LossHistoryProps) {
   const {history, avgHistory} = props;
 
-  const [showAvgHistory] = useState<boolean>(true);
+  const [showAvgHistory, setShowAvgHistory] = useState<boolean>(true);
+  const [showMinLoss, setShowMinLoss] = useState<boolean>(true);
 
   const emptyStateHistoryData: [number] = [0];
   const historyData: Datum[] = (history.length ? history : emptyStateHistoryData).map(
@@ -41,13 +43,15 @@ function LossHistory(props: LossHistoryProps) {
   const chartData: Serie[] = [];
 
   const minLossSeriesId = 'Min Loss';
-  const avgLossSeriesId = 'P95 Avg Loss';
+  const avgLossSeriesId = 'P50 Avg Loss';
 
-  chartData.push({
-    id: minLossSeriesId,
-    data: historyData,
-    color: 'black',
-  });
+  if (showMinLoss) {
+    chartData.push({
+      id: minLossSeriesId,
+      data: historyData,
+      color: 'black',
+    });
+  }
 
   if (showAvgHistory) {
     chartData.push({
@@ -106,7 +110,7 @@ function LossHistory(props: LossHistoryProps) {
             </Block>
             <Block>
               <small>
-                {serieId === minLossSeriesId ? 'Min Loss' : 'Avg Loss'}: <b>{data.yFormatted}</b>
+                {serieId}: <b>{data.yFormatted}</b>
               </small>
             </Block>
           </Block>
@@ -114,11 +118,11 @@ function LossHistory(props: LossHistoryProps) {
       }}
       legends={[
         {
-          anchor: 'bottom-left',
+          anchor: 'top-right',
           direction: 'column',
           justify: false,
-          translateX: 10,
-          translateY: -3,
+          translateX: -10,
+          translateY: 0,
           itemsSpacing: 0,
           itemDirection: 'left-to-right',
           itemWidth: 80,
@@ -132,15 +136,44 @@ function LossHistory(props: LossHistoryProps) {
     />
   );
 
+  const chartControls = (
+    <Block display="flex" flexDirection="row" marginTop="20px" marginLeft="47px">
+      <Block marginRight="30px">
+        <Checkbox
+          disabled={!showAvgHistory}
+          checked={showMinLoss}
+          onChange={() => setShowMinLoss(!showMinLoss)}
+        >
+          {minLossSeriesId}
+        </Checkbox>
+      </Block>
+
+      <Block>
+        <Checkbox
+          disabled={!showMinLoss}
+          checked={showAvgHistory}
+          onChange={() => setShowAvgHistory(!showAvgHistory)}
+        >
+          {avgLossSeriesId}
+        </Checkbox>
+      </Block>
+    </Block>
+  );
+
   return (
-    <Block
-      height="300px"
-      $style={{
-        fontFamily: 'system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif',
-        fontSize: '14px',
-      }}
-    >
-      {chart}
+    <Block>
+      <Block
+        height="300px"
+        $style={{
+          fontFamily: 'system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontSize: '14px',
+        }}
+      >
+        {chart}
+      </Block>
+      <Block>
+        {chartControls}
+      </Block>
     </Block>
   );
 }

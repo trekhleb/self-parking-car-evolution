@@ -251,25 +251,27 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
   );
 
   const performanceBooster = (
-    <FormControl>
-      <Block marginTop="10px">
-        <Checkbox
-          checked={performanceBoost}
-          // @ts-ignore
-          onChange={e => onPerformanceBoost(e.target.checked)}
-          labelPlacement={LABEL_PLACEMENT.right}
-        >
-          <Row>
-            <Block marginRight="5px">
-              <small>Performance boost</small>
-            </Block>
-            <Hint
-              hint="Speed up the simulation by simplifying the geometry"
-            />
-          </Row>
-        </Checkbox>
-      </Block>
-    </FormControl>
+    <Block>
+      <FormControl>
+        <Block marginTop="10px">
+          <Checkbox
+            checked={performanceBoost}
+            // @ts-ignore
+            onChange={e => onPerformanceBoost(e.target.checked)}
+            labelPlacement={LABEL_PLACEMENT.right}
+          >
+            <Row>
+              <Block marginRight="5px">
+                <small>Performance boost</small>
+              </Block>
+              <Hint
+                hint="Speed up the simulation by simplifying the geometry"
+              />
+            </Row>
+          </Checkbox>
+        </Block>
+      </FormControl>
+    </Block>
   );
 
   const resetConfirmationModal = (
