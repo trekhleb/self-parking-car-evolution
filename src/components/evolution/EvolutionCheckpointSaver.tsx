@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Block } from 'baseui/block';
-import { Button, SIZE as BUTTON_SIZE } from 'baseui/button';
+import { Button, SIZE as BUTTON_SIZE, SHAPE as BUTTON_SHAPE } from 'baseui/button';
 import { BiDownload, BiUpload } from 'react-icons/all';
 import { saveAs } from 'file-saver';
 import {
@@ -121,7 +121,7 @@ function EvolutionCheckpointSaver(props: EvolutionCheckpointSaverProps) {
           Checkpoint is a <code>json</code> file that contain the history of the evolution and the list of genomes from the latest generation.
         </Paragraph3>
         <Paragraph3>
-          You may save your own evolution progress to the checkpoint file or use <a href={CHECKPOINTS_PATH}>one of the pre-trained checkpoints</a>.
+          You may save your own evolution progress to the checkpoint file or use <a style={{color: 'black'}} href={CHECKPOINTS_PATH}>one of the pre-trained checkpoints</a>.
         </Paragraph3>
         <FileUploader
           onCancel={onCancelCheckpointUpload}
@@ -139,8 +139,9 @@ function EvolutionCheckpointSaver(props: EvolutionCheckpointSaverProps) {
       <Row>
         <Block marginRight="5px">
           <Button
-            startEnhancer={() => <BiDownload />}
+            startEnhancer={() => <BiDownload size={18} />}
             size={BUTTON_SIZE.compact}
+            shape={BUTTON_SHAPE.pill}
             onClick={onSaveEvolution}
           >
             Save evolution
@@ -149,8 +150,9 @@ function EvolutionCheckpointSaver(props: EvolutionCheckpointSaverProps) {
 
         <Block marginLeft="5px">
           <Button
-            startEnhancer={() => <BiUpload />}
+            startEnhancer={() => <BiUpload size={18} />}
             size={BUTTON_SIZE.compact}
+            shape={BUTTON_SHAPE.pill}
             onClick={onCheckpointModalOpen}
           >
             Restore evolution

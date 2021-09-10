@@ -138,7 +138,7 @@ function EvolutionTabAutomatic() {
       <Block marginTop="20px">
         <Notification overrides={{Body: {style: {width: 'auto'}}}}>
           See the trained (almost) self-parking car in action<br/><br/>
-          <small>You may also update genome values to see how it affects car's behavior</small>
+          <small>You may also update genome values to see how it affects the car's behavior</small>
         </Notification>
       </Block>
       <AutomaticParkingAnalytics

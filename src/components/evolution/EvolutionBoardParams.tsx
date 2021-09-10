@@ -28,18 +28,18 @@ import Hint from '../shared/Hint';
 import Row from '../shared/Row';
 import { GENOME_LENGTH } from '../../libs/carGenetic';
 
-export const SECOND = 1000;
+export const SECOND: number = 1000;
 
-const GENERATION_SIZES = [4, 10, 50, 100, 200, 500, 1000, 2000];
-const BATCH_SIZES = [1, 2, 5, 10, 15, 20, 30, 50, 100];
+const GENERATION_SIZES: number[] = [4, 10, 50, 100, 200, 500, 1000, 2000];
+const BATCH_SIZES: number[] = [1, 2, 3, 5, 10, 15, 20, 30, 50, 100];
 
-export const DEFAULT_PERFORMANCE_BOOST = false;
-export const DEFAULT_GENERATION_SIZE = GENERATION_SIZES[1];
-export const DEFAULT_BATCH_SIZE = BATCH_SIZES[2];
-export const DEFAULT_MUTATION_PROBABILITY = 0.3;
-export const DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE = 10;
-export const DEFAULT_GENERATION_LIFETIME = 20;
-export const TRAINED_CAR_GENERATION_LIFETIME = DEFAULT_GENERATION_LIFETIME;
+export const DEFAULT_PERFORMANCE_BOOST: boolean = false;
+export const DEFAULT_GENERATION_SIZE: number = 100;
+export const DEFAULT_BATCH_SIZE: number = 2;
+export const DEFAULT_MUTATION_PROBABILITY: Probability = 0.04;
+export const DEFAULT_LONG_LIVING_CHAMPIONS_PERCENTAGE: Percentage = 6;
+export const DEFAULT_GENERATION_LIFETIME: number = 17;
+export const TRAINED_CAR_GENERATION_LIFETIME: number = DEFAULT_GENERATION_LIFETIME;
 
 type EvolutionBoardParamsProps = {
   generationSize: number,
@@ -192,7 +192,7 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
   const mutationProbabilityChanger = (
     <FormControl
       label={() => 'Gene mutation probability, %'}
-      caption={() => `≈${genesToBeMutated} car genes will be mutated`}
+      caption={() => `≈${genesToBeMutated} out of ${GENOME_LENGTH} car genes will be mutated`}
     >
       <Slider
         step={1}
@@ -299,14 +299,19 @@ function EvolutionBoardParams(props: EvolutionBoardParamsProps) {
       </ModalBody>
       <ModalFooter>
         <ModalButton
+          size={BUTTON_SIZE.compact}
+          shape={BUTTON_SHAPE.pill}
           onClick={onConfirmationModalClose}
           kind={BUTTON_KIND.tertiary}
         >
           Cancel
         </ModalButton>
         <ModalButton
+          size={BUTTON_SIZE.compact}
+          shape={BUTTON_SHAPE.pill}
           onClick={onConfirmationModalConfirm}
           kind={BUTTON_KIND.primary}
+          startEnhancer={() => <BiReset size={18} />}
         >
           Reset
         </ModalButton>
