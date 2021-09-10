@@ -12,9 +12,11 @@ import {
 } from 'baseui/modal';
 import { FileUploader } from 'baseui/file-uploader';
 import { Notification, KIND as NOTIFICATION_KIND } from 'baseui/notification';
+import { Paragraph3 } from 'baseui/typography';
 
 import Row from '../shared/Row';
 import { Generation, Percentage, Probability } from '../../libs/genetic';
+import { CHECKPOINTS_PATH } from '../../constants/links';
 
 export type EvolutionCheckpoint = {
   dateTime: string,
@@ -47,7 +49,7 @@ function EvolutionCheckpointSaver(props: EvolutionCheckpointSaverProps) {
 
   const onSaveEvolution = () => {
     const checkpoint: EvolutionCheckpoint = onCheckpointToFile();
-    const fileName = `evolution-checkpoint--gen-${checkpoint.generationIndex}--size-${checkpoint.generationSize}.json`;
+    const fileName = `evolution-checkpoint--population-${checkpoint.generationSize}--generation-${checkpoint.generationIndex}.json`;
     const checkpointString: string = JSON.stringify(checkpoint);
     const checkpointBlob = new Blob(
       [checkpointString],
@@ -115,6 +117,12 @@ function EvolutionCheckpointSaver(props: EvolutionCheckpointSaverProps) {
       <ModalHeader>Restore evolution from the checkpoint file</ModalHeader>
       <ModalBody>
         {checkpointError}
+        <Paragraph3>
+          Checkpoint is a <code>json</code> file that contain the history of the evolution and the list of genomes from the latest generation.
+        </Paragraph3>
+        <Paragraph3>
+          You may save your own evolution progress to the checkpoint file or use <a href={CHECKPOINTS_PATH}>one of the pre-trained checkpoints</a>.
+        </Paragraph3>
         <FileUploader
           onCancel={onCancelCheckpointUpload}
           onDrop={onFileDrop}
