@@ -49,7 +49,7 @@ function EvolutionCheckpointSaver(props: EvolutionCheckpointSaverProps) {
 
   const onSaveEvolution = () => {
     const checkpoint: EvolutionCheckpoint = onCheckpointToFile();
-    const fileName = `evolution-checkpoint--population-${checkpoint.generationSize}--generation-${checkpoint.generationIndex}.json`;
+    const fileName = `ckpt--population-${checkpoint.generationSize}--generation-${checkpoint.generationIndex}.json`;
     const checkpointString: string = JSON.stringify(checkpoint);
     const checkpointBlob = new Blob(
       [checkpointString],
