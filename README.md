@@ -1,6 +1,6 @@
-# Self-Parking Car Evolution
+# 🧬 Self-Parking Car Evolution
 
-TODO
+Training the car to do self-parking using a genetic algorithm.
 
 Hints:
 
