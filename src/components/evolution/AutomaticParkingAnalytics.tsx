@@ -1,11 +1,6 @@
 import React from 'react';
 import { Block } from 'baseui/block';
-import { 
-  ButtonGroup, 
-  MODE as BUTTON_GROUP_MODE, 
-  SIZE as BUTTON_GROUP_SIZE,
-} from 'baseui/button-group';
-import { Button } from 'baseui/button';
+import { Button, SIZE as BUTTON_SIZE, KIND as BUTTON_KIND, SHAPE as BUTTON_SHAPE } from 'baseui/button';
 import { Checkbox, LABEL_PLACEMENT } from 'baseui/checkbox';
 
 import EvolutionTiming from './EvolutionTiming';
@@ -57,9 +52,23 @@ function AutomaticParkingAnalytics(props: AutomaticParkingAnalyticsProps) {
   );
 
   const carLicencePlates = genomes.map((genome: Genome, genomeIndex: number) => (
-    <Button key={genomeIndex}>
-      CAR-{genomeIndex}
-    </Button>
+    <Block
+      key={genomeIndex}
+      display="inline-block"
+      marginRight="4px"
+      marginBottom="4px"
+    >
+      <Button 
+        size={BUTTON_SIZE.compact}
+        shape={BUTTON_SHAPE.pill}
+        kind={genomeIndex === selectedGenomeIndex ? BUTTON_KIND.primary : BUTTON_KIND.secondary}
+        onClick={() => {
+          onChangeGenomeIndex(genomeIndex);
+        }}
+      >
+        CAR-{genomeIndex}
+      </Button>
+    </Block>
   ));
 
   const carsSwitcher = (
@@ -67,16 +76,9 @@ function AutomaticParkingAnalytics(props: AutomaticParkingAnalyticsProps) {
       <FormControl
         label={() => 'Select the pre-trained car genome'}
       >
-        <ButtonGroup
-          size={BUTTON_GROUP_SIZE.compact}
-          mode={BUTTON_GROUP_MODE.radio}
-          selected={selectedGenomeIndex}
-          onClick={(_event, index) => {
-            onChangeGenomeIndex(index);
-          }}
-        >
+        <Block>
           {carLicencePlates}
-        </ButtonGroup>
+        </Block>
       </FormControl>
     </Block>
   );
