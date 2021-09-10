@@ -216,6 +216,7 @@ describe('genetic', () => {
             const geneticCoefficient = genomePolynomial[i];
             const coefficientDifference = Math.abs(geneticCoefficient - targetCoefficient);
             try {
+              // eslint-disable-next-line jest/no-conditional-expect
               expect(maxCoefficientsDifference).toBeGreaterThanOrEqual(coefficientDifference);
             } catch(e) {
               failedCoefficientsChecks.push([i, geneticCoefficient, targetCoefficient]);
@@ -237,6 +238,7 @@ describe('genetic', () => {
         if (maxAvgPolynomialResultsDistance !== undefined) {
           const avgDistance = avgPolynomialsDelta(genomePolynomial, targetPolynomial);
           try {
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(maxAvgPolynomialResultsDistance).toBeGreaterThanOrEqual(avgDistance);
           } catch(e) {
             throw new Error(`Expect avg polynomial results to be close (< ${maxAvgPolynomialResultsDistance}): ${avgDistance} ≤ ${maxAvgPolynomialResultsDistance}`);
@@ -247,6 +249,7 @@ describe('genetic', () => {
         if (minFitness !== undefined) {
           const genomeFitness = fitness(bestGenome);
           try {
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(minFitness).toBeLessThanOrEqual(genomeFitness);
           } catch(e) {
             throw new Error(`Expect the fitness value of ${genomeFitness} to be greater than ${minFitness}`);

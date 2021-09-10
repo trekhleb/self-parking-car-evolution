@@ -659,6 +659,7 @@ function EvolutionTabEvolution() {
   // Start the evolution.
   useEffect(() => {
     startEvolution();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Once generation index is changed we need to create (or mate) a new generation.
@@ -668,16 +669,19 @@ function EvolutionTabEvolution() {
     } else {
       mateExistingGeneration();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [generationIndex, worldIndex]);
 
   // Once generation is changed we need to create cars.
   useEffect(() => {
     createCarsFromGeneration();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [generation]);
 
   // Once the cars batch index is updated we need to generate a cars batch.
   useEffect(() => {
     generateNextCarsBatch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [carsBatchIndex]);
 
   // Once the new cars batch is created we need to start generation timer.
@@ -686,6 +690,7 @@ function EvolutionTabEvolution() {
     return () => {
       cancelBatchTimer();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [carsBatch]);
 
   return (

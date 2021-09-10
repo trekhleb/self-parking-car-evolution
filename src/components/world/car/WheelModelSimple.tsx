@@ -2,7 +2,6 @@ import React from 'react';
 import { GroupProps } from '@react-three/fiber';
 
 import { WHEEL_WIDTH, WHEEL_RADIUS } from './constants';
-import { useCylinder } from '@react-three/cannon';
 
 type WheelModelSimpleProps = {
   castShadow?: boolean,
@@ -17,7 +16,6 @@ function WheelModelSimple(props: WheelModelSimpleProps) {
   const {
     castShadow = true,
     receiveShadow = true,
-    groupProps = {},
     baseColor: color,
   } = props;
 

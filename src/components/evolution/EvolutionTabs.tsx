@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { Tab, Tabs } from 'baseui/tabs';
-import { Block } from 'baseui/block';
 
 import { StyleObject } from 'styletron-standard';
 import ErrorBoundary from '../shared/ErrorBoundary';
 import { getSearchParam, setSearchParam } from '../../utils/url';
-import Hint from '../shared/Hint';
-import Row from '../shared/Row';
 import EvolutionTabManual from './EvolutionTabManual';
 import EvolutionTabEvolution from './EvolutionTabEvolution';
 import EvolutionTabAutomatic from './EvolutionTabAutomatic';

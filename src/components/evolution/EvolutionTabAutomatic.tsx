@@ -118,9 +118,8 @@ function EvolutionTabAutomatic() {
     return () => {
       cancelAutomaticCycleTimer();
     };
-  }, [
-    bestTrainedCarCycleIndex,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bestTrainedCarCycleIndex]);
 
   return (
     <Block>

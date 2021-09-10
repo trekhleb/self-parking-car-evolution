@@ -27,6 +27,7 @@ function Timer(props: TimerProps) {
     setTimePassed(timePassedRef.current);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onIntervalCallback = useCallback(onInterval, [timeout, interval]);
 
   useEffect(() => {

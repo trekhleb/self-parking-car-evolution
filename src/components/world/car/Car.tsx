@@ -241,6 +241,7 @@ function Car(props: CarProps) {
       wheelsNum: wheelsRef.current.length,
     });
     return onUnmount;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!onMoveThrottledRef.current) {

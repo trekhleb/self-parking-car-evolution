@@ -1,6 +1,5 @@
 import React from 'react';
 import { GroupProps } from '@react-three/fiber';
-import { useBox } from '@react-three/cannon';
 
 import { CHASSIS_HEIGHT, CHASSIS_LENGTH, CHASSIS_WIDTH } from './constants';
 
@@ -15,7 +14,6 @@ type ChassisModelSimpleProps = {
 
 function ChassisModelSimple(props: ChassisModelSimpleProps) {
   const {
-    bodyProps = {},
     castShadow = true,
     receiveShadow = true,
     baseColor: color,
