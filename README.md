@@ -1,6 +1,8 @@
 # 🧬 Self-Parking Car Evolution
 
-Training the car to do self-parking using a genetic algorithm.
+> Training the car to do self-parking using a [genetic algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm).
+
+This is an experimental project with the aim to learn the basics of how genetic algorithms works by evolving the car
 
 Hints:
 
