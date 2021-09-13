@@ -40,6 +40,7 @@ import World from '../world/World';
 import { BAD_SIMULATION_BATCH_INDEX_CHECK, BAD_SIMULATION_MIN_LOSS_INCREASE_PERCENTAGE, BAD_SIMULATION_RETRIES_ENABLED, BAD_SIMULATION_RETRIES_NUM, FITNESS_ALPHA } from './constants/evolution';
 import EvolutionCheckpointSaver, { EvolutionCheckpoint } from './EvolutionCheckpointSaver';
 import { ARTICLE_LINK } from '../../constants/links';
+import { DynamicCarsPosition, DYNAMIC_CARS_POSITION_FRONT } from '../world/cars/DynamicCars';
 
 const GENERATION_SIZE_URL_PARAM = 'generation';
 const GROUP_SIZE_URL_PARAM = 'group';
@@ -86,6 +87,8 @@ function EvolutionTabEvolution() {
   const [secondBestGenome, setSecondBestGenome] = useState<Genome | null>(null);
   const [secondMinLoss, setSecondMinLoss] = useState<number | null>(null);
   const [secondBestCarLicencePlate, setSecondBestCarLicencePlate] = useState<CarLicencePlateType | null>(null);
+
+  const [dynamicCarsPosition] = useState<DynamicCarsPosition>(DYNAMIC_CARS_POSITION_FRONT);
 
   const batchTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -704,6 +707,7 @@ function EvolutionTabEvolution() {
           cars={carsBatch}
           withVisibleSensors
           withLabels
+          carsPosition={dynamicCarsPosition}
         />
       </World>
       <Block marginTop="20px">

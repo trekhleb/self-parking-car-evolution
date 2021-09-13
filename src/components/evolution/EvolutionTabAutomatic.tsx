@@ -16,6 +16,7 @@ import { BEST_GENOMES } from './constants/genomes';
 import AutomaticParkingAnalytics from './AutomaticParkingAnalytics';
 import World from '../world/World';
 import ParkingAutomatic from '../world/parkings/ParkingAutomatic';
+import { DynamicCarsPosition, DYNAMIC_CARS_POSITION_FRONT } from '../world/cars/DynamicCars';
 
 const defaultGenomeIndex = 0;
 
@@ -34,6 +35,8 @@ function EvolutionTabAutomatic() {
   const [performanceBoost, setPerformanceBoost] = useState<boolean>(false);
 
   const [selectedGenomeIndex, setSelectedGenomeIndex] = useState<number>(defaultGenomeIndex);
+
+  const [dynamicCarsPosition] = useState<DynamicCarsPosition>(DYNAMIC_CARS_POSITION_FRONT);
 
   const [bestTrainedCarLoss, setBestTrainedCarLoss] = useState<number | null>(null);
   const [bestTrainedCarCycleIndex, setBestTrainedCarCycleIndex] = useState<number>(0);
@@ -130,6 +133,7 @@ function EvolutionTabAutomatic() {
         <ParkingAutomatic
           performanceBoost={performanceBoost}
           cars={bestTrainedCars}
+          carsPosition={dynamicCarsPosition}
           withVisibleSensors
           withLabels
         />

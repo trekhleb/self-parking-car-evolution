@@ -2,7 +2,7 @@ import React from 'react';
 
 import Ground from '../surroundings/Ground';
 import StaticCars from '../cars/StaticCars';
-import DynamicCars from '../cars/DynamicCars';
+import DynamicCars, { DYNAMIC_CARS_POSITION_MIDDLE } from '../cars/DynamicCars';
 import ParkingSpot from '../surroundings/ParkingSpot';
 
 // Collision groups and masks must be powers of 2.
@@ -40,6 +40,7 @@ function ParkingManual(props: ParkingManualProps) {
         withSensors={withSensors}
         withLabels={withLabels}
         performanceBoost={performanceBoost}
+        carsPosition={DYNAMIC_CARS_POSITION_MIDDLE}
         controllable
         visibleSensors
       />

@@ -15,6 +15,12 @@ import { getRandomColor } from '../../../utils/colors';
 import { RectanglePoints } from '../../../types/vectors';
 import { CHASSIS_SIMPLIFIED_BASE_COLOR } from '../car/constants';
 
+export type DynamicCarsPosition = 'middle' | 'front' | 'rear';
+
+export const DYNAMIC_CARS_POSITION_REAR: DynamicCarsPosition = 'rear';
+export const DYNAMIC_CARS_POSITION_MIDDLE: DynamicCarsPosition = 'middle';
+export const DYNAMIC_CARS_POSITION_FRONT: DynamicCarsPosition = 'front';
+
 type DynamicCarsProps = {
   cars: CarType[],
   collisionFilterGroup?: number,
@@ -26,6 +32,7 @@ type DynamicCarsProps = {
   withRandomColors?: boolean,
   withRandomStartingPoint?: boolean,
   performanceBoost?: boolean,
+  carsPosition?: DynamicCarsPosition,
 };
 
 function DynamicCars(props: DynamicCarsProps) {
@@ -40,6 +47,7 @@ function DynamicCars(props: DynamicCarsProps) {
     withRandomColors = false,
     withRandomStartingPoint = false,
     performanceBoost = false,
+    carsPosition = DYNAMIC_CARS_POSITION_FRONT,
   } = props;
   const carsUUIDs = useRef<userCarUUID[]>([]);
   const carsAPIs = useRef<Record<userCarUUID, OnCarReadyArgs>>({});
@@ -121,7 +129,13 @@ function DynamicCars(props: DynamicCarsProps) {
       }
     };
 
-    const z = withRandomStartingPoint ? 7 + 2 * Math.random() : 7;
+    const zPositions: Record<DynamicCarsPosition, number> = {
+      'rear': withRandomStartingPoint ? -7 - 2 * Math.random() : -7,
+      'middle': 0,
+      'front': withRandomStartingPoint ? 7 + 2 * Math.random() : 7,
+    };
+
+    const z = zPositions[carsPosition]
     const position = [0, 2, z];
     const angularVelocity = [-0.2, 0, 0];
 

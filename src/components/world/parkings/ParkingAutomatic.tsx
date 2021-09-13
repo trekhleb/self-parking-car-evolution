@@ -2,7 +2,7 @@ import React from 'react';
 
 import Ground from '../surroundings/Ground';
 import StaticCars from '../cars/StaticCars';
-import DynamicCars from '../cars/DynamicCars';
+import DynamicCars, { DynamicCarsPosition } from '../cars/DynamicCars';
 import ParkingSpot from '../surroundings/ParkingSpot';
 import { CarType } from '../types/car';
 
@@ -18,6 +18,7 @@ type ParkingAutomaticProps = {
   withVisibleSensors?: boolean,
   withLabels?: boolean,
   performanceBoost?: boolean,
+  carsPosition?: DynamicCarsPosition,
 };
 
 function ParkingAutomatic(props: ParkingAutomaticProps) {
@@ -26,6 +27,7 @@ function ParkingAutomatic(props: ParkingAutomaticProps) {
     withVisibleSensors = false,
     withLabels = false,
     performanceBoost = false,
+    carsPosition,
   } = props;
 
   return (
@@ -46,6 +48,7 @@ function ParkingAutomatic(props: ParkingAutomaticProps) {
         withLabels={withLabels}
         withRandomColors={false}
         performanceBoost={performanceBoost}
+        carsPosition={carsPosition}
       />
       <StaticCars
         rows={2}
