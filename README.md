@@ -2,7 +2,10 @@
 
 > Training the car to do self-parking using a [genetic algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm).
 
-This is an experimental project with the aim to learn the basics of how genetic algorithms works by evolving the car
+- 🚗 🚕 🚗 [Launch the demo](https://trekhleb.dev/self-parking-car-evolution)
+- 📃 [How it works](https://trekhleb.dev/blog/2021/self-parking-car-evolution/)
+
+This is an experimental project with the aim to learn the basics of how genetic algorithms work.
 
 Hints:
 
