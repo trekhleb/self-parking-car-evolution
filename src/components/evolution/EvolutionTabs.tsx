@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Tab, Tabs } from 'baseui/tabs';
+import { Block } from 'baseui/block';
 
 import { StyleObject } from 'styletron-standard';
 import ErrorBoundary from '../shared/ErrorBoundary';
@@ -7,6 +8,9 @@ import { getSearchParam, setSearchParam } from '../../utils/url';
 import EvolutionTabManual from './EvolutionTabManual';
 import EvolutionTabEvolution from './EvolutionTabEvolution';
 import EvolutionTabAutomatic from './EvolutionTabAutomatic';
+import { BiDna } from 'react-icons/bi';
+import { FaRegHandSpock } from 'react-icons/fa';
+import { RiGuideLine } from 'react-icons/ri';
 
 const WORLD_SEARCH_PARAM = 'parking';
 
@@ -61,7 +65,12 @@ function EvolutionTabs() {
     >
       <Tab
         key={TAB_KEYS.evolution}
-        title="Parking Evolution"
+        title={(
+          <TabTitle
+            icon={<BiDna size={16} />}
+            title="Parking Evolution"
+          />
+        )}
       >
         <ErrorBoundary>
           <EvolutionTabEvolution />
@@ -70,7 +79,12 @@ function EvolutionTabs() {
 
       <Tab
         key={TAB_KEYS.automatic}
-        title="Automatic Parking"
+        title={(
+          <TabTitle
+            icon={<RiGuideLine  size={16} />}
+            title="Automatic Parking"
+          />
+        )}
       >
         <ErrorBoundary>
           <EvolutionTabAutomatic />
@@ -79,7 +93,12 @@ function EvolutionTabs() {
 
       <Tab
         key={TAB_KEYS.manual}
-        title="Manual Parking"
+        title={(
+          <TabTitle
+            icon={<FaRegHandSpock size={15} />}
+            title="Manual Parking"
+          />
+        )}
       >
         <ErrorBoundary>
           <EvolutionTabManual />
@@ -88,5 +107,33 @@ function EvolutionTabs() {
     </Tabs>
   );
 }
+
+type TabTitleProps = {
+  icon: React.ReactNode,
+  title: string,
+};
+
+const TabTitle = (props: TabTitleProps) => {
+  const {icon, title} = props;
+  return (
+    <Block 
+      display="flex"
+      flexDirection="row"
+      alignItems="center"
+    >
+      <Block
+        display={['none', 'none', 'flex']}
+        marginRight={['0', '0', '8px']}
+        flexDirection="row"
+        alignItems="center"
+      >
+        {icon}
+      </Block>
+      <Block>
+        {title}
+      </Block>
+    </Block>
+  );
+};
 
 export default EvolutionTabs;
