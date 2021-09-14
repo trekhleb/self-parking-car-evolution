@@ -2,7 +2,7 @@
 
 Training the car to do self-parking using a [genetic algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm).
 
-> - 🚗 🚕 🚗 [Launch the demo](https://trekhleb.dev/self-parking-car-evolution)
+> - 🚕 [Launch the demo](https://trekhleb.dev/self-parking-car-evolution)
 > - 📃 [Read about how it works](https://trekhleb.dev/blog/2021/self-parking-car-evolution/)
 
 ![Self-Parking Car Evolution](./assets/covers/01-cover-02.jpg)
