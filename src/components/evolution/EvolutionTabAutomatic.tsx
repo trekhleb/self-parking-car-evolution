@@ -16,10 +16,15 @@ import { BEST_GENOMES } from './constants/genomes';
 import AutomaticParkingAnalytics from './AutomaticParkingAnalytics';
 import World from '../world/World';
 import ParkingAutomatic from '../world/parkings/ParkingAutomatic';
-import { DynamicCarsPosition } from '../world/constants/cars';
+import { DynamicCarsPosition, DYNAMIC_CARS_POSITION_MIDDLE } from '../world/constants/cars';
 import { DYNAMIC_CARS_POSITION_FRONT } from '../world/constants/cars';
+import { getIntSearchParam, getStringSearchParam, setSearchParam } from '../../utils/url';
 
 const defaultGenomeIndex = 0;
+
+const GENOME_IDX_URL_PARAM = 'genome_idx';
+const START_POSITION_URL_PARAM = 'position';
+const DEFAULT_START_POSITION = DYNAMIC_CARS_POSITION_FRONT;
 
 function EvolutionTabAutomatic() {
   const {enqueue} = useSnackbar();
@@ -31,9 +36,11 @@ function EvolutionTabAutomatic() {
 
   const [performanceBoost, setPerformanceBoost] = useState<boolean>(false);
 
-  const [selectedGenomeIndex, setSelectedGenomeIndex] = useState<number>(defaultGenomeIndex);
+  const [selectedGenomeIndex, setSelectedGenomeIndex] = useState<number>(
+    getIntSearchParam(GENOME_IDX_URL_PARAM, defaultGenomeIndex)
+  );
 
-  const [dynamicCarsPosition, setDynamicCarsPosition] = useState<DynamicCarsPosition>(DYNAMIC_CARS_POSITION_FRONT);
+  const [dynamicCarsPosition, setDynamicCarsPosition] = useState<DynamicCarsPosition>(getCarsPositionFromURL());
 
   const bestDefaultTrainedGeneration: Generation = [
     BEST_GENOMES[dynamicCarsPosition][defaultGenomeIndex],
@@ -114,12 +121,15 @@ function EvolutionTabAutomatic() {
   const onChangeGenomeIndex = (index: number) => {
     setSelectedGenomeIndex(index);
     onBestGenomeEdit(BEST_GENOMES[dynamicCarsPosition][index]);
+    setSearchParam(GENOME_IDX_URL_PARAM, `${index}`);
   };
 
   const onCarsPositionChange = (position: DynamicCarsPosition) => {
     setDynamicCarsPosition(position);
     setSelectedGenomeIndex(defaultGenomeIndex);
     onBestGenomeEdit(BEST_GENOMES[position][defaultGenomeIndex]);
+    setSearchParam(START_POSITION_URL_PARAM, position);
+    setSearchParam(GENOME_IDX_URL_PARAM, `${defaultGenomeIndex}`);
   };
 
   // Start the automatic parking cycles.
@@ -168,6 +178,18 @@ function EvolutionTabAutomatic() {
       />
     </Block>
   );
+}
+
+function getCarsPositionFromURL(): DynamicCarsPosition {
+  // @ts-ignore
+  const carPositionFromUrl: DynamicCarsPosition = getStringSearchParam(
+    START_POSITION_URL_PARAM,
+    DEFAULT_START_POSITION
+  );
+  if ([DYNAMIC_CARS_POSITION_FRONT, DYNAMIC_CARS_POSITION_MIDDLE].includes(carPositionFromUrl)) {
+    return carPositionFromUrl;
+  }
+  return DEFAULT_START_POSITION;
 }
 
 export default EvolutionTabAutomatic;

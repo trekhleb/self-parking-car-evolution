@@ -22,6 +22,14 @@ const getSearchParams = (): URLSearchParams => {
   return new URLSearchParams(searchQuery);
 };
 
+export const getStringSearchParam = (name: string, defaultValue: string): string => {
+  const searchParam: string | null = getSearchParam(name);
+  if (searchParam === null) {
+    return defaultValue;
+  }
+  return searchParam;
+};
+
 export const getIntSearchParam = (name: string, defaultValue: number): number => {
   const searchParam: string | null = getSearchParam(name);
   if (searchParam === null) {
