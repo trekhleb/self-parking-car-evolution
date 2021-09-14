@@ -14,12 +14,7 @@ import {
 import { getRandomColor } from '../../../utils/colors';
 import { RectanglePoints } from '../../../types/vectors';
 import { CHASSIS_SIMPLIFIED_BASE_COLOR } from '../car/constants';
-
-export type DynamicCarsPosition = 'middle' | 'front' | 'rear';
-
-export const DYNAMIC_CARS_POSITION_REAR: DynamicCarsPosition = 'rear';
-export const DYNAMIC_CARS_POSITION_MIDDLE: DynamicCarsPosition = 'middle';
-export const DYNAMIC_CARS_POSITION_FRONT: DynamicCarsPosition = 'front';
+import { DynamicCarsPosition, DYNAMIC_CARS_POSITION_FRONT } from '../constants/cars';
 
 type DynamicCarsProps = {
   cars: CarType[],

@@ -2,7 +2,8 @@ import React from 'react';
 
 import Ground from '../surroundings/Ground';
 import StaticCars from '../cars/StaticCars';
-import DynamicCars, { DYNAMIC_CARS_POSITION_MIDDLE } from '../cars/DynamicCars';
+import DynamicCars from '../cars/DynamicCars';
+import { DYNAMIC_CARS_POSITION_MIDDLE } from '../constants/cars';
 import ParkingSpot from '../surroundings/ParkingSpot';
 
 // Collision groups and masks must be powers of 2.

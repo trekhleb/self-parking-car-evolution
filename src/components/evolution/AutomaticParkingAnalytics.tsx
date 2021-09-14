@@ -2,6 +2,7 @@ import React from 'react';
 import { Block } from 'baseui/block';
 import { Button, SIZE as BUTTON_SIZE, KIND as BUTTON_KIND, SHAPE as BUTTON_SHAPE } from 'baseui/button';
 import { Checkbox, LABEL_PLACEMENT } from 'baseui/checkbox';
+import { ButtonGroup, MODE as BUTTON_GROUP_MODE, SIZE as BUTTON_GROUP_SIZE } from 'baseui/button-group';
 
 import EvolutionTiming from './EvolutionTiming';
 import BestGenomes from './BestGenomes';
@@ -9,6 +10,7 @@ import { Genome } from '../../libs/genetic';
 import { FormControl } from 'baseui/form-control';
 import Row from '../shared/Row';
 import Hint from '../shared/Hint';
+import { DynamicCarsPosition } from '../world/constants/cars';
 
 type AutomaticParkingAnalyticsProps = {
   genomes: Genome[],
@@ -19,6 +21,8 @@ type AutomaticParkingAnalyticsProps = {
   carsBatchIndex: number | null,
   performanceBoost: boolean,
   selectedGenomeIndex: number,
+  carsPosition: DynamicCarsPosition,
+  onCarsPositionChange: (carsPosition: DynamicCarsPosition) => void,
   onChangeGenomeIndex: (index: number) => void,
   onBestGenomeEdit?: (genome: Genome) => void,
   onPerformanceBoost: (state: boolean) => void,
@@ -34,6 +38,8 @@ function AutomaticParkingAnalytics(props: AutomaticParkingAnalyticsProps) {
     carsBatchIndex,
     selectedGenomeIndex,
     performanceBoost,
+    carsPosition,
+    onCarsPositionChange,
     onChangeGenomeIndex,
     onPerformanceBoost,
     onBestGenomeEdit = (genome: Genome) => {},
@@ -105,11 +111,55 @@ function AutomaticParkingAnalytics(props: AutomaticParkingAnalyticsProps) {
     </FormControl>
   );
 
+  const selectedCarsPosition: Record<DynamicCarsPosition, number> = {
+    'middle': 0,
+    'front': 1,
+    'rear': 3,
+  };
+
+  const carsPositionFromIndex = (positionIndex: number): DynamicCarsPosition => {
+    // @ts-ignore
+    const positions: DynamicCarsPosition[] = Object.keys(selectedCarsPosition);
+    return positions[positionIndex];
+  };
+
+  const carsStartPositionChanger = (
+    <Block>
+      <FormControl label="Car start position">
+        <ButtonGroup
+          mode={BUTTON_GROUP_MODE.radio}
+          size={BUTTON_GROUP_SIZE.compact}
+          selected={selectedCarsPosition[carsPosition]}
+          onClick={(_event, index) => {
+            onCarsPositionChange(carsPositionFromIndex(index));
+          }}
+        >
+          <Button>Middle</Button>
+          <Button>Front</Button>
+      </ButtonGroup>
+      </FormControl>
+    </Block>
+  );
+
   return (
     <>
       {timingDetails}
+
+      <Block
+        display="flex"
+        flexDirection="row"
+        alignItems="flex-end"
+      >
+        <Block marginRight="20px">
+          {carsStartPositionChanger}
+        </Block>
+        <Block marginBottom="5px">
+          {performanceBooster}
+        </Block>
+      </Block>
+
       {carsSwitcher}
-      {performanceBooster}
+
       <BestGenomes
         bestGenomePanelTitle="Self-parking car genome"
         bestGenome={bestGenome}

@@ -16,13 +16,10 @@ import { BEST_GENOMES } from './constants/genomes';
 import AutomaticParkingAnalytics from './AutomaticParkingAnalytics';
 import World from '../world/World';
 import ParkingAutomatic from '../world/parkings/ParkingAutomatic';
-import { DynamicCarsPosition, DYNAMIC_CARS_POSITION_FRONT } from '../world/cars/DynamicCars';
+import { DynamicCarsPosition } from '../world/constants/cars';
+import { DYNAMIC_CARS_POSITION_FRONT } from '../world/constants/cars';
 
 const defaultGenomeIndex = 0;
-
-const bestDefaultTrainedGeneration: Generation = [
-  BEST_GENOMES[defaultGenomeIndex],
-];
 
 function EvolutionTabAutomatic() {
   const {enqueue} = useSnackbar();
@@ -36,7 +33,11 @@ function EvolutionTabAutomatic() {
 
   const [selectedGenomeIndex, setSelectedGenomeIndex] = useState<number>(defaultGenomeIndex);
 
-  const [dynamicCarsPosition] = useState<DynamicCarsPosition>(DYNAMIC_CARS_POSITION_FRONT);
+  const [dynamicCarsPosition, setDynamicCarsPosition] = useState<DynamicCarsPosition>(DYNAMIC_CARS_POSITION_FRONT);
+
+  const bestDefaultTrainedGeneration: Generation = [
+    BEST_GENOMES[dynamicCarsPosition][defaultGenomeIndex],
+  ];
 
   const [bestTrainedCarLoss, setBestTrainedCarLoss] = useState<number | null>(null);
   const [bestTrainedCarCycleIndex, setBestTrainedCarCycleIndex] = useState<number>(0);
@@ -112,7 +113,13 @@ function EvolutionTabAutomatic() {
 
   const onChangeGenomeIndex = (index: number) => {
     setSelectedGenomeIndex(index);
-    onBestGenomeEdit(BEST_GENOMES[index]);
+    onBestGenomeEdit(BEST_GENOMES[dynamicCarsPosition][index]);
+  };
+
+  const onCarsPositionChange = (position: DynamicCarsPosition) => {
+    setDynamicCarsPosition(position);
+    setSelectedGenomeIndex(defaultGenomeIndex);
+    onBestGenomeEdit(BEST_GENOMES[position][defaultGenomeIndex]);
   };
 
   // Start the automatic parking cycles.
@@ -145,15 +152,17 @@ function EvolutionTabAutomatic() {
         </Notification>
       </Block>
       <AutomaticParkingAnalytics
-        genomes={BEST_GENOMES}
+        genomes={BEST_GENOMES[dynamicCarsPosition]}
         bestGenome={bestTrainedGeneration[0]}
         minLoss={bestTrainedCarLoss}
         generationLifetimeMs={automaticParkingCycleLifetimeMs}
         batchVersion={automaticWorldVersion}
         carsBatchIndex={bestTrainedCarCycleIndex}
-        onBestGenomeEdit={onBestGenomeEdit}
         performanceBoost={performanceBoost}
         selectedGenomeIndex={selectedGenomeIndex}
+        carsPosition={dynamicCarsPosition}
+        onCarsPositionChange={onCarsPositionChange}
+        onBestGenomeEdit={onBestGenomeEdit}
         onChangeGenomeIndex={onChangeGenomeIndex}
         onPerformanceBoost={onPerformanceBoost}
       />

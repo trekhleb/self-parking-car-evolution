@@ -2,7 +2,8 @@ import React from 'react';
 
 import Ground from '../surroundings/Ground';
 import StaticCars from '../cars/StaticCars';
-import DynamicCars, { DynamicCarsPosition } from '../cars/DynamicCars';
+import DynamicCars from '../cars/DynamicCars';
+import { DynamicCarsPosition } from '../constants/cars';
 import ParkingSpot from '../surroundings/ParkingSpot';
 import { CarType } from '../types/car';
 

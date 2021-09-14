@@ -40,7 +40,8 @@ import World from '../world/World';
 import { BAD_SIMULATION_BATCH_INDEX_CHECK, BAD_SIMULATION_MIN_LOSS_INCREASE_PERCENTAGE, BAD_SIMULATION_RETRIES_ENABLED, BAD_SIMULATION_RETRIES_NUM, FITNESS_ALPHA } from './constants/evolution';
 import EvolutionCheckpointSaver, { EvolutionCheckpoint } from './EvolutionCheckpointSaver';
 import { ARTICLE_LINK } from '../../constants/links';
-import { DynamicCarsPosition, DYNAMIC_CARS_POSITION_FRONT } from '../world/cars/DynamicCars';
+import { DynamicCarsPosition } from '../world/constants/cars';
+import { DYNAMIC_CARS_POSITION_FRONT } from '../world/constants/cars';
 
 const GENERATION_SIZE_URL_PARAM = 'generation';
 const GROUP_SIZE_URL_PARAM = 'group';
