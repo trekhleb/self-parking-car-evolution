@@ -134,8 +134,8 @@ function AutomaticParkingAnalytics(props: AutomaticParkingAnalyticsProps) {
             onCarsPositionChange(carsPositionFromIndex(index));
           }}
         >
-          <Button>Middle</Button>
-          <Button>Front</Button>
+          <Button>Center</Button>
+          <Button>Right</Button>
       </ButtonGroup>
       </FormControl>
     </Block>
