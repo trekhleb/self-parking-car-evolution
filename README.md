@@ -1,13 +1,13 @@
 # 🧬 Self-Parking Car Evolution
 
-Training the car to do self-parking using a [genetic algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm).
+Training the car to do self-parking using a genetic algorithm.
 
 > - 🚕 [Launch the demo](https://trekhleb.dev/self-parking-car-evolution)
 > - 📃 [Read about how it works](https://trekhleb.dev/blog/2021/self-parking-car-evolution/)
 
 [![Self-Parking Car Evolution](./assets/covers/01-cover-02.jpg)](https://trekhleb.dev/self-parking-car-evolution)
 
-This is an experimental project with the aim to learn the basics of how genetic algorithms work.
+This is an experimental project with the aim to learn the basics of how [genetic algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm) work.
 
 Hints:
 
