@@ -9,9 +9,17 @@ Training the car to do self-parking using a genetic algorithm.
 
 This is an experimental project with the aim to learn the basics of how [genetic algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm) works.
 
-It starts from the generation that consists of random genomes. At this point the cars don't know how to do the self-parking:
+**At the beginning of the evolution** the cars behave like this:
 
-![Self-parking car at the beginning of the evolution](./public/01-cars-before-01.gif)
+![Self-parking cars at the beginning of the evolution](./public/01-cars-before-01.gif)
+
+**In 40th generation** the cars start learning what the self-parking is:
+
+![Self-parking car in ](./public/01-cars-before-01.gif)
+
+Another example with a bit more challenging starting point:
+
+![Self-parking car in ](./public/01-cars-before-03.gif)
 
 Hints:
 
