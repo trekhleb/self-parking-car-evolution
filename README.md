@@ -40,6 +40,6 @@ The web-site will be available on `http://localhost:3000/self-parking-car-evolut
 
 **Hints:**
 
-- You may upload one of the [pre-trained checkpoints](https://github.com/trekhleb/self-parking-car-evolution/tree/master/src/checkpoints) to avoid starting the evolution from generation zero
+- You may upload one of the [pre-trained checkpoints](https://github.com/trekhleb/self-parking-car-evolution/tree/master/src/checkpoints) to avoid starting the evolution from scratch.
 - Use the `?debug=true` URL param to see the FPS performance monitor and debugging logs in the console (i.e. `http://localhost:3000/self-parking-car-evolution?debug=true`).
-- Training progress is being saved to the local storage for each generation (not for the batch/group).
+- Training progress is being saved to the local storage for each generation (not for each batch/group).
