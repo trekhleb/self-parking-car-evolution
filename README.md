@@ -21,13 +21,20 @@ Another example with a bit more challenging starting point:
 
 ![Self-parking car in ](./public/02-car-after-03.gif)
 
-## Development Details and Hints
+## Development Details
 
 The project is a [React](https://create-react-app.dev/) application written on TypeScript. Styled with [BaseWeb](https://baseweb.design/).
 
 The 3D world simulation is made with [Three.js](https://threejs.org/) library using [@react-three/fiber](https://github.com/pmndrs/react-three-fiber) wrapper. The physics is simulated with [Cannon.js](https://github.com/schteppe/cannon.js) using [cannon-es](https://github.com/pmndrs/cannon-es) wrapper.
 
 The whole evolution simulations is happening directly in the browser.
+
+To launch the project, fork/clone it and run the following commands:
+
+```shell
+npm install
+npm run start
+```
 
 Hints:
 
