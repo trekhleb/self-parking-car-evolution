@@ -13,7 +13,7 @@ This is an experimental project with the aim to learn the basics of how [genetic
 
 ![Self-parking cars at the beginning of the evolution](./public/01-cars-before-01.gif)
 
-**On 40th generation** the cars start learning what the self-parking is and start aiming to get closer to the parkin spot (although hitting the other cars along the way):
+**On the 40th generation** the cars start learning what the self-parking is and start aiming to get closer to the parkin spot (although hitting the other cars along the way):
 
 ![Self-parking car in ](./public/02-car-after-01.gif)
 
