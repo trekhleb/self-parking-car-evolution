@@ -36,7 +36,7 @@ npm install
 npm run start
 ```
 
-The web-site will be available on `http://localhost:3000/`.
+The web-site will be available on `http://localhost:3000`.
 
 Hints:
 
