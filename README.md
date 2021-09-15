@@ -13,13 +13,21 @@ This is an experimental project with the aim to learn the basics of how [genetic
 
 ![Self-parking cars at the beginning of the evolution](./public/01-cars-before-01.gif)
 
-**On the 40th generation** the cars start learning what the self-parking is and start aiming to get closer to the parkin spot (although hitting the other cars along the way):
+**On the 40th generation** the cars start learning what the self-parking is and start aiming to get closer to the parking spot (although hitting the other cars along the way):
 
 ![Self-parking car in ](./public/02-car-after-01.gif)
 
 Another example with a bit more challenging starting point:
 
 ![Self-parking car in ](./public/02-car-after-03.gif)
+
+## Development Details and Hints
+
+The project is a [React](https://create-react-app.dev/) application written on TypeScript. Styled with [BaseWeb](https://baseweb.design/).
+
+The 3D world simulation is made with [Three.js](https://threejs.org/) library using [@react-three/fiber](https://github.com/pmndrs/react-three-fiber) wrapper. The physics is simulated with [Cannon.js](https://github.com/schteppe/cannon.js) using [cannon-es](https://github.com/pmndrs/cannon-es) wrapper.
+
+The whole evolution simulations is happening directly in the browser.
 
 Hints:
 
