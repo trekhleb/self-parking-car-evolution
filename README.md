@@ -15,11 +15,11 @@ This is an experimental project with the aim to learn the basics of how [genetic
 
 **In 40th generation** the cars start learning what the self-parking is:
 
-![Self-parking car in ](./public/01-cars-before-01.gif)
+![Self-parking car in ](./public/02-car-after-01.gif)
 
 Another example with a bit more challenging starting point:
 
-![Self-parking car in ](./public/01-cars-before-03.gif)
+![Self-parking car in ](./public/02-car-after-03.gif)
 
 Hints:
 
