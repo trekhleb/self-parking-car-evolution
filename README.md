@@ -27,7 +27,7 @@ The project is a [React](https://create-react-app.dev/) application written on T
 
 The 3D world simulation is made with [Three.js](https://threejs.org/) library using [@react-three/fiber](https://github.com/pmndrs/react-three-fiber) wrapper. The physics is simulated with [Cannon.js](https://github.com/schteppe/cannon.js) using [cannon-es](https://github.com/pmndrs/cannon-es) wrapper.
 
-The whole evolution simulations is happening directly in the browser.
+The whole evolution simulation is happening directly in the browser.
 
 To launch the project, fork/clone it and run the following commands:
 
@@ -36,7 +36,7 @@ npm install
 npm run start
 ```
 
-The web-site will be available on `http://localhost:3000/self-parking-car-evolution`.
+The website will be available on `http://localhost:3000/self-parking-car-evolution`.
 
 **Hints:**
 
