@@ -36,6 +36,8 @@ npm install
 npm run start
 ```
 
+The web-site will be available on `http://localhost:3000/`.
+
 Hints:
 
 - Use `?debug=true` URL param to see the FPS performance monitor and debugging logs.
