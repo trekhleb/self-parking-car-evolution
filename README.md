@@ -21,6 +21,12 @@ Another example with a bit more challenging starting point:
 
 ![Self-parking car in ](./public/02-car-after-03.gif)
 
+## Genetic Source-Code
+
+Most of the code in this repository (≈92%) relates to the UI logic of doing 3D simulation of the cars world and to UI controls for the evolution training process.
+
+However, the actual code that implements a genetic algorithm is less than ≈500 lines and may be found in the [src/libs](https://github.com/trekhleb/self-parking-car-evolution/tree/master/src/libs) folder.
+
 ## Development Details
 
 The project is a [React](https://create-react-app.dev/) application written on TypeScript. Styled with [BaseWeb](https://baseweb.design/).
