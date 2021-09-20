@@ -23,9 +23,9 @@ Another example with a bit more challenging starting point:
 
 ## Genetic Source-Code
 
-Most of the code in this repository (≈92%) relates to the UI logic of doing 3D simulation of the cars world and to UI controls for the evolution training process.
+The `≈92%` of the code in this repository relates to the UI logic (3D simulation of the cars world,controls for the evolution training process, etc.).
 
-However, the actual code that implements a genetic algorithm is less than ≈500 lines and may be found in the [src/libs](https://github.com/trekhleb/self-parking-car-evolution/tree/master/src/libs) folder.
+However, the actual [code that implements a genetic algorithm](https://github.com/trekhleb/self-parking-car-evolution/tree/master/src/libs) takes less than `≈500` lines of code.
 
 ## Development Details
 
