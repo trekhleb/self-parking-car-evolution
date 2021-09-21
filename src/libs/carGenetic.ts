@@ -14,9 +14,9 @@ export const BIAS_UNITS = 1;
 // How many genes we need to encode each numeric parameter for the formulas.
 export const GENES_PER_NUMBER = precisionConfigs.custom.totalBitsCount;
 
-// Based on 16 distance sensors we need to provide two formulas that would define car's behaviour:
-// 1. Engine formula (input: 16 sensors; output: -1 (backward), 0 (neutral), +1 (forward))
-// 2. Wheels formula (input: 16 sensors; output: -1 (left), 0 (straight), +1 (right))
+// Based on 8 distance sensors we need to provide two formulas that would define car's behaviour:
+// 1. Engine formula (input: 8 sensors; output: -1 (backward), 0 (neutral), +1 (forward))
+// 2. Wheels formula (input: 8 sensors; output: -1 (left), 0 (straight), +1 (right))
 export const ENGINE_FORMULA_GENES_NUM = (CAR_SENSORS_NUM + BIAS_UNITS) * GENES_PER_NUMBER;
 export const WHEELS_FORMULA_GENES_NUM = (CAR_SENSORS_NUM + BIAS_UNITS) * GENES_PER_NUMBER;
 
