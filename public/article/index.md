@@ -2,7 +2,7 @@
 
 > Training the car to do self-parking using a genetic algorithm
 
-![Self-Parking car evolution](assets/01-cover-01.jpg)
+![Self-Parking car evolution](https://trekhleb.dev/self-parking-car-evolution/article/images/01-cover-01.jpg)
 
 ## TL;DR
 
@@ -10,15 +10,15 @@ In this article, we'll train the car to do self-parking using a [genetic algorit
 
 We'll create **the 1st generation** of cars with random genomes that will behave something like this:
 
-![The 1st generation of cars with random genomes](assets/02-cars-before-01.gif)
+![The 1st generation of cars with random genomes](https://trekhleb.dev/self-parking-car-evolution/article/images/02-cars-before-01.gif)
 
 **On the ≈40th generation** the cars start learning what the self-parking is and start getting closer to the parking spot:
 
-![The 40th generation start learning how to park](assets/03-car-after-01.gif)
+![The 40th generation start learning how to park](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-after-01.gif)
 
 Another example with a bit more challenging starting point:
 
-![More challenging starting point for self-parking](assets/03-car-after-03.gif)
+![More challenging starting point for self-parking](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-after-03.gif)
 
 > Yeah-yeah, the cars are hitting some other cars along the way, and also are not perfectly fitting the parking spot, but this is only the 40th generation since the creation of the world for them, so be merciful and give the cars some space to grow :D
 
@@ -54,7 +54,7 @@ To be able to move, the car would need "muscles". Let's give the car two types o
 
 With these two muscles the car can perform the following movements:
 
-![Car movements achieved by car muscles](assets/03-car-muscles-01.gif)
+![Car movements achieved by car muscles](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-muscles-01.gif)
 
 In our case, the muscles are receivers of the signals that come from the brain once every `100ms` (milliseconds). Based on the value of the brain's signal the muscles act differently. We'll cover the "brain" part below, but for now, let's say that our brain may send only 3 possible signals to each muscle: `-1`, `0`, or `+1`.
 
@@ -81,7 +81,7 @@ Before our car will learn how to do self-parking using its muscles, it needs to 
 - Each sensor reports the latest information about the obstacles it "sees" to the car's "brain" every `100ms`.
 - Whenever the sensor doesn't see any obstacles it reports the value of `0`. On the contrary, if the value of the sensor is small but not zero (i.e. `0.01m`) it would mean that the obstacle is close.
 
-![Car sensors with distances](assets/04-sensors-01.jpg)
+![Car sensors with distances](https://trekhleb.dev/self-parking-car-evolution/article/images/04-sensors-01.jpg)
 
 > You may [use the Evolution Simulator](https://trekhleb.dev/self-parking-car-evolution?parking=manual#/) and see how the color of each sensor changes based on how close the obstacle is.
 
@@ -192,15 +192,15 @@ The output of a `linearPolynomial()` function is a float number. The `brainToMus
 
 To do the first part of the conversion we need to introduce a [Sigmoid Function](https://en.wikipedia.org/wiki/Sigmoid_function) which implements the following formula:
 
-![Sigmoid formula](assets/05-sigmoid-01.svg)
+![Sigmoid formula](https://trekhleb.dev/self-parking-car-evolution/article/images/05-sigmoid-01.svg)
 
 It converts the wide range of floats (the `x` axis) to float numbers with a limited range of `(0...1)` (the `y` axis). This is exactly what we need.
 
-![Sigmoid graph](assets/05-sigmoid-02.png)
+![Sigmoid graph](https://trekhleb.dev/self-parking-car-evolution/article/images/05-sigmoid-02.png)
 
 Here is how the conversion steps would look on the Sigmoid graph.
 
-![Conversion steps on the graph](assets/05-sigmoid-03.png)
+![Conversion steps on the graph](https://trekhleb.dev/self-parking-car-evolution/article/images/05-sigmoid-03.png)
 
 The implementation of two conversion steps mentioned above would look like this:
 
@@ -253,7 +253,7 @@ Let's move one step deeper (to the level of the genes) and convert the decimal n
 
 Here is a quick example of how the floating-point number may be converted to the `16 bits` binary number (again, feel free to [read this first](https://trekhleb.dev/blog/2021/binary-floating-point/) if the example is confusing):
 
-![Example of floating to binary numbers conversion](assets/06-floating-point-conversion-01.png)
+![Example of floating to binary numbers conversion](https://trekhleb.dev/self-parking-car-evolution/article/images/06-floating-point-conversion-01.png)
 
 In our case, to reduce the genome length, we will convert each floating coefficient to the non-standard `10 bits` binary number (`1` sign bit, `4` exponent bits, `5` fraction bits).
 
@@ -295,7 +295,7 @@ Oh my! The binary genome looks so cryptic. But can you imagine, that these `180`
 
 By the way, you may see the exact values of genomes and coefficients for the best performing car on the [Evolution Simulator](https://trekhleb.dev/self-parking-car-evolution?parking=evolution#/) dashboard:
 
-![Car genomes and coefficients examples](assets/06-genome-examples.png)
+![Car genomes and coefficients examples](https://trekhleb.dev/self-parking-car-evolution/article/images/06-genome-examples.png)
 
 Here is the source code that performs the conversion from binary to decimal format for the floating-point numbers (the brain will need it to decode the genome and to produce the muscle signals based on the genome data):
 
@@ -472,7 +472,7 @@ We're not going to cover a genetic algorithm in all details, but on a high level
 4. **MUTATE** - during the mating process some genes may randomly mutate (`1`s and `0`s in child genome may flip). This may bring a wider variety of children genomes and, thus, a wider variety of children cars behavior. Imagine that the 1st bit was accidentally set to `0` for all `~1000` cars. The only way to try the car with the 1st bit being set to `1` is through the random mutations. At the same time, extensive mutations may ruin healthy genomes.
 5. Go to "Step 2" unless the number of generations has reached the limit (i.e. `100` generations have passed) or unless the top-performing individuums have reached the expected fitness function value (i.e. the best car has approached the parking spot closer than `1 meter`). Otherwise, quit.
 
-![Genetic algorithm flow](assets/07-genetic-algorithm-flow-01.png)
+![Genetic algorithm flow](https://trekhleb.dev/self-parking-car-evolution/article/images/07-genetic-algorithm-flow-01.png)
 
 ## Evolving the car's brain using a Genetic Algorithm
 
@@ -738,7 +738,7 @@ The fitness of the car will be defined by the distance from the car to the parki
 
 The final distance we will calculate is an average distance from `4` car wheels to the correspondent `4` corners of the parking spot. This distance we will call the `loss` which is inversely proportional to the `fitness`.
 
-![The distance from the car to the parking spot](assets/08-distance-to-parkin-lot.png)
+![The distance from the car to the parking spot](https://trekhleb.dev/self-parking-car-evolution/article/images/08-distance-to-parkin-lot.png)
 
 Calculating the distance between each wheel and each corner separately (instead of just calculating the distance from the car center to the parking spot center) will make the car preserve the proper orientation relative to the parking spot.
 
@@ -811,7 +811,7 @@ const carFitness = (params: GeometricParams): number => {
 
 You may see the `fitness` and the `loss` values for a specific genome and for a current car position on the [Evolution Simulator](https://trekhleb.dev/self-parking-car-evolution?parking=evolution#/) dashboard:
 
-![Evolution simulator dashboard](assets/09-fitness-function.png)
+![Evolution simulator dashboard](https://trekhleb.dev/self-parking-car-evolution/article/images/09-fitness-function.png)
 
 ## Launching the evolution
 
@@ -869,21 +869,21 @@ After running the `select()` function, the `generation` array is sorted by the f
 
 **The 1st generation** of cars with random genomes will behave something like this:
 
-![The 1st generation of cars with random genomes](assets/02-cars-before-01.gif)
+![The 1st generation of cars with random genomes](https://trekhleb.dev/self-parking-car-evolution/article/images/02-cars-before-01.gif)
 
 **On the ≈40th generation** the cars start learning what the self-parking is and start getting closer to the parking spot:
 
-![The 40th generation start learning how to park](assets/03-car-after-01.gif)
+![The 40th generation start learning how to park](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-after-01.gif)
 
 Another example with a bit more challenging starting point:
 
-![More challenging starting point for self-parking](assets/03-car-after-03.gif)
+![More challenging starting point for self-parking](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-after-03.gif)
 
 The cars are hitting some other cars along the way, and also are not perfectly fitting the parking spot, but this is only the 40th generation since the creation of the world for them, so you may give the cars some more time to learn.
 
 From generation to generation we may see how the loss values are going down (which means that fitness values are going up). The `P50 Avg Loss` shows the average loss value (average distance from the cars to the parking spot) of the `50%` of fittest cars. The `Min Loss` shows the loss value of the fittest car in each generation.
 
-![Loss history](assets/10-loss-history-00.png)
+![Loss history](https://trekhleb.dev/self-parking-car-evolution/article/images/10-loss-history-00.png)
 
 You may see that on average the `50%` of the fittest cars of the generation are learning to get closer to the parking spot (from `5.5m` away from the parking spot to `3.5m` in 35 generations). The trend for the `Min Loss` values is less obvious (from `1m` to `0.5m` with some noise signals), however from the animations above you may see that cars have learned some basic parking moves.
 
@@ -912,4 +912,4 @@ There are still some **unresolved issues** with the code and the simulator:
 
 However, the purpose of this article was to have some fun while learning how the genetic algorithm works and not to build a production-ready self-parking Teslas. So, even with the issues mentioned above, I hope you've had a good time going through the article.
 
-![Fin](assets/11-fin.png)
+![Fin](https://trekhleb.dev/self-parking-car-evolution/article/images/11-fin.png)
