@@ -52,7 +52,7 @@ To be able to move, the car would need "muscles". Let's give the car two types o
 1. **Engine muscle** - allows the car to move *↓ back*, *↑ forth*, or *◎ stand steel* (neutral gear)
 2. **Steering wheel muscle** - allows the car to turn *← left*, *→ right*, or *◎ go straight* while moving
 
-With these two muscles the car is able to perform the following movements:
+With these two muscles the car can perform the following movements:
 
 ![Car movements achieved by car muscles](assets/03-car-muscles-01.gif)
 
@@ -79,7 +79,7 @@ Before our car will learn how to do self-parking using its muscles, it needs to 
 
 - Each sensor can detect the obstacle in a distance range of `0-4m` (meters).
 - Each sensor reports the latest information about the obstacles it "sees" to the car's "brain" every `100ms`.
-- Whenever the sensor doesn't see any obstacles it reports the value of `0`. On the contrary, if the value of the sensor is small but not zero (i.e. `0.01m`) it would mean that the obstacle is really close.
+- Whenever the sensor doesn't see any obstacles it reports the value of `0`. On the contrary, if the value of the sensor is small but not zero (i.e. `0.01m`) it would mean that the obstacle is close.
 
 ![Car sensors with distances](assets/04-sensors-01.jpg)
 
@@ -144,9 +144,9 @@ wheelSignal = brainToMuscleSignal(
 
 Where:
 
-- `[s0, s1, ..., s7]` - the `8` variables, which are the `8` sensor values. These ones are dynamic.
-- `[e0, e1, ..., e8]` - the `9` coefficients for the engine polynomial. These ones the car will need to learn, and they will be static.
-- `[w0, w1, ..., w8]` - the `9` coefficients for the steering wheel polynomial. These ones the car will need to learn, and they will be static
+- `[s0, s1, ..., s7]` - the `8` variables, which are the `8` sensor values. These are dynamic.
+- `[e0, e1, ..., e8]` - the `9` coefficients for the engine polynomial. These the car will need to learn, and they will be static.
+- `[w0, w1, ..., w8]` - the `9` coefficients for the steering wheel polynomial. These the car will need to learn, and they will be static
 
 The cost of using the simpler function for the brain will be that the car won't be able to learn some sophisticated moves and also won't be able to generalize well and adapt well to unknown surroundings. But for our particular parking lot and for the sake of demonstrating the work of a genetic algorithm it should still be enough.
 
@@ -468,7 +468,7 @@ We're not going to cover a genetic algorithm in all details, but on a high level
 
 1. **CREATE** – the very first generation of cars [can't come out of nothing](https://en.wikipedia.org/wiki/Laws_of_thermodynamics), so we will generate a set of random car genomes (set of binary arrays with the length of `180`) at the very beginning. For example, we may create `~1000` cars. With a bigger population the chances to find the optimal solution (and to find it faster) increase.
 2. **SELECT** - we will need to select the fittest individuums out of the current generation for further mating (see the next step). The fitness of each individuum will be defined based on the fitness function, which in our case, will show how close the car approached the target parking spot. The closer the car to the parking spot, the fitter it is.
-3. **MATE** – simply saying we will allow the selected *"♂ father-cars"* to have *"sex"* with the selected *"♀ mother-cars"* so that their genomes could mix together in a `~50/50` proportion and produce *"♂♀ children-cars"* genomes. The idea is that the children cars might get better (or worse) in self-parking, by taking the best (or the worst) bits from their parents.
+3. **MATE** – simply saying we will allow the selected *"♂ father-cars"* to have *"sex"* with the selected *"♀ mother-cars"* so that their genomes could mix in a `~50/50` proportion and produce *"♂♀ children-cars"* genomes. The idea is that the children cars might get better (or worse) in self-parking, by taking the best (or the worst) bits from their parents.
 4. **MUTATE** - during the mating process some genes may randomly mutate (`1`s and `0`s in child genome may flip). This may bring a wider variety of children genomes and, thus, a wider variety of children cars behavior. Imagine that the 1st bit was accidentally set to `0` for all `~1000` cars. The only way to try the car with the 1st bit being set to `1` is through the random mutations. At the same time, extensive mutations may ruin healthy genomes.
 5. Go to "Step 2" unless the number of generations has reached the limit (i.e. `100` generations have passed) or unless the top-performing individuums have reached the expected fitness function value (i.e. the best car has approached the parking spot closer than `1 meter`). Otherwise, quit.
 
@@ -483,7 +483,7 @@ Before launching the genetic algorithm let's go and create the functions for the
 The `createGeneration()` function will create an array of random genomes (a.k.a. population or generation) and will accept two parameters:
 
 - `generationSize` - defines the size of the generation. This generation size will be preserved from generation to generation.
-- `genomeLength` - defines the genome length of each individuum in cars population. In our case the length of genome will be `180`.
+- `genomeLength` - defines the genome length of each individuum in the cars population. In our case, the length of the genome will be `180`.
 
 There is a `50/50` chance for each gene of a genome to be either `0` or `1`.
 
@@ -513,7 +513,7 @@ function createGeneration(params: GenerationParams): Generation {
 
 The `mutate()` function will mutate some genes randomly based on the `mutationProbability` value.
 
-For example, if the `mutationProbability = 0.1` then there is a `10%` chance for each genome to be mutated. Let's say if we would have a genome of length `10` that looks like `[0, 0, 0, 0, 0, 0 ,0 ,0 ,0 ,0]`, then after the mutation there will be a chance that 1 gene will be mutated and we may get a genome that might look like `[0, 0, 0, 1, 0, 0 ,0 ,0 ,0 ,0]`.
+For example, if the `mutationProbability = 0.1` then there is a `10%` chance for each genome to be mutated. Let's say if we would have a genome of length `10` that looks like `[0, 0, 0, 0, 0, 0 ,0 ,0 ,0 ,0]`, then after the mutation, there will be a chance that 1 gene will be mutated and we may get a genome that might look like `[0, 0, 0, 1, 0, 0 ,0 ,0 ,0 ,0]`.
 
 ```typescript
 // The number between 0 and 1.
@@ -534,7 +534,7 @@ function mutate(genome: Genome, mutationProbability: Probability): Genome {
 
 The `mate()` function will accept the `father` and the `mother` genomes and will produce two children. We will imitate the real-world scenario and also do the mutation during the mating.
 
-Each bit of the child genome will be defined based on the values of the correspondent bit of the father's or mother's genomes. There is a `50/50%` probability that the child will inherit the bit of the father or the mother. For example, let's say we have a genomes of length `4` (for simplicity reasons):
+Each bit of the child genome will be defined based on the values of the correspondent bit of the father's or mother's genomes. There is a `50/50%` probability that the child will inherit the bit of the father or the mother. For example, let's say we have genomes of length `4` (for simplicity reasons):
 
 ```text
 Father's genome: [0, 0, 1, 1]
@@ -582,7 +582,7 @@ function mate(
 
 ### Functions for the SELECT step
 
-To select the fittest individuums for further mating we need a way to find out the fitness of each genome. To do this we will use a so called fitness function.
+To select the fittest individuums for further mating we need a way to find out the fitness of each genome. To do this we will use a so-called fitness function.
 
 The fitness function is always related to the particular task that we try to solve, and it is not generic. In our case, the fitness function will measure the distance between the car and the parking spot. The closer the car to the parking spot, the fitter it is. We will implement the fitness function a bit later, but for now, let's introduce the interface for it:
 
@@ -590,7 +590,7 @@ The fitness function is always related to the particular task that we try to sol
 type FitnessFunction = (genome: Genome) => number;
 ```
 
-Now, let's say we have fitness values for each individuum in population. Let's also say that we sorted all individuums by their fitness values so that the first individuums are the strongest ones. How should we select the fathers and the mothers from this array? We need to do the selection in a way, that the higher the fitness value of the individuum, the higher the chances of this individuum to be selected for mating. The `weightedRandom()` function will help us with this.
+Now, let's say we have fitness values for each individuum in the population. Let's also say that we sorted all individuums by their fitness values so that the first individuums are the strongest ones. How should we select the fathers and the mothers from this array? We need to do the selection in a way, that the higher the fitness value of the individuum, the higher the chances of this individuum being selected for mating. The `weightedRandom()` function will help us with this.
 
 ```typescript
 // Picks the random item based on its weight.
@@ -634,9 +634,9 @@ const weightedRandom = <T>(items: T[], weights: number[]): { item: T, index: num
 };
 ```
 
-The usage of this function is pretty straightforward. Let's say you really like bananas and want to eat them more often than strawberry. Then you may call `const fruit = weightedRandom(['banana', 'strawberry'], [9, 1])`, and in `≈9` out of `10` cases the `fruit` variable will be equal to `banana`, and only in `≈1` out of `10` times it will be equal to `strawberry`.
+The usage of this function is pretty straightforward. Let's say you really like bananas and want to eat them more often than strawberries. Then you may call `const fruit = weightedRandom(['banana', 'strawberry'], [9, 1])`, and in `≈9` out of `10` cases the `fruit` variable will be equal to `banana`, and only in `≈1` out of `10` times it will be equal to `strawberry`.
 
-To avoid loosing the best individuums (let's call them champions) during the mating process we may also introduce a so called `longLivingChampionsPercentage` parameter. For example if the `longLivingChampionsPercentage = 10`, then `10%` of the best cars from the previous population will be carried over to the new generation. You may think about it as there are some long-living individuums that can live a long life and see their children and even grandchildren.
+To avoid losing the best individuums (let's call them champions) during the mating process we may also introduce a so-called `longLivingChampionsPercentage` parameter. For example, if the `longLivingChampionsPercentage = 10`, then `10%` of the best cars from the previous population will be carried over to the new generation. You may think about it as there are some long-living individuums that can live a long life and see their children and even grandchildren.
 
 Here is the actual implementation of the `select()` function:
 
@@ -734,13 +734,13 @@ function select(
 
 ### Fitness function
 
-The fitness of the car will be defined by the distance from the car to the parking spot. The higher the distance, the the lower the fitness.
+The fitness of the car will be defined by the distance from the car to the parking spot. The higher the distance, the lower the fitness.
 
-The final distance we will calculate as an average distance from `4` car wheels to the correspondent `4` corners of the parking spot. This distance we will call the `loss` which is inversely proportional to the `fitness`.
+The final distance we will calculate is an average distance from `4` car wheels to the correspondent `4` corners of the parking spot. This distance we will call the `loss` which is inversely proportional to the `fitness`.
 
 ![The distance from the car to the parking spot](assets/08-distance-to-parkin-lot.png)
 
-Calculating the distance between each wheel and each corner separately (instead of just calculating the distance from car center ot the parking spot center) will make the car to preserve the proper orientation relatively to the parking spot.
+Calculating the distance between each wheel and each corner separately (instead of just calculating the distance from the car center to the parking spot center) will make the car preserve the proper orientation relative to the parking spot.
 
 The distance between two points in space will be calculated based on the [Pythagorean theorem](https://en.wikipedia.org/wiki/Pythagorean_theorem) like this:
 
@@ -815,7 +815,7 @@ You may see the `fitness` and the `loss` values for a specific genome and for a 
 
 ## Launching the evolution
 
-Lets put the evolution functions together. We're going to "create the world", launch the evolution loop, make the time going, the generation evolving, and the cars learning how to park.
+Let's put the evolution functions together. We're going to "create the world", launch the evolution loop, make the time going, the generation evolving, and the cars learning how to park.
 
 To get the fitness values of each car we need to run a simulation of the cars behavior in a virtual 3D world. The [Evolution Simulator](https://trekhleb.dev/self-parking-car-evolution) does exactly that - it runs the code below in the simulator, which is [made with Three.js](https://github.com/trekhleb/self-parking-car-evolution):
 
@@ -865,7 +865,7 @@ while(generationIndex < MAX_GENERATIONS_NUM) {
 const fittestCar = generation[0];
 ```
 
-After running the `select()` function, the `generation` array is sorted by the fitness values in a descending order. Therefore, the fittest car will always be the first car in the array.
+After running the `select()` function, the `generation` array is sorted by the fitness values in descending order. Therefore, the fittest car will always be the first car in the array.
 
 **The 1st generation** of cars with random genomes will behave something like this:
 
@@ -881,19 +881,19 @@ Another example with a bit more challenging starting point:
 
 The cars are hitting some other cars along the way, and also are not perfectly fitting the parking spot, but this is only the 40th generation since the creation of the world for them, so you may give the cars some more time to learn.
 
-From generation to generation we may see how the loss values are going down (which means that fitness values are going up). The `P50 Avg Loss` shows the average loss value (average distance from the cars to the parking spot) of the `50%` of most fittest cars. The `Min Loss` shows the loss value of the fittest car in each generation.
+From generation to generation we may see how the loss values are going down (which means that fitness values are going up). The `P50 Avg Loss` shows the average loss value (average distance from the cars to the parking spot) of the `50%` of fittest cars. The `Min Loss` shows the loss value of the fittest car in each generation.
 
 ![Loss history](assets/10-loss-history-00.png)
 
-You may see that in average the `50%` of the most fittest cars of the generation are learning to get closer to the parking spot (from `5.5m` away from the parking spot to `3.5m` in 35 generations). The trend for the `Min Loss` values is less obvious (from `1m` to `0.5m` with some noise signals), however from the animations above you may see that cars have learned some basic parking moves.
+You may see that on average the `50%` of the fittest cars of the generation are learning to get closer to the parking spot (from `5.5m` away from the parking spot to `3.5m` in 35 generations). The trend for the `Min Loss` values is less obvious (from `1m` to `0.5m` with some noise signals), however from the animations above you may see that cars have learned some basic parking moves.
 
 ## Conclusion
 
-In this article we've broken down a high-level task of creating the self-parking car to the straightforward low-level task of finding the optimal combination of `180` ones and zeroes (finding the optimal car genome).
+In this article, we've broken down the high-level task of creating the self-parking car to the straightforward low-level task of finding the optimal combination of `180` ones and zeroes (finding the optimal car genome).
 
 Then we've applied the genetic algorithm to find the optimal car genome. It allowed us to get pretty good results in several hours of simulation (instead of many years of running the naive approach).
 
-You may launch the 🚕 [Self-parking Car Evolution Simulator](https://trekhleb.dev/self-parking-car-evolution) to see the evolution process directly in you browser. The simulator gives you the following opportunities:
+You may launch the 🚕 [Self-parking Car Evolution Simulator](https://trekhleb.dev/self-parking-car-evolution) to see the evolution process directly in your browser. The simulator gives you the following opportunities:
 
 - You may [train the cars from scratch](https://trekhleb.dev/self-parking-car-evolution?parking=evolution#/) and adjust genetic parameters by yourself
 - You may [see the trained self-parking cars in action](https://trekhleb.dev/self-parking-car-evolution?parking=automatic#/)
@@ -903,13 +903,13 @@ The full genetic source code that was shown in this article may also be found in
 
 There are still some **unresolved issues** with the code and the simulator:
 
-- The car's brain is oversimplified and it uses linear equation instead of, let's say, neural networks. It makes the car not adoptable to the new surroundings or to the new parking lot types.
+- The car's brain is oversimplified and it uses linear equations instead of, let's say, neural networks. It makes the car not adaptable to the new surroundings or to the new parking lot types.
 - We don't decrease the car's fitness value when the car is hitting the other car. Therefore the car doesn't "feel" any guilt in creating the road accident.
-- The evolution simulator is not stable. It means that for the same car genome it may produce different fitness values, which makes the evolution less efficient.
-- The evolution simulator is also very heavy in terms of performance, which slows down the evolution progress, since we can't train, let's say, 1000 car at once.
-- Also the Evolution Simulator requires the browser tab to be open and active in order to perform the simulation.
+- The evolution simulator is not stable. It means that the same car genome may produce different fitness values, which makes the evolution less efficient.
+- The evolution simulator is also very heavy in terms of performance, which slows down the evolution progress since we can't train, let's say, 1000 cars at once.
+- Also the Evolution Simulator requires the browser tab to be open and active to perform the simulation.
 - and [more](https://github.com/trekhleb/self-parking-car-evolution/issues)...
 
-However, the purpose of this article was to have some fun while learning how the genetic algorithm works and not to build a production-ready self-parking Tesla. So, even with the issues mentioned above, I hope you've had a good time going through the article.
+However, the purpose of this article was to have some fun while learning how the genetic algorithm works and not to build a production-ready self-parking Teslas. So, even with the issues mentioned above, I hope you've had a good time going through the article.
 
 ![Fin](assets/11-fin.png)
