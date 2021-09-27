@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Block } from 'baseui/block';
-import { Button, SIZE as BUTTON_SIZE, SHAPE as BUTTON_SHAPE } from 'baseui/button';
+import { 
+  Button,
+  SIZE as BUTTON_SIZE,
+  SHAPE as BUTTON_SHAPE,
+  KIND as BUTTON_KIND,
+} from 'baseui/button';
 import { BiDownload, BiUpload } from 'react-icons/all';
 import { saveAs } from 'file-saver';
 import {
@@ -17,6 +22,7 @@ import { Paragraph3 } from 'baseui/typography';
 import Row from '../shared/Row';
 import { Generation, Percentage, Probability } from '../../libs/genetic';
 import { CHECKPOINTS_PATH } from '../../constants/links';
+import demoCheckpoint from '../../checkpoints/ckpt--population-1000--generation-36.json';
 
 export type EvolutionCheckpoint = {
   dateTime: string,
@@ -93,6 +99,16 @@ function EvolutionCheckpointSaver(props: EvolutionCheckpointSaverProps) {
     }
   };
 
+  const onUseDemoCheckpoint = () => {
+    try {
+      // @ts-ignore
+      onRestoreFromCheckpoint(demoCheckpoint);
+      onCheckpointModalClose();
+    } catch (error: any) {
+      setCheckpointErrorMessage(error.message);
+    }
+  };
+
   const checkpointError = checkpointErrorMessage ? (
     <Notification
       kind={NOTIFICATION_KIND.negative}
@@ -123,6 +139,18 @@ function EvolutionCheckpointSaver(props: EvolutionCheckpointSaverProps) {
         <Paragraph3>
           You may save your own evolution progress to the checkpoint file or use <a style={{color: 'black'}} href={CHECKPOINTS_PATH}>one of the pre-trained checkpoints</a>.
         </Paragraph3>
+
+        <Block marginBottom="20px">
+          <Button
+            size={BUTTON_SIZE.compact}
+            shape={BUTTON_SHAPE.pill}
+            kind={BUTTON_KIND.secondary}
+            onClick={onUseDemoCheckpoint}
+          >
+            Use demo checkpoint  
+          </Button>
+        </Block>
+
         <FileUploader
           onCancel={onCancelCheckpointUpload}
           onDrop={onFileDrop}
