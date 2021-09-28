@@ -5,7 +5,7 @@ import { linearPolynomial } from './math/polynomial';
 import { sigmoid, sigmoidToCategories } from './math/sigmoid';
 import { euclideanDistance } from './math/geometry';
 
-// Car has 16 distance sensors.
+// Car has 8 distance sensors.
 export const CAR_SENSORS_NUM = 8;
 
 // Additional formula coefficient that is not connected to a sensor.
