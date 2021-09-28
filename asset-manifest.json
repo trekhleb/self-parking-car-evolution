@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/self-parking-car-evolution/static/css/main.00dbac36.chunk.css",
+    "main.js": "/self-parking-car-evolution/static/js/main.6e938c48.chunk.js",
+    "main.js.map": "/self-parking-car-evolution/static/js/main.6e938c48.chunk.js.map",
+    "runtime-main.js": "/self-parking-car-evolution/static/js/runtime-main.a4c9d526.js",
+    "runtime-main.js.map": "/self-parking-car-evolution/static/js/runtime-main.a4c9d526.js.map",
+    "static/js/2.10fc6a4c.chunk.js": "/self-parking-car-evolution/static/js/2.10fc6a4c.chunk.js",
+    "static/js/2.10fc6a4c.chunk.js.map": "/self-parking-car-evolution/static/js/2.10fc6a4c.chunk.js.map",
+    "index.html": "/self-parking-car-evolution/index.html",
+    "static/css/main.00dbac36.chunk.css.map": "/self-parking-car-evolution/static/css/main.00dbac36.chunk.css.map",
+    "static/js/2.10fc6a4c.chunk.js.LICENSE.txt": "/self-parking-car-evolution/static/js/2.10fc6a4c.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a4c9d526.js",
+    "static/js/2.10fc6a4c.chunk.js",
+    "static/css/main.00dbac36.chunk.css",
+    "static/js/main.6e938c48.chunk.js"
+  ]
+}
