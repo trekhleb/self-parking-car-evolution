@@ -2,7 +2,7 @@
 
 > С помощью генетического алгоритма натренируем тачку парковаться самостоятельно.
 
-![Self-Parking car evolution](https://trekhleb.dev/self-parking-car-evolution/article/images/01-cover-01.jpg)
+![Эволюция самопаркующейся машины](https://trekhleb.dev/self-parking-car-evolution/article/images/01-cover-01.jpg)
 
 ## Вкратце
 
@@ -10,15 +10,15 @@
 
 **В 1-м поколении** автомобили будут иметь случайный геном и будут вести себя хаотично, приблизительно вот так:
 
-![The 1st generation of cars with random genomes](https://trekhleb.dev/self-parking-car-evolution/article/images/02-cars-before-01.gif)
+![1-е поколение](https://trekhleb.dev/self-parking-car-evolution/article/images/02-cars-before-01.gif)
 
 **В ≈40-м поколении** автомобили понемногу начнут учиться парковке и будут все ближе и ближе подбираться к парковочному месту,
 
-![The 40th generation start learning how to park](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-after-01.gif)
+![40-е поколение](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-after-01.gif)
 
 Еще один пример с более сложным стартовым положением:
 
-![More challenging starting point for self-parking](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-after-03.gif)
+![40-е поколение с более сложным стартом](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-after-03.gif)
 
 > Да-да, машины врезаются в другие машины по пути, и неточно становятся на парковочное место, но для них это всего-лишь 40-е поколение с момента создания мира, так что будьте снисходительны и дайте машинам подрасти :D
 
@@ -54,7 +54,7 @@
 
 С помощью этих двух мышц машина может выполнять следующие движения:
 
-![Car movements achieved by car muscles](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-muscles-01.gif)
+![Мышцы автомобиля в работе](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-muscles-01.gif)
 
 В нашем случае мышцы являются приемниками сигналов, поступающих от мозга каждые 100 мс (миллисекунд). В зависимости от значения сигнала мозга мышцы действуют по-разному. Мы рассмотрим «мозговую» часть ниже, а пока предположим, что наш мозг может посылать только 3 возможных сигнала каждой мышце: `-1`, `0` или `+1`.
 
@@ -81,7 +81,7 @@ type MuscleSignal = -1 | 0 | 1;
 - Каждый датчик сообщает последние данные о препятствиях, которые он «видит» в «мозг» автомобиля каждые `100 мс`.
 - Когда датчик не видит никаких препятствий, он сообщает значение `0`. Если же значение датчика небольшое, но не нулевое (например, `0.01 м`), это будет означать, что препятствие близко.
 
-![Car sensors with distances](https://trekhleb.dev/self-parking-car-evolution/article/images/04-sensors-01.jpg)
+![Глаза автомобиля](https://trekhleb.dev/self-parking-car-evolution/article/images/04-sensors-01.jpg)
 
 > Вы можете воспользоваться [симулятором эволюции](https://trekhleb.dev/self-parking-car-evolution?parking=manual#/) и посмотреть, как меняется цвет каждого датчика в зависимости от того, насколько близко находится препятствие.
 
@@ -192,15 +192,15 @@ const wheelSignal: MuscleSignal = brainToMuscleSignal(
 
 Чтобы выполнить первую часть преобразования, нам нужно ввести [сигмоидную функцию](https://en.wikipedia.org/wiki/Sigmoid_function), которая реализует следующую формулу:
 
-![Sigmoid formula](https://trekhleb.dev/self-parking-car-evolution/article/images/05-sigmoid-01.svg)
+![Формула сигмоида](https://trekhleb.dev/self-parking-car-evolution/article/images/05-sigmoid-01.svg)
 
 Сигмоид преобразует широкий диапазон чисел с плавающей запятой (ось `x`) в числа с плавающей запятой с ограниченным диапазоном `(0...1)` (ось `y`). Это именно то, что нам нужно.
 
-![Sigmoid graph](https://trekhleb.dev/self-parking-car-evolution/article/images/05-sigmoid-02.png)
+![Сигмоид](https://trekhleb.dev/self-parking-car-evolution/article/images/05-sigmoid-02.png)
 
 Вот как шаги преобразования будут выглядеть на графике сигмоиды.
 
-![Conversion steps on the graph](https://trekhleb.dev/self-parking-car-evolution/article/images/05-sigmoid-03.png)
+![Преобразования сигналов мозга](https://trekhleb.dev/self-parking-car-evolution/article/images/05-sigmoid-03.png)
 
 Реализация двух упомянутых выше шагов преобразования будет выглядеть так:
 
@@ -253,7 +253,7 @@ const carGenomeBase10 = [e0, e1, ..., e8, w0, w1, ..., w8];
 
 Вот краткий пример того, как число с плавающей запятой может быть преобразовано в `16-битное` двоичное число (опять же, можете [обратиться к этой статье](https://trekhleb.dev/blog/2021/binary-floating-point/), если пример непонятен):
 
-![Example of floating to binary numbers conversion](https://trekhleb.dev/self-parking-car-evolution/article/images/06-floating-point-conversion-01.png)
+![Пример конвертации числа с плавающей точкой](https://trekhleb.dev/self-parking-car-evolution/article/images/06-floating-point-conversion-01.png)
 
 В нашем случае, чтобы уменьшить длину генома, мы преобразуем каждый плавающий коэффициент в нестандартное `10-битное` двоичное число (`1` знаковый бит, `4` бита экспоненты, `5` дробных битов).
 
@@ -295,7 +295,7 @@ const genome: Genome = [
 
 Кстати, вы можете увидеть точные значения геномов и коэффициентов для наиболее "умного" автомобиля в панели [симулятора](https://trekhleb.dev/self-parking-car-evolution?parking=evolution#/)
 
-![Car genomes and coefficients examples](https://trekhleb.dev/self-parking-car-evolution/article/images/06-genome-examples.png)
+![Примеры значений генома и коэффициентов](https://trekhleb.dev/self-parking-car-evolution/article/images/06-genome-examples.png)
 
 Вот исходный код, который выполняет преобразование из двоичного формата в десятичный формат чисел с плавающей запятой (мозгу он понадобится для декодирования генома и создания мышечных сигналов на основе данных генома):
 
@@ -472,7 +472,7 @@ export const getWheelsMuscleSignal = (genome: Genome, sensors: Sensors): MuscleS
 4. **МУТАЦИЯ** - в процессе спаривания некоторые гены могут случайным образом мутировать (единицы и нули в геноме ребенка могут меняться). Это может привести к более широкому разнообразию геномов детей и, таким образом, к более широкому разнообразию поведения детей-автомобилей. Представьте, что 1-й бит был случайно установлен в `0` для всех `~1000` автомобилей. Единственный способ попробовать машину с 1-м битом, установленным в `1`, - это случайные мутации. В то же время сильные мутации могут разрушить здоровые геномы.
 5. Переходим к «Шагу №2», если количество поколений не достигло предела (например, не прошло `100` поколений) или пока самые успешные индивидуумы не достигли ожидаемого значения функции пригодности (например, если лучший автомобиль еще не приблизился к месту стоянки ближе, чем на `1 метр`). В противном случае выходим из цикла.
 
-![Genetic algorithm flow](https://trekhleb.dev/self-parking-car-evolution/article/images/07-genetic-algorithm-flow-01.png)
+![Генетический алгоритм](https://trekhleb.dev/self-parking-car-evolution/article/images/07-genetic-algorithm-flow-01.png)
 
 ## Развитие мозга автомобиля с помощью генетического алгоритма
 
@@ -737,7 +737,7 @@ function select(
 
 Мы будем рассчитывать среднее расстояние от `4` колес автомобиля до соответствующих `4` углов парковочного места. Это расстояние мы будем называть потерей (уроном), которая обратно пропорциональна приспособленности.
 
-![The distance from the car to the parking spot](https://trekhleb.dev/self-parking-car-evolution/article/images/08-distance-to-parkin-lot.png)
+![Расстояние от машины до парковочного места](https://trekhleb.dev/self-parking-car-evolution/article/images/08-distance-to-parkin-lot.png)
 
 Вычисление расстояния между каждым колесом и каждым углом по отдельности (вместо простого расчета расстояния от центра автомобиля до центра парковочного места) позволит автомобилю сохранять правильную ориентацию относительно парковочного места.
 
@@ -810,7 +810,7 @@ const carFitness = (params: GeometricParams): number => {
 
 Вы можете увидеть значения `fitness` и `loss` для определенного генома и для текущего положения автомобиля на панели [симулятора](https://trekhleb.dev/self-parking-car-evolution?parking=evolution#/):
 
-![Evolution simulator dashboard](https://trekhleb.dev/self-parking-car-evolution/article/images/09-fitness-function.png)
+![Пример значений фитнеса и урон](https://trekhleb.dev/self-parking-car-evolution/article/images/09-fitness-function.png)
 
 ## Запускаем эволюцию
 
@@ -869,21 +869,21 @@ const fittestCar = generation[0];
 
 **Автомобили 1-го поколения** со случайным геномом будут вести себя примерно так:
 
-![The 1st generation of cars with random genomes](https://trekhleb.dev/self-parking-car-evolution/article/images/02-cars-before-01.gif)
+![1-е поколение](https://trekhleb.dev/self-parking-car-evolution/article/images/02-cars-before-01.gif)
 
 **Автомобили ≈40-го поколения** начинают учиться парковаться самостоятельно и все ближе приближаются к месту парковки:
 
-![The 40th generation start learning how to park](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-after-01.gif)
+![40-е поколение](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-after-01.gif)
 
-Другой пример с немного более сложной отправной точкой:
+Другой пример с немного более сложной стартовой точкой:
 
-![More challenging starting point for self-parking](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-after-03.gif)
+![40-е поколение с более сложной стартовой точкой](https://trekhleb.dev/self-parking-car-evolution/article/images/03-car-after-03.gif)
 
 По пути машины сталкиваются с другими машинами, а также неточно занимают парковочное место, но это всего-лишь 40-е поколение с момента создания мира для них, так что вы можете дать машинам еще немного времени для обучения.
 
 Из поколения в поколение мы можем видеть, как урон уменьшается (что означает, что значения пригодности растут). `P50 Avg Loss` показывает среднее значение урона (среднее расстояние от автомобилей до места парковки) для `50%` наиболее приспособленных автомобилей. `Min Loss` показывает урон наиболее приспособленного автомобиля в каждом поколении.
 
-![Loss history](https://trekhleb.dev/self-parking-car-evolution/article/images/10-loss-history-00.png)
+![История урона](https://trekhleb.dev/self-parking-car-evolution/article/images/10-loss-history-00.png)
 
 Вы можете видеть, что в среднем `50%` наиболее приспособленных автомобилей учатся приближаться к месту парковки (от `5,5м` от места парковки до `3,5м` за `35` поколений). Тренд для значений `Min Loss` менее очевиден (от `1м` до `0,5м` с некоторыми шумом), однако из анимации выше вы можете увидеть, что автомобили научились некоторым базовым парковочным движениям.
 
@@ -910,6 +910,6 @@ const fittestCar = generation[0];
 - Также симулятор требует, чтобы вкладка браузера была открыта и активна для выполнения симуляции.
 - и [пр.](https://github.com/trekhleb/self-parking-car-evolution/issues)
 
-Тем не менее, целью этой статьи было изучение того, как работает генетический алгоритм, а не создание самопарковочной Tesla. Я надеюсь, вы хорошо провели время, читая статью, даже с учетом упомянутых выше недоработок.
+Тем не менее, целью этой статьи было изучение того, как работает генетический алгоритм, а не создание самопаркующейся Tesla. Я надеюсь, вы хорошо провели время, читая статью, даже с учетом упомянутых выше недоработок.
 
-![Fin](https://trekhleb.dev/self-parking-car-evolution/article/images/11-fin.png)
+![Конец](https://trekhleb.dev/self-parking-car-evolution/article/images/11-fin.png)
