@@ -22,7 +22,7 @@ function EvolutionTabManual() {
       <Block marginTop="20px">
         <Notification overrides={{Body: {style: {width: 'auto'}}}}>
           Try to park the car by yourself<br/><br/>
-          <small>WASD keys to drive, SPACE to break, Joystick for mobile</small>
+          <small>WASD keys to drive, SPACE to brake, Joystick for mobile</small>
         </Notification>
       </Block>
     </Block>

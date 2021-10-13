@@ -6,7 +6,7 @@ import { carEvents, off, on } from '../utils/events';
 import {
   onEngineBackward,
   onEngineForward,
-  onEngineNeutral, onPressBreak, onReleaseBreak,
+  onEngineNeutral, onPressBrake, onReleaseBrake,
   onWheelsLeft,
   onWheelsRight,
   onWheelsStraight
@@ -57,8 +57,8 @@ function DynamicCars(props: DynamicCarsProps) {
     const onLeft = () => { onWheelsLeft(carsAPIs.current[uuid].api) };
     const onRight = () => { onWheelsRight(carsAPIs.current[uuid].api) };
     const onStraight = () => { onWheelsStraight(carsAPIs.current[uuid].api) };
-    const onBreak = () => { onPressBreak(carsAPIs.current[uuid].api) };
-    const onBreakRelease = () => { onReleaseBreak(carsAPIs.current[uuid].api) };
+    const onBrake = () => { onPressBrake(carsAPIs.current[uuid].api) };
+    const onBrakeRelease = () => { onReleaseBrake(carsAPIs.current[uuid].api) };
 
     const onCarReady = (args: OnCarReadyArgs) => {
       carsAPIs.current[uuid] = args;
@@ -69,8 +69,8 @@ function DynamicCars(props: DynamicCarsProps) {
         on(carEvents.wheelsLeft, onLeft);
         on(carEvents.wheelsRight, onRight);
         on(carEvents.wheelsStraight, onStraight);
-        on(carEvents.pressBreak, onBreak);
-        on(carEvents.releaseBreak, onBreakRelease);
+        on(carEvents.pressBrake, onBrake);
+        on(carEvents.releaseBrake, onBrakeRelease);
       }
     };
 
@@ -82,8 +82,8 @@ function DynamicCars(props: DynamicCarsProps) {
         off(carEvents.wheelsLeft, onLeft);
         off(carEvents.wheelsRight, onRight);
         off(carEvents.wheelsStraight, onStraight);
-        off(carEvents.pressBreak, onBreak);
-        off(carEvents.releaseBreak, onBreakRelease);
+        off(carEvents.pressBrake, onBrake);
+        off(carEvents.releaseBrake, onBrakeRelease);
       }
     };
 

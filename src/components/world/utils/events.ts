@@ -1,6 +1,6 @@
 // @see: https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
 
-type CarEvent = 'engineforward' | 'enginebackward' | 'engineneutral' | 'wheelsleft' | 'wheelsright' | 'wheelsstraight' | 'pressbreak' | 'releasebreak';
+type CarEvent = 'engineforward' | 'enginebackward' | 'engineneutral' | 'wheelsleft' | 'wheelsright' | 'wheelsstraight' | 'pressbrake' | 'releasebrake';
 
 type CarEvents = Record<string, CarEvent>;
 
@@ -11,8 +11,8 @@ export const carEvents: CarEvents = {
   wheelsLeft: 'wheelsleft',
   wheelsRight: 'wheelsright',
   wheelsStraight: 'wheelsstraight',
-  pressBreak: 'pressbreak',
-  releaseBreak: 'releasebreak',
+  pressBrake: 'pressbrake',
+  releaseBrake: 'releasebrake',
 };
 
 export const trigger = (eventType: CarEvent, data: any = {}) => {

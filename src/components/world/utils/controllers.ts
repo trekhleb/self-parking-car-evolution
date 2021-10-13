@@ -1,5 +1,5 @@
 import { RaycastVehiclePublicApi } from '../types/car';
-import { CAR_MAX_BREAK_FORCE, CAR_MAX_FORCE, CAR_MAX_STEER_VALUE } from '../car/constants';
+import { CAR_MAX_BRAKE_FORCE, CAR_MAX_FORCE, CAR_MAX_STEER_VALUE } from '../car/constants';
 
 export const onEngineForward = (carAPI: RaycastVehiclePublicApi, wheelsNum: number = 4): void => {
   for (let wheelIdx = 0; wheelIdx < wheelsNum; wheelIdx += 1) {
@@ -37,13 +37,13 @@ export const onWheelsStraight = (carAPI: RaycastVehiclePublicApi,): void => {
   carAPI.setSteeringValue(0, 1);
 };
 
-export const onPressBreak = (carAPI: RaycastVehiclePublicApi, wheelsNum: number = 4): void => {
+export const onPressBrake = (carAPI: RaycastVehiclePublicApi, wheelsNum: number = 4): void => {
   for (let wheelIdx = 0; wheelIdx < wheelsNum; wheelIdx += 1) {
-    carAPI.setBrake(CAR_MAX_BREAK_FORCE, wheelIdx);
+    carAPI.setBrake(CAR_MAX_BRAKE_FORCE, wheelIdx);
   }
 };
 
-export const onReleaseBreak = (carAPI: RaycastVehiclePublicApi, wheelsNum: number = 4): void => {
+export const onReleaseBrake = (carAPI: RaycastVehiclePublicApi, wheelsNum: number = 4): void => {
   for (let wheelIdx = 0; wheelIdx < wheelsNum; wheelIdx += 1) {
     carAPI.setBrake(0, wheelIdx);
   }
