@@ -38,12 +38,12 @@ function CarKeyboardController() {
       trigger(carEvents.engineNeutral);
     }
 
-    // Break.
+    // Brake.
     if (brake) {
-      trigger(carEvents.pressBreak);
+      trigger(carEvents.pressBrake);
     }
     if (!brake) {
-      trigger(carEvents.releaseBreak);
+      trigger(carEvents.releaseBrake);
     }
   }, [forward, backward, left, right, brake]);
 
@@ -54,8 +54,8 @@ function CarKeyboardController() {
       paddingLeft="15px"
     >
       <Paragraph4 $style={{color: 'white'}}>
-        {/*<code>WASD</code> or <code>↑→↓←</code> to drive. <code>SPACE</code> to break.*/}
-        <code>WASD</code> keys to drive. <code>SPACE</code> to break.
+        {/*<code>WASD</code> or <code>↑→↓←</code> to drive. <code>SPACE</code> to brake.*/}
+        <code>WASD</code> keys to drive. <code>SPACE</code> to brake.
       </Paragraph4>
     </Block>
   );
